@@ -44,7 +44,7 @@ export default function TabLayout() {
         options={{
           title: "هزینه",
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={35} name="data-saver-on" color={color} />
+            <IconSymbol size={35} name="data-saver-off" color={color} />
           ),
         }}
       />
