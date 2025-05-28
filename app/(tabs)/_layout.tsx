@@ -38,9 +38,10 @@ export default function TabLayout() {
         tabBarShowLabel: true,
         tabBarHideOnKeyboard: true,
       }}
+      initialRouteName="spending"
     >
       <Tabs.Screen
-        name="index"
+        name="spending"
         options={{
           title: "هزینه",
           tabBarIcon: ({ color }) => (
@@ -49,7 +50,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="income"
         options={{
           title: "درآمد",
           tabBarIcon: ({ color }) => (
