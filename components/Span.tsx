@@ -2,19 +2,19 @@ import { StyleSheet, Text, type TextProps } from 'react-native';
 
 import { useThemeColor } from '@/hooks/useThemeColor';
 
-export type ThemedTextProps = TextProps & {
+export type SpanProps = TextProps & {
   lightColor?: string;
   darkColor?: string;
   type?: 'default' | 'title' | 'defaultSemiBold' | 'subtitle' | 'link' | 'defaultBold' | 'defaultMedium';
 };
 
-export function ThemedText({
+export function Span({
   style,
   lightColor,
   darkColor,
   type = 'default',
   ...rest
-}: ThemedTextProps) {
+}: SpanProps) {
   const color = useThemeColor({ light: lightColor, dark: darkColor }, 'text');
 
   return (
