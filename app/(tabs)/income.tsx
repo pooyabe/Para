@@ -1,12 +1,12 @@
-import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
+import { Div } from "@/components/Div";
+import { Span } from "@/components/Span";
 import { StyleSheet } from "react-native";
 
 export default function TabTwoScreen() {
   return (
-    <ThemedView style={styles.container}>
-      <ThemedText>صفحه درآمد در حال توسعه است</ThemedText>
-    </ThemedView>
+    <Div style={styles.container}>
+      <Span>صفحه درآمد در حال توسعه است</Span>
+    </Div>
   );
 }
 

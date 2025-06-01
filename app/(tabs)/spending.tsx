@@ -1,13 +1,13 @@
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+import { Div } from '@/components/Div';
+import { Span } from '@/components/Span';
 import { StyleSheet } from 'react-native';
 
 
 export default function HomeScreen() {
   return (
-    <ThemedView style={styles.container}>
-      <ThemedText>سلام دنیا</ThemedText>
-    </ThemedView>
+    <Div style={styles.container}>
+      <Span>سلام دنیا</Span>
+    </Div>
   );
 }
 
