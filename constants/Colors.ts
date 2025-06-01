@@ -15,12 +15,14 @@ export const Colors = {
     tabIconDefault: "#687076",
     tabIconSelected: tintColorLight,
     border: "rgb(24, 31, 47)",
+    placeHolderColor: "#11181C",
   },
   dark: {
     text: "#ECEDEE",
     background: "rgb(24, 31, 47)",
     tint: tintColorDark,
     border: "#d6dbdf",
+    placeHolderColor: "rgba(201,251,255,0.4)",
 
     // Bottom Tab Colors
     tabIcon: "#9BA1A6",
