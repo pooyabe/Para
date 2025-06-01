@@ -1,18 +1,30 @@
 import { useThemeColor } from "@/hooks/useThemeColor";
-import { StyleSheet, TextInput, type TextInputProps } from "react-native";
+import { StyleSheet, TextInput, View, type TextInputProps } from "react-native";
 import { Span } from "./Span";
 
 export type InputProps = TextInputProps & {
   type?: "PersianText" | "EnglishText" | "number";
+  label?: null | string;
 };
 
-export function Input({ style, type = "text", ...rest }: InputProps) {
+export function Input({
+  style,
+  type = "PersianText",
+  label = null,
+  ...rest
+}: InputProps) {
+  // Theme color retrive
+  const textColor = useThemeColor({}, "text");
+
+  const placeholderColor = useThemeColor({}, "placeHolderColor");
+
   return (
-    <>
-      <Span></Span>
+    <View style={styles.inputGroup}>
+      <Span style={styles.overLabel}>{label}</Span>
       <TextInput
+        placeholderTextColor={placeholderColor}
         style={[
-          styles.themeColors, // theme styles
+          { color: textColor },
           styles.defaultTextInputStyle, // The default styles
           style, // User defined style
           // The direction type style
@@ -21,7 +33,7 @@ export function Input({ style, type = "text", ...rest }: InputProps) {
         ]}
         {...rest}
       />
-    </>
+    </View>
   );
 }
 
@@ -33,23 +45,29 @@ export function Input({ style, type = "text", ...rest }: InputProps) {
 
 // Theme styles
 const borderColor = useThemeColor({}, "border");
-const textColor = useThemeColor({}, "text");
 
 const styles = StyleSheet.create({
-  defaultTextInputStyle: {
-    height: 60,
+  inputGroup: {
     borderWidth: 1.5,
+    width: "80%",
+    borderRadius: 100,
+    borderColor,
+    zIndex: 1,
+    height: 60,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingBottom: 10,
+  },
+  defaultTextInputStyle: {
+    width: "100%",
+    height: "100%",
     paddingHorizontal: 50,
     fontSize: 18,
     fontFamily: "VazirRegular",
     backgroundColor: "transparent",
-    borderRadius: 100,
     textAlign: "center",
-    width: "80%",
-  },
-  themeColors: {
-    borderColor,
-    color: textColor,
+    zIndex: 1,
   },
 
   ltr: {
@@ -57,5 +75,20 @@ const styles = StyleSheet.create({
   },
   rtl: {
     direction: "rtl",
+  },
+
+  /**
+   *
+   * Label Style
+   *
+   */
+  overLabel: {
+    backgroundColor: "rgb(24, 31, 47)",
+    zIndex: 2,
+    alignSelf: "flex-end",
+    marginRight: 50,
+    marginLeft: 50,
+    paddingRight: 5,
+    paddingLeft: 5,
   },
 });
