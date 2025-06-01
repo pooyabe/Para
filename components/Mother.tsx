@@ -20,7 +20,7 @@ export function Mother({
 
   return (
     <ScrollView
-      contentContainerStyle={[{ backgroundColor }, style]}
+      contentContainerStyle={[{ backgroundColor }, styles.container, style]}
       {...otherProps}
     />
   );
@@ -28,6 +28,9 @@ export function Mother({
 
 const styles = StyleSheet.create({
   container: {
+    display: "flex",
     flex: 1,
+    width: "100%",
+    height: "100%",
   },
 });
