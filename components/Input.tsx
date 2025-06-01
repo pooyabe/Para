@@ -78,6 +78,7 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
     textAlign: "center",
     zIndex: 1,
+    paddingTop: 0
   },
 
   ltr: {
