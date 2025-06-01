@@ -15,9 +15,15 @@ export function Input({
   placeholder = "",
   ...rest
 }: InputProps) {
+  // Define the KeyBoard Type
+  // Determine keyboardType based on type
+  let keyboardType: "default" | "numeric" = "default";
+  if (type === "number") keyboardType = "numeric";
+  else if (type === "EnglishText" || type === "PersianText")
+    keyboardType = "default";
+
   // Theme color retrive
   const textColor = useThemeColor({}, "text");
-
   const placeholderColor = useThemeColor({}, "placeHolderColor");
 
   return (
@@ -34,6 +40,7 @@ export function Input({
           type === "number" || type === "EnglishText" ? styles.ltr : undefined,
           type === "PersianText" ? styles.rtl : undefined,
         ]}
+        keyboardType={keyboardType}
         {...rest}
       />
     </View>
