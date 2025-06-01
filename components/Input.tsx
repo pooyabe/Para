@@ -5,12 +5,14 @@ import { Span } from "./Span";
 export type InputProps = TextInputProps & {
   type?: "PersianText" | "EnglishText" | "number";
   label?: null | string;
+  placeholder?: null | string;
 };
 
 export function Input({
   style,
   type = "PersianText",
   label = null,
+  placeholder = "",
   ...rest
 }: InputProps) {
   // Theme color retrive
@@ -22,6 +24,7 @@ export function Input({
     <View style={styles.inputGroup}>
       <Span style={styles.overLabel}>{label}</Span>
       <TextInput
+        placeholder={placeholder}
         placeholderTextColor={placeholderColor}
         style={[
           { color: textColor },
