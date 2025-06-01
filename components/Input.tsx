@@ -1,16 +1,27 @@
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { StyleSheet, TextInput, type TextInputProps } from "react-native";
+import { Span } from "./Span";
 
 export type InputProps = TextInputProps & {
-  type?: "text" | "number";
+  type?: "PersianText" | "EnglishText" | "number";
 };
 
 export function Input({ style, type = "text", ...rest }: InputProps) {
   return (
-    <TextInput
-      style={[styles.themeColors, styles.defaultTextInputStyle, style]}
-      {...rest}
-    />
+    <>
+      <Span></Span>
+      <TextInput
+        style={[
+          styles.themeColors, // theme styles
+          styles.defaultTextInputStyle, // The default styles
+          style, // User defined style
+          // The direction type style
+          type === "number" || type === "EnglishText" ? styles.ltr : undefined,
+          type === "PersianText" ? styles.rtl : undefined,
+        ]}
+        {...rest}
+      />
+    </>
   );
 }
 
@@ -27,19 +38,24 @@ const textColor = useThemeColor({}, "text");
 const styles = StyleSheet.create({
   defaultTextInputStyle: {
     height: 60,
-    width: "100%",
     borderWidth: 1.5,
-    paddingHorizontal: 10,
-    fontSize: 16,
+    paddingHorizontal: 50,
+    fontSize: 18,
     fontFamily: "VazirRegular",
     backgroundColor: "transparent",
     borderRadius: 100,
     textAlign: "center",
-    writingDirection: "rtl",
-    direction: "rtl",
+    width: "80%",
   },
   themeColors: {
     borderColor,
     color: textColor,
+  },
+
+  ltr: {
+    direction: "ltr",
+  },
+  rtl: {
+    direction: "rtl",
   },
 });
