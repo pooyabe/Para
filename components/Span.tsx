@@ -63,9 +63,8 @@ const styles = StyleSheet.create({
     lineHeight: 32,
   },
   subtitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-    fontFamily: "VazirBold",
+    fontSize: 12,
+    fontFamily: "VazirRegular",
   },
   link: {
     lineHeight: 30,
