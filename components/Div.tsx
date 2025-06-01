@@ -1,14 +1,8 @@
-import { View, type ViewProps } from 'react-native';
+import { View, type ViewProps } from "react-native";
 
-import { useThemeColor } from '@/hooks/useThemeColor';
 
-export type DivProps = ViewProps & {
-  lightColor?: string;
-  darkColor?: string;
-};
+export type DivProps = ViewProps & {};
 
-export function Div({ style, lightColor, darkColor, ...otherProps }: DivProps) {
-  const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'background');
-
-  return <View style={[{ backgroundColor }, style]} {...otherProps} />;
+export function Div({ style, ...otherProps }: DivProps) {
+  return <View style={style} {...otherProps} />;
 }
