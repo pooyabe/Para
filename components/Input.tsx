@@ -52,7 +52,7 @@ const borderColor = useThemeColor({}, "border");
 const styles = StyleSheet.create({
   inputGroup: {
     borderWidth: 1.5,
-    width: "80%",
+    width: "100%",
     borderRadius: 100,
     borderColor,
     zIndex: 1,
