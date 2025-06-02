@@ -15,6 +15,13 @@ export default function HomeScreen() {
     setThePriceString(numberToText(val));
   };
 
+  const [Card_Items, setItem] = useState([
+    { label: "پاسارگاد", value: "pasargad" },
+    { label: "ملی", value: "melli" },
+    { label: "ملت", value: "mellat" },
+    { label: "رسالت", value: "resalat" },
+  ]);
+
   return (
     <Mother>
       <Div style={styles.container}>
@@ -29,7 +36,11 @@ export default function HomeScreen() {
 
         <Spacer />
 
-        <Select label="با کدوم کارت؟" />
+        <Select
+          label="با کدوم کارت؟"
+          items_array={Card_Items}
+          searchable={true}
+        />
       </Div>
     </Mother>
   );
