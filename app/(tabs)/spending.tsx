@@ -1,6 +1,8 @@
 import { Div } from "@/components/Div";
 import { Input } from "@/components/Input";
 import { Mother } from "@/components/Mother";
+import { Select } from "@/components/Select";
+import { Spacer } from "@/components/Spacer";
 import { Span } from "@/components/Span";
 import numberToText from "@/hooks/numberToText";
 import { useState } from "react";
@@ -24,6 +26,10 @@ export default function HomeScreen() {
         <Span type="subtitle" style={{ color: "#118dff" }}>
           {thePriceString}
         </Span>
+
+        <Spacer />
+
+        <Select label="با کدوم کارت؟" />
       </Div>
     </Mother>
   );
