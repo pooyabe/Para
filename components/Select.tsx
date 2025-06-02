@@ -88,6 +88,7 @@ export function Select({
           color: textColor,
           fontFamily: "VazirBold",
           direction: "rtl",
+          fontSize: 16,
         }}
         selectedItemContainerStyle={{
           backgroundColor: backgroundColor,
