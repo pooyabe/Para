@@ -6,16 +6,18 @@ import { useState } from "react";
 import DropDownPicker from "react-native-dropdown-picker";
 
 export type InputProps = TextInputProps & {
-  type?: "PersianText" | "EnglishText" | "number";
-  label?: null | string;
   placeholder?: null | string;
+  items_array: Array<{ label: string; value: any }>;
+  label?: null | string;
+  searchable?: boolean;
 };
 
 export function Select({
   style,
-  type = "PersianText",
-  label = null,
   placeholder = "",
+  label = "",
+  items_array = [],
+  searchable = false,
   ...rest
 }: InputProps) {
   // Theme color retrive
@@ -25,12 +27,8 @@ export function Select({
 
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState([]);
-  const [items, setItems] = useState([
-    { label: "پاسارگاد", value: "pasargad" },
-    { label: "ملی", value: "melli" },
-    { label: "ملت", value: "mellat" },
-    { label: "رسالت", value: "resalat" },
-  ]);
+  const [items, setItems] =
+    useState<Array<{ label: string; value: any }>>(items_array);
 
   return (
     <View style={styles.inputGroup}>
@@ -48,7 +46,7 @@ export function Select({
         listMode="MODAL"
         modalAnimationType="slide"
         placeholder="انتخاب"
-        searchable={true}
+        searchable={searchable}
         addCustomItem={true}
         showTickIcon={true}
         closeOnBackPressed={true}
