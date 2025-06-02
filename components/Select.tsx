@@ -31,7 +31,7 @@ export function Select({
     useState<Array<{ label: string; value: any }>>(items_array);
 
   return (
-    <View style={styles.SelectInputGroup}>
+    <View style={[styles.SelectInputGroup, style]}>
       <Span style={styles.SelectoverLabel}>{label}</Span>
       <DropDownPicker
         open={open}
