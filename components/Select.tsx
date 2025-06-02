@@ -46,11 +46,19 @@ export function Select({
         listMode="MODAL"
         modalAnimationType="slide"
         placeholder="انتخاب"
+        searchPlaceholder="جستجو یا اضافه کردن آیتم جدید"
         searchable={searchable}
         addCustomItem={true}
         showTickIcon={true}
         closeOnBackPressed={true}
         itemSeparator={false}
+        searchPlaceholderTextColor={textColor}
+        searchTextInputStyle={{
+          borderColor: tintColor,
+          fontFamily: "VazirRegular",
+          borderRadius: 50,
+          borderWidth: 2,
+        }}
         placeholderStyle={{
           direction: "rtl",
           fontFamily: "VazirMedium",
@@ -79,9 +87,14 @@ export function Select({
         listItemLabelStyle={{
           color: textColor,
           fontFamily: "VazirBold",
+          direction: "rtl",
         }}
         selectedItemContainerStyle={{
-          backgroundColor: "#000",
+          backgroundColor: backgroundColor,
+          direction: "rtl",
+        }}
+        tickIconContainerStyle={{
+          padding: 10
         }}
         arrowIconStyle={{
           marginRight: 20,
