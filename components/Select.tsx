@@ -1,11 +1,11 @@
 import { useThemeColor } from "@/hooks/useThemeColor";
-import { StyleSheet, View, type TextInputProps } from "react-native";
+import { StyleSheet, View, type ViewProps } from "react-native";
 import { Span } from "./Span";
 
 import { useState } from "react";
 import DropDownPicker from "react-native-dropdown-picker";
 
-export type InputProps = TextInputProps & {
+export type SelectProps = ViewProps & {
   placeholder?: null | string;
   items_array: Array<{ label: string; value: any }>;
   label?: null | string;
@@ -19,7 +19,7 @@ export function Select({
   items_array = [],
   searchable = false,
   ...rest
-}: InputProps) {
+}: SelectProps) {
   // Theme color retrive
   const textColor = useThemeColor({}, "text");
   const backgroundColor = useThemeColor({}, "background");
@@ -31,8 +31,8 @@ export function Select({
     useState<Array<{ label: string; value: any }>>(items_array);
 
   return (
-    <View style={styles.inputGroup}>
-      <Span style={styles.overLabel}>{label}</Span>
+    <View style={styles.SelectInputGroup}>
+      <Span style={styles.SelectoverLabel}>{label}</Span>
       <DropDownPicker
         open={open}
         value={value}
@@ -95,7 +95,7 @@ export function Select({
           direction: "rtl",
         }}
         tickIconContainerStyle={{
-          padding: 10
+          padding: 10,
         }}
         arrowIconStyle={{
           marginRight: 20,
@@ -118,7 +118,7 @@ export function Select({
 const borderColor = useThemeColor({}, "border");
 
 const styles = StyleSheet.create({
-  inputGroup: {
+  SelectInputGroup: {
     borderWidth: 1.5,
     width: "100%",
     borderRadius: 100,
@@ -130,31 +130,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingBottom: 10,
   },
-  defaultTextInputStyle: {
-    width: "100%",
-    height: "100%",
-    paddingHorizontal: 50,
-    fontSize: 18,
-    fontFamily: "VazirRegular",
-    backgroundColor: "transparent",
-    textAlign: "center",
-    zIndex: 1,
-    paddingTop: 0,
-  },
-
-  ltr: {
-    direction: "ltr",
-  },
-  rtl: {
-    direction: "rtl",
-  },
-
   /**
    *
    * Label Style
    *
    */
-  overLabel: {
+  SelectoverLabel: {
     backgroundColor: "rgb(24, 31, 47)",
     zIndex: 2,
     alignSelf: "flex-end",
