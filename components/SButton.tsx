@@ -1,7 +1,42 @@
-import { type ButtonProps } from "react-native";
+import { useThemeColor } from "@/hooks/useThemeColor";
+import {
+  StyleSheet,
+  TouchableOpacity,
+  type TouchableOpacityProps,
+} from "react-native";
+import { Span } from "./Span";
 
-export type SButtonProps = ButtonProps & {};
+export type SButtonProps = TouchableOpacityProps & {};
 
-export function SButton({ ...rest }: SButtonProps) {
-  return <></>;
+const tintColor = useThemeColor({}, "tint");
+const backgroundColor = useThemeColor({}, "theLightBlue");
+const textColor = useThemeColor({}, "text");
+
+export function SButton({ style, ...rest }: SButtonProps) {
+  return (
+    <TouchableOpacity style={[styles.theButtonContainer, style]}>
+      <Span type="defaultBold" style={styles.theButtonText}>
+        ثبت
+      </Span>
+    </TouchableOpacity>
+  );
 }
+
+const styles = StyleSheet.create({
+  theButtonContainer: {
+    width: "100%",
+    height: 60,
+    borderWidth: 2,
+    borderColor: tintColor,
+    backgroundColor: backgroundColor,
+    borderRadius: 100,
+    display: "flex",
+    justifyContent: "center",
+  },
+  theButtonText: {
+    color: textColor,
+    fontSize: 20,
+    width: "100%",
+    textAlign: 'center'
+  },
+});
