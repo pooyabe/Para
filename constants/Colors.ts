@@ -16,6 +16,8 @@ export const Colors = {
     tabIconSelected: tintColorLight,
     border: "rgb(24, 31, 47)",
     placeHolderColor: "#11181C",
+    theDarkBlue: "#1f6bb6",
+    theLightBlue: "#118dff",
   },
   dark: {
     text: "#ECEDEE",
@@ -23,7 +25,8 @@ export const Colors = {
     tint: tintColorDark,
     border: "#d6dbdf",
     placeHolderColor: "rgba(201,251,255,0.4)",
-
+    theDarkBlue: "#1f6bb6",
+    theLightBlue: "#118dff",
     // Bottom Tab Colors
     tabIcon: "#9BA1A6",
     tabBackground: "rgb(59, 66, 82)",
