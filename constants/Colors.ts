@@ -12,12 +12,15 @@ export const Colors = {
     background: "#fff",
     tint: tintColorLight,
     icon: "#687076",
-    tabIconDefault: "#687076",
-    tabIconSelected: tintColorLight,
     border: "rgb(24, 31, 47)",
     placeHolderColor: "#11181C",
     theDarkBlue: "#1f6bb6",
     theLightBlue: "#118dff",
+    // Bottom Tab Colors
+    tabIconDefault: "#687076",
+    tabIconSelected: tintColorLight,
+    tabIcon: "#9BA1A6",
+    tabBackground: "rgb(59, 66, 82)",
   },
   dark: {
     text: "#ECEDEE",
