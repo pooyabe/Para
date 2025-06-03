@@ -42,9 +42,9 @@ export default function HomeScreen() {
 
         <Radio Items={["الکی", "میشد خرج نشه", "ضروری"]} />
 
-        <Spacer height={60} />
+        <Spacer height={100} />
 
-        <SButton />
+        <SButton text="ثبت شه"/>
       </Div>
     </Mother>
   );

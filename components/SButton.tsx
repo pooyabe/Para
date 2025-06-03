@@ -6,17 +6,19 @@ import {
 } from "react-native";
 import { Span } from "./Span";
 
-export type SButtonProps = TouchableOpacityProps & {};
+export type SButtonProps = TouchableOpacityProps & {
+  text: string;
+};
 
 const tintColor = useThemeColor({}, "tint");
 const backgroundColor = useThemeColor({}, "theLightBlue");
 const textColor = useThemeColor({}, "text");
 
-export function SButton({ style, ...rest }: SButtonProps) {
+export function SButton({ text, style, ...rest }: SButtonProps) {
   return (
     <TouchableOpacity style={[styles.theButtonContainer, style]}>
       <Span type="defaultBold" style={styles.theButtonText}>
-        ثبت
+        {text}
       </Span>
     </TouchableOpacity>
   );
@@ -37,6 +39,6 @@ const styles = StyleSheet.create({
     color: textColor,
     fontSize: 20,
     width: "100%",
-    textAlign: 'center'
+    textAlign: "center",
   },
 });
