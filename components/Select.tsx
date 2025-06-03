@@ -14,7 +14,7 @@ export type SelectProps = ViewProps & {
 
 export function Select({
   style,
-  placeholder = "",
+  placeholder = "انتخاب",
   label = "",
   items_array = [],
   searchable = false,
@@ -45,7 +45,7 @@ export function Select({
         theme="DARK"
         listMode="MODAL"
         modalAnimationType="slide"
-        placeholder="انتخاب"
+        placeholder={placeholder}
         searchPlaceholder="جستجو یا اضافه کردن آیتم جدید"
         searchable={searchable}
         addCustomItem={true}
