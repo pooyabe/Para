@@ -1,3 +1,4 @@
+import { Button } from "@/components/Button";
 import { Div } from "@/components/Div";
 import { Input } from "@/components/Input";
 import { Mother } from "@/components/Mother";
@@ -39,7 +40,11 @@ export default function HomeScreen() {
 
         <Spacer height={20} />
 
-        <Radio Items={["الکی", "میشد خرج نشه", "ضروری"]}/>
+        <Radio Items={["الکی", "میشد خرج نشه", "ضروری"]} />
+
+        <Spacer height={60} />
+
+        <Button />
       </Div>
     </Mother>
   );
