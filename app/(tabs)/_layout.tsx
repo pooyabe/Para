@@ -6,6 +6,7 @@ import { Span } from "@/components/Span";
 import { IconSymbol } from "@/components/ui/IconSymbol";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
+import { Image } from "react-native";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme() as "light" | "dark";
@@ -45,10 +46,15 @@ export default function TabLayout() {
         headerTransparent: true,
         headerTitle: () => (
           <Div style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
-            <IconSymbol
-              name="insert-chart"
-              size={28}
-              color={Colors[colorScheme].tint}
+            <Image
+              source={require("@/assets/images/icon.png")}
+              alt="Para"
+              style={{
+                width: 50,
+                height: 50,
+                borderRadius: 8,
+                objectFit: "cover",
+              }}
             />
             <Span type="title" style={{ fontSize: 25, fontWeight: "normal" }}>
               پارا
