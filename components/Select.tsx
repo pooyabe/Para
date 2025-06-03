@@ -6,7 +6,7 @@ import { useState } from "react";
 import DropDownPicker from "react-native-dropdown-picker";
 
 export type SelectProps = ViewProps & {
-  placeholder?: null | string;
+  placeholder?: undefined | string;
   items_array: Array<{ label: string; value: any }>;
   label?: null | string;
   searchable?: boolean;
