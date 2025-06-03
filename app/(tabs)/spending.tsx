@@ -32,18 +32,13 @@ export default function HomeScreen() {
           type="number"
           onChangeText={(value) => printPriceString(value)}
         />
+        <Spacer height={5} />
         <Span type="subtitle" style={{ color: "#118dff" }}>
           {thePriceString}
         </Span>
 
-        <Spacer height={30} />
+        <Spacer height={20} />
 
-        <Select
-          label="با کدوم کارت؟"
-          items_array={Card_Items}
-          searchable={true}
-        />
-        <Spacer height={30} />
         <Select label="چی خریدی؟" items_array={Reasons} searchable={true} />
       </Div>
     </Mother>
