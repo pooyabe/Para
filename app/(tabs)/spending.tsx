@@ -1,7 +1,6 @@
 import { Div } from "@/components/Div";
 import { Input } from "@/components/Input";
 import { Mother } from "@/components/Mother";
-import { Select } from "@/components/Select";
 import { Spacer } from "@/components/Spacer";
 import { Span } from "@/components/Span";
 import numberToText from "@/hooks/numberToText";
@@ -11,7 +10,7 @@ import { StyleSheet } from "react-native";
 export default function HomeScreen() {
   const [thePriceString, setThePriceString] = useState("");
 
-  const printPriceString = (val: number) => {
+  const printPriceString = (val: any) => {
     setThePriceString(numberToText(val));
   };
 
@@ -39,7 +38,6 @@ export default function HomeScreen() {
 
         <Spacer height={20} />
 
-        <Select label="چی خریدی؟" items_array={Reasons} searchable={true} />
       </Div>
     </Mother>
   );
