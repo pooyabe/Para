@@ -17,7 +17,7 @@ const textColor = useThemeColor({}, "text");
 export function SButton({ text, style, ...rest }: SButtonProps) {
   return (
     <TouchableOpacity style={[styles.theButtonContainer, style]}>
-      <Span type="defaultBold" style={styles.theButtonText}>
+      <Span type="default" style={styles.theButtonText}>
         {text}
       </Span>
     </TouchableOpacity>
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
   },
   theButtonText: {
     color: textColor,
-    fontSize: 20,
+    fontSize: 18,
     width: "100%",
     textAlign: "center",
   },
