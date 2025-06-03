@@ -1,9 +1,11 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
+import { Tabs } from "expo-router";
+import React from "react";
 
-import { IconSymbol } from '@/components/ui/IconSymbol';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
+import { Div } from "@/components/Div";
+import { Span } from "@/components/Span";
+import { IconSymbol } from "@/components/ui/IconSymbol";
+import { Colors } from "@/constants/Colors";
+import { useColorScheme } from "@/hooks/useColorScheme";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme() as "light" | "dark";
@@ -12,7 +14,6 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme].tint,
-        headerShown: false,
         tabBarStyle: {
           backgroundColor: Colors[colorScheme].tabBackground,
           borderTopColor: Colors[colorScheme].tabIcon,
@@ -37,6 +38,23 @@ export default function TabLayout() {
         },
         tabBarShowLabel: true,
         tabBarHideOnKeyboard: true,
+
+        // ---  Custom Header
+        headerShown: true,
+        headerTintColor: Colors[colorScheme].tint,
+        headerTransparent: true,
+        headerTitle: () => (
+          <Div style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+            <IconSymbol
+              name="insert-chart"
+              size={28}
+              color={Colors[colorScheme].tint}
+            />
+            <Span type="title" style={{ fontSize: 25, fontWeight: "normal" }}>
+              پارا
+            </Span>
+          </Div>
+        ),
       }}
       initialRouteName="spending"
     >
