@@ -1,6 +1,7 @@
 import { Div } from "@/components/Div";
 import { Input } from "@/components/Input";
 import { Mother } from "@/components/Mother";
+import { Radio } from "@/components/Radio";
 import { Select } from "@/components/Select";
 import { Spacer } from "@/components/Spacer";
 import { Span } from "@/components/Span";
@@ -38,7 +39,7 @@ export default function HomeScreen() {
 
         <Spacer height={20} />
 
-
+        <Radio Items={["الکی", "میشد خرج نشه", "ضروری"]}/>
       </Div>
     </Mother>
   );
