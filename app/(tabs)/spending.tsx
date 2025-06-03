@@ -1,6 +1,7 @@
 import { Div } from "@/components/Div";
 import { Input } from "@/components/Input";
 import { Mother } from "@/components/Mother";
+import { Select } from "@/components/Select";
 import { Spacer } from "@/components/Spacer";
 import { Span } from "@/components/Span";
 import numberToText from "@/hooks/numberToText";
@@ -13,15 +14,6 @@ export default function HomeScreen() {
   const printPriceString = (val: any) => {
     setThePriceString(numberToText(val));
   };
-
-  const [Card_Items, setCard_Item] = useState([
-    { label: "پاسارگاد", value: "pasargad" },
-    { label: "ملی", value: "melli" },
-    { label: "ملت", value: "mellat" },
-    { label: "رسالت", value: "resalat" },
-  ]);
-
-  const [Reasons, setReasons] = useState([]);
 
   return (
     <Mother>
@@ -37,6 +29,15 @@ export default function HomeScreen() {
         </Span>
 
         <Spacer height={20} />
+
+        <Select
+          label="چی خریدی؟"
+          searchable={true}
+          placeholder="برای چی ازت کم شد؟"
+        />
+
+        <Spacer height={20} />
+
 
       </Div>
     </Mother>
