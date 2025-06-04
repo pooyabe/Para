@@ -1,3 +1,4 @@
+import { Date } from "@/components/Date";
 import { Div } from "@/components/Div";
 import { Input } from "@/components/Input";
 import { Mother } from "@/components/Mother";
@@ -42,9 +43,13 @@ export default function HomeScreen() {
 
         <Radio Items={["الکی", "میشد خرج نشه", "ضروری"]} />
 
+        <Spacer height={40} />
+
+        <Date OpenLabel="امروز" />
+
         <Spacer height={100} />
 
-        <SButton text="ثبت شه"/>
+        <SButton text="ثبت شه" />
       </Div>
     </Mother>
   );
