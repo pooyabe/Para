@@ -144,7 +144,7 @@ export function Date({ OpenLabel = "تاریخ امروز", ...other }: DateProp
             selectedDayTextColor="white"
             dayTextColor={Colors[colorScheme].text}
             disabledTextColor="#4bcffa66"
-            onDateChange={(date) => {
+            onDateChange={(date: Date) => {
               if (typeof other.onDateChange === "function") {
                 other.onDateChange(date);
               }
