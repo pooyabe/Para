@@ -1,5 +1,5 @@
 import DatePicker, {
-    type Props,
+  type Props,
 } from "@mohamadkh75/react-native-jalali-datepicker";
 import { useState } from "react";
 import { Modal } from "react-native";
@@ -19,7 +19,7 @@ export function Date({
   style,
   ...other
 }: DateProps) {
-  const [modalVisible, setModalVisible] = useState(true);
+  const [modalVisible, setModalVisible] = useState(false);
 
   const colorScheme = useColorScheme() as "light" | "dark";
 
