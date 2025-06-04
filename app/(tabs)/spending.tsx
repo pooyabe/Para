@@ -45,7 +45,12 @@ export default function HomeScreen() {
 
         <Spacer height={40} />
 
-        <Date OpenLabel="امروز" />
+        <Date
+          OpenLabel="امروز"
+          onDateChange={(date) => {
+            console.log(date);
+          }}
+        />
 
         <Spacer height={100} />
 

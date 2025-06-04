@@ -12,13 +12,10 @@ import { Span } from "./Span";
 
 export type DateProps = Props & {
   OpenLabel?: string;
+  style?: object;
 };
 
-export function Date({
-  OpenLabel = "تاریخ امروز",
-  style,
-  ...other
-}: DateProps) {
+export function Date({ OpenLabel = "تاریخ امروز", ...other }: DateProps) {
   const [modalVisible, setModalVisible] = useState(false);
 
   const colorScheme = useColorScheme() as "light" | "dark";
@@ -54,6 +51,7 @@ export function Date({
             انتخاب تاریخ
           </Span>
           <DatePicker
+            {...other}
             style={{
               width: "80%",
               height: "50%",
@@ -146,7 +144,12 @@ export function Date({
             selectedDayTextColor="white"
             dayTextColor={Colors[colorScheme].text}
             disabledTextColor="#4bcffa66"
-            onDateChange={() => setModalVisible(false)}
+            onDateChange={(date) => {
+              if (typeof other.onDateChange === "function") {
+                other.onDateChange(date);
+              }
+              setModalVisible(false);
+            }}
           />
           <SButton
             text="بستن"
