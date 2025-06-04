@@ -7,18 +7,25 @@ import { Div } from "./Div";
 import { SButton } from "./SButton";
 
 import { Colors } from "@/constants/Colors";
+import { useShamsiDate } from "@/hooks/BackEnd/useShamsiDate";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { Span } from "./Span";
 
 export type DateProps = Props & {
-  OpenLabel?: string;
   style?: object;
+  SelectedDate?: string;
 };
 
-export function Date({ OpenLabel = "تاریخ امروز", ...other }: DateProps) {
+export function Date({ SelectedDate, ...other }: DateProps) {
   const [modalVisible, setModalVisible] = useState(false);
 
   const colorScheme = useColorScheme() as "light" | "dark";
+
+  const { nowJalali } = useShamsiDate();
+
+  const [OpenLabel, setOpenLabel] = useState(
+    SelectedDate ? `تاریخ: ${SelectedDate}` : `امروز: ${nowJalali()}`
+  );
 
   return (
     <>
@@ -147,6 +154,7 @@ export function Date({ OpenLabel = "تاریخ امروز", ...other }: DateProp
             onDateChange={(date: Date) => {
               if (typeof other.onDateChange === "function") {
                 other.onDateChange(date);
+                setOpenLabel(`تاریخ: ${date}`);
               }
               setModalVisible(false);
             }}
