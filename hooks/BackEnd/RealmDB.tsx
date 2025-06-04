@@ -78,14 +78,22 @@ export function getNextId(realm: Realm, schemaName: string): number {
 // توابع CRUD نمونه
 
 // اضافه کردن کالای جدید
-export function addGood(name: string) {
+export function findOrCreateGood(name: string): number {
   const realm = getRealm();
-  realm.write(() => {
-    realm.create("Good", {
-      id: getNextId(realm, "Good"),
-      name,
+  const existing = realm.objects("Good").filtered("name == $0", name)[0];
+
+  if (existing) {
+    return existing.id;
+  } else {
+    const id = getNextId(realm, "Good");
+    realm.write(() => {
+      realm.create("Good", {
+        id,
+        name,
+      });
     });
-  });
+    return id;
+  }
 }
 
 // گرفتن همه کالاها
