@@ -7,6 +7,7 @@ import { SButton } from "@/components/SButton";
 import { Select } from "@/components/Select";
 import { Spacer } from "@/components/Spacer";
 import { Span } from "@/components/Span";
+import { useShamsiDate } from "@/hooks/BackEnd/useShamsiDate";
 import numberToText from "@/hooks/numberToText";
 import { useState } from "react";
 import { StyleSheet } from "react-native";
@@ -19,6 +20,10 @@ export default function HomeScreen() {
   };
 
   const [selectedValue, setSelectedValue] = useState(null);
+
+  const { nowJalali } = useShamsiDate();
+
+  const today = nowJalali();
 
   return (
     <Mother>
@@ -61,7 +66,7 @@ export default function HomeScreen() {
         <Spacer height={40} />
 
         <Date
-          OpenLabel="امروز"
+          OpenLabel={`امروز ${today}`}
           onDateChange={(date: Date) => {
             console.log(date);
           }}
