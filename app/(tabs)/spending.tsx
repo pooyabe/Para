@@ -18,6 +18,8 @@ export default function HomeScreen() {
     setThePriceString(numberToText(val));
   };
 
+  const [selectedValue, setSelectedValue] = useState(null);
+
   return (
     <Mother>
       <Div style={styles.container}>
@@ -37,6 +39,14 @@ export default function HomeScreen() {
           label="چی خریدی؟"
           searchable={true}
           placeholder="برای چی ازت کم شد؟"
+          items_array={[
+            { label: "گزینه ۱", value: 1 },
+            { label: "گزینه ۲", value: 2 },
+          ]}
+          onValueChange={(val) => {
+            console.log("مقدار انتخاب‌شده:", val);
+            setSelectedValue(val);
+          }}
         />
 
         <Spacer height={20} />

@@ -10,6 +10,7 @@ export type SelectProps = ViewProps & {
   items_array?: Array<{ label: string; value: any }>;
   label?: null | string;
   searchable?: boolean;
+  onValueChange?: (value: any) => void;
 };
 
 export function Select({
@@ -18,6 +19,7 @@ export function Select({
   label = "",
   items_array = [{ label: "", value: "" }],
   searchable = false,
+  onValueChange,
   ...rest
 }: SelectProps) {
   // Theme color retrive
@@ -38,7 +40,11 @@ export function Select({
         value={value}
         items={items}
         setOpen={setOpen}
-        setValue={setValue}
+        setValue={(callback) => {
+          const newValue = callback(value);
+          setValue(newValue);
+          onValueChange?.(newValue);
+        }}
         setItems={setItems}
         language="FA"
         rtl={true}
