@@ -43,7 +43,6 @@ export default function HomeScreen() {
           ]}
           onValueChange={(val) => {
             console.log("مقدار انتخاب‌شده:", val);
-            setSelectedValue(val);
           }}
         />
 
