@@ -62,7 +62,7 @@ export default function HomeScreen() {
 
         <Date
           OpenLabel="امروز"
-          onDateChange={(date) => {
+          onDateChange={(date: Date) => {
             console.log(date);
           }}
         />
