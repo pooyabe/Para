@@ -51,7 +51,12 @@ export default function HomeScreen() {
 
         <Spacer height={20} />
 
-        <Radio Items={["الکی", "میشد خرج نشه", "ضروری"]} />
+        <Radio
+          Items={["الکی", "میشد خرج نشه", "ضروری"]}
+          onChangeValueWithIndex={(value, index) => {
+            console.log("انتخاب شد:", value, "در ایندکس:", index);
+          }}
+        />
 
         <Spacer height={40} />
 

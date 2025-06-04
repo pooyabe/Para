@@ -8,12 +8,14 @@ import { Span } from "./Span";
 export type RadioProps = SegmentedControlProps & {
   Items: Array<string>;
   label?: string | undefined;
+  onChangeValueWithIndex?: (value: string, index: number) => void;
 };
 
 export function Radio({
   Items = [],
   label = "برچسب",
   style,
+  onChangeValueWithIndex,
   ...otherProps
 }: RadioProps) {
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -40,7 +42,12 @@ export function Radio({
         values={Items}
         selectedIndex={selectedIndex}
         onChange={(event) => {
-          setSelectedIndex(event.nativeEvent.selectedSegmentIndex);
+          const newIndex = event.nativeEvent.selectedSegmentIndex;
+          setSelectedIndex(newIndex);
+          onChangeValueWithIndex?.(Items[newIndex], newIndex);
+        }}
+        onValueChange={(value) => {
+          // این تابع فقط برای رفع اخطار لازمه چون SegmentedControl بهش نیاز داره
         }}
         appearance="dark"
         backgroundColor={backgroundColor}
@@ -67,6 +74,7 @@ export function Radio({
           borderColor: tintColor,
           backgroundColor: theLightBlue,
         }}
+        {...otherProps}
       />
     </>
   );
