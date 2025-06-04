@@ -1,18 +1,167 @@
-import DatePicker, { type Props } from "@mohamadkh75/react-native-jalali-datepicker";
+import DatePicker, {
+    type Props,
+} from "@mohamadkh75/react-native-jalali-datepicker";
+import { useState } from "react";
+import { Modal } from "react-native";
+import { Div } from "./Div";
+import { SButton } from "./SButton";
 
-export type DateProps = Props & {};
+import { Colors } from "@/constants/Colors";
+import { useColorScheme } from "@/hooks/useColorScheme";
+import { Span } from "./Span";
 
-export function Date(props: DateProps) {
+export type DateProps = Props & {
+  OpenLabel?: string;
+};
+
+export function Date({
+  OpenLabel = "تاریخ امروز",
+  style,
+  ...other
+}: DateProps) {
+  const [modalVisible, setModalVisible] = useState(true);
+
+  const colorScheme = useColorScheme() as "light" | "dark";
+
   return (
-    <DatePicker
-      {...props}
-      style={{
-        width: "100%",
-        height: 50,
-        borderRadius: 10,
-        backgroundColor: "#f0f0f0",
-        paddingHorizontal: 10,
-      }}
-    />
+    <>
+      <SButton
+        onPress={() => setModalVisible(true)}
+        text={OpenLabel}
+        style={{
+          backgroundColor: "transparent",
+          borderWidth: 2,
+        }}
+      />
+      <Modal
+        visible={modalVisible}
+        animationType="slide"
+        onRequestClose={() => setModalVisible(false)}
+        transparent
+      >
+        <Div
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "rgba(24, 31, 47, 0.95)",
+          }}
+        >
+          <Span
+            type="defaultMedium"
+            style={{ fontWeight: "normal", fontSize: 20, marginBottom: 40 }}
+          >
+            انتخاب تاریخ
+          </Span>
+          <DatePicker
+            style={{
+              width: "80%",
+              height: "50%",
+              alignSelf: "center",
+              backgroundColor: Colors[colorScheme].background,
+              borderWidth: 2,
+              borderColor: Colors[colorScheme].border,
+              borderRadius: 10,
+              elevation: 5,
+              padding: 5,
+            }}
+            headerContainerStyle={{ height: "15%" }}
+            yearMonthBoxStyle={{
+              width: "30%",
+              height: "50%",
+              justifyContent: "center",
+              alignItems: "center",
+              borderWidth: 1,
+              borderRadius: 100,
+            }}
+            yearMonthTextStyle={{
+              fontSize: 22,
+              color: Colors[colorScheme].text,
+            }}
+            iconContainerStyle={{ width: `${100 / 7}%` }}
+            backIconStyle={{
+              width: 20,
+              height: 20,
+              resizeMode: "center",
+              tintColor: Colors[colorScheme].tint,
+            }}
+            nextIconStyle={{
+              width: 20,
+              height: 20,
+              resizeMode: "center",
+              tintColor: Colors[colorScheme].tint,
+            }}
+            eachYearStyle={{
+              width: `30%`,
+              height: `100%`,
+              justifyContent: "center",
+              alignItems: "center",
+              backgroundColor: Colors[colorScheme].theLightBlue,
+              marginBottom: "5%",
+              borderRadius: 10,
+              marginHorizontal: "1%",
+              elevation: 3,
+            }}
+            eachYearTextStyle={{
+              fontSize: 16,
+              color: "white",
+            }}
+            eachMonthStyle={{
+              width: `30%`,
+              height: `20%`,
+              justifyContent: "center",
+              alignItems: "center",
+              backgroundColor: Colors[colorScheme].theLightBlue,
+              marginBottom: "3%",
+              borderRadius: 10,
+              elevation: 3,
+            }}
+            eachMonthTextStyle={{ fontSize: 16, color: "white" }}
+            weekdaysContainerStyle={{ height: "10%" }}
+            weekdayStyle={{
+              flex: 1,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            weekdayTextStyle={{
+              fontSize: 16,
+              color: Colors[colorScheme].text,
+            }}
+            borderColor={Colors[colorScheme].border}
+            dayStyle={{
+              width: `${100 / 7}%`,
+              justifyContent: "center",
+              alignItems: "center",
+              aspectRatio: 1 / 1,
+            }}
+            selectedDayStyle={{
+              width: "70%",
+              aspectRatio: 1 / 1,
+              justifyContent: "center",
+              alignItems: "center",
+              borderRadius: 100,
+            }}
+            selectedDayColor={Colors[colorScheme].theLightBlue}
+            dayTextStyle={{ fontSize: 18 }}
+            selectedDayTextColor="white"
+            dayTextColor={Colors[colorScheme].text}
+            disabledTextColor="#4bcffa66"
+            onDateChange={() => setModalVisible(false)}
+          />
+          <SButton
+            text="بستن"
+            onPress={() => setModalVisible(false)}
+            style={{
+              width: "80%",
+              borderWidth: 1,
+              borderRadius: 10,
+              marginTop: 50,
+              height: 50,
+              backgroundColor: Colors[colorScheme].theDarkBlue,
+            }}
+          />
+        </Div>
+      </Modal>
+    </>
   );
 }
