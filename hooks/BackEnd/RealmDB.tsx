@@ -1,7 +1,7 @@
 import Realm from "realm";
 
-const GoodSchema = {
-  name: "Good",
+const SpendingGoodSchema = {
+  name: "SpendingGood",
   primaryKey: "id",
   properties: {
     id: "int",
@@ -9,8 +9,8 @@ const GoodSchema = {
   },
 };
 
-const ImportanceSchema = {
-  name: "Importance",
+const SpendingImportanceSchema = {
+  name: "SpendingImportance",
   primaryKey: "id",
   properties: {
     id: "int",
@@ -24,8 +24,8 @@ const SpendingSchema = {
   properties: {
     id: "int",
     amount: "int",
-    good: "Good",
-    importance: "Importance",
+    good: "SpendingGood",
+    importance: "SpendingImportance",
     date: "date",
     create_datetime: "date",
   },
@@ -67,8 +67,8 @@ const IncomeSchema = {
 const databaseOptions = {
   path: "theLocalDb.realm",
   schema: [
-    GoodSchema,
-    ImportanceSchema,
+    SpendingGoodSchema,
+    SpendingImportanceSchema,
     SpendingSchema,
     IncomeSourceSchema,
     IncomeStorageLocationSchema,
@@ -85,11 +85,11 @@ export function getRealm() {
 
     // درج دیتا پیش‌فرض برای importance
     realmInstance.write(() => {
-      const existing = realmInstance.objects("Importance");
+      const existing = realmInstance.objects("SpendingImportance");
       if (existing.length === 0) {
-        realmInstance.create("Importance", { id: 0, title: "الکی" });
-        realmInstance.create("Importance", { id: 1, title: "میشد خرج نکرد" });
-        realmInstance.create("Importance", { id: 2, title: "ضروری" });
+        realmInstance.create("SpendingImportance", { id: 0, title: "الکی" });
+        realmInstance.create("SpendingImportance", { id: 1, title: "میشد خرج نکرد" });
+        realmInstance.create("SpendingImportance", { id: 2, title: "ضروری" });
       }
     });
   return realmInstance;
@@ -107,14 +107,14 @@ export function getNextId(realm: Realm, schemaName: string): number {
 // اضافه کردن کالای جدید
 export function findOrCreateGood(name: string): number {
   const realm = getRealm();
-  const existing = realm.objects("Good").filtered("name == $0", name)[0];
+  const existing = realm.objects("SpendingGood").filtered("name == $0", name)[0];
 
   if (existing) {
     return existing.id;
   } else {
-    const id = getNextId(realm, "Good");
+    const id = getNextId(realm, "SpendingGood");
     realm.write(() => {
-      realm.create("Good", {
+      realm.create("SpendingGood", {
         id,
         name,
       });
@@ -126,7 +126,7 @@ export function findOrCreateGood(name: string): number {
 // گرفتن همه کالاها
 export function getAllGoods() {
   const realm = getRealm();
-  return realm.objects("Good");
+  return realm.objects("SpendingGood");
 }
 
 // اضافه کردن هزینه جدید
@@ -137,8 +137,8 @@ export function addSpending(
   date: Date
 ) {
   const realm = getRealm();
-  const good = realm.objectForPrimaryKey("Good", goodId);
-  const importance = realm.objectForPrimaryKey("Importance", importanceId);
+  const good = realm.objectForPrimaryKey("SpendingGood", goodId);
+  const importance = realm.objectForPrimaryKey("SpendingImportance", importanceId);
 
   if (!good || !importance) throw new Error("Good یا Importance یافت نشد");
 
