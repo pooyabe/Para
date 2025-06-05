@@ -36,8 +36,18 @@ const IncomeSourceSchema = {
   primaryKey: "id",
   properties: {
     id: "int",
-    anme: "string",
-    date: "date",
+    name: "string",
+    create_datetime: "date",
+  },
+}
+
+const IncomeStorageLocationSchema = {
+  name: "IncomeStorageLocation",
+  primaryKey: "id",
+  properties: {
+    id: "int",
+    name: "IncomeSource",
+    create_datetime: "date",
   },
 }
 
@@ -48,6 +58,7 @@ const IncomeSchema = {
     id: "int",
     amount: "int",
     source: "IncomeSource",
+    storage_location: "IncomeStorageLocation",
     date: "date",
     create_datetime: "date",
   },
@@ -60,6 +71,7 @@ const databaseOptions = {
     ImportanceSchema,
     SpendingSchema,
     IncomeSourceSchema,
+    IncomeStorageLocationSchema,
     IncomeSchema,
   ],
   schemaVersion: 1,
