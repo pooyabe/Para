@@ -31,13 +31,23 @@ const SpendingSchema = {
   },
 };
 
+const IncomeSourceSchema = {
+  name: "IncomeSource",
+  primaryKey: "id",
+  properties: {
+    id: "int",
+    anme: "string",
+    date: "date",
+  },
+}
+
 const IncomeSchema = {
   name: "Income",
   primaryKey: "id",
   properties: {
     id: "int",
     amount: "int",
-    source: "string",
+    source: "IncomeSource",
     date: "date",
     create_datetime: "date",
   },
@@ -49,6 +59,7 @@ const databaseOptions = {
     GoodSchema,
     ImportanceSchema,
     SpendingSchema,
+    IncomeSourceSchema,
     IncomeSchema,
   ],
   schemaVersion: 1,
