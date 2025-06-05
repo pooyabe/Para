@@ -1,6 +1,5 @@
 import Realm from "realm";
 
-// تعریف schemaها
 const GoodSchema = {
   name: "Good",
   primaryKey: "id",
@@ -38,6 +37,7 @@ const IncomeSchema = {
   properties: {
     id: "int",
     amount: "int",
+    source: "string",
     date: "date",
     create_datetime: "date",
   },
@@ -45,7 +45,12 @@ const IncomeSchema = {
 
 const databaseOptions = {
   path: "theLocalDb.realm",
-  schema: [GoodSchema, ImportanceSchema, SpendingSchema, IncomeSchema],
+  schema: [
+    GoodSchema,
+    ImportanceSchema,
+    SpendingSchema,
+    IncomeSchema,
+  ],
   schemaVersion: 1,
 };
 
@@ -64,7 +69,6 @@ export function getRealm() {
         realmInstance.create("Importance", { id: 2, title: "ضروری" });
       }
     });
-  }
   return realmInstance;
 }
 
