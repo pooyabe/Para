@@ -1,3 +1,4 @@
+import { Date } from "@/components/Date";
 import { Div } from "@/components/Div";
 import { Input } from "@/components/Input";
 import { Mother } from "@/components/Mother";
@@ -20,7 +21,7 @@ export default function IncomePage() {
     <Mother>
       <Div style={styles.container}>
         <Input
-          label="چقد زدن؟"
+          label="چقد گرفتی؟"
           type="number"
           onChangeText={(value) => printPriceString(value)}
         />
@@ -32,14 +33,30 @@ export default function IncomePage() {
         <Spacer height={20} />
 
         <Select
-          label="واسه چی زدن؟"
+          label="واسه چی گرفتی؟"
           searchable={true}
           placeholder="چرا بهت پول دادن؟"
         />
 
+        <Spacer height={40} />
+
+        <Select
+          label="کجا ریختن؟"
+          searchable={true}
+          placeholder="نقده؟ بانکیه؟ چیه؟"
+        />
+
+        <Spacer height={40} />
+
+        <Date
+          onDateChange={(date: Date) => {
+            console.log(date);
+          }}
+        />
+
         <Spacer height={100} />
 
-        <SButton text="ثبت شه"/>
+        <SButton text="ثبت شه" />
       </Div>
     </Mother>
   );
