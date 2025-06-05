@@ -1,5 +1,12 @@
 import Realm from "realm";
 
+/**
+ * 
+ * 
+ * Spending Schemas
+ * 
+ * 
+ */
 const SpendingGoodSchema = {
   name: "SpendingGood",
   primaryKey: "id",
@@ -30,6 +37,14 @@ const SpendingSchema = {
     create_datetime: "date",
   },
 };
+
+/**
+ * 
+ * 
+ * Income Schemas
+ * 
+ * 
+ */
 
 const IncomeSourceSchema = {
   name: "IncomeSource",
@@ -64,6 +79,12 @@ const IncomeSchema = {
   },
 };
 
+
+/**
+ * 
+ * Database init
+ * 
+ */
 const databaseOptions = {
   path: "theLocalDb.realm",
   schema: [
@@ -95,6 +116,16 @@ export function getRealm() {
   return realmInstance;
 }
 
+  
+  
+/**
+ * 
+ *
+ * The database actions
+ * 
+ */
+  
+  
 // Helper برای گرفتن id جدید
 export function getNextId(realm: Realm, schemaName: string): number {
   const objects = realm.objects(schemaName);
