@@ -21,7 +21,7 @@ export default function IncomePage() {
     <Mother>
       <Div style={styles.container}>
         <Input
-          label="چقد زدن؟"
+          label="چقد گرفتی؟"
           type="number"
           onChangeText={(value) => printPriceString(value)}
         />
@@ -33,7 +33,7 @@ export default function IncomePage() {
         <Spacer height={20} />
 
         <Select
-          label="واسه چی زدن؟"
+          label="واسه چی گرفتی؟"
           searchable={true}
           placeholder="چرا بهت پول دادن؟"
         />
