@@ -1,27 +1,15 @@
 version: '3.8'
-
 services:
-  expo-dev:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: para_dev_env
-    volumes:
-      - .:/app # ماونت کردن دایرکتوری جاری پروژه به /app داخل کانتینر
-      - /app/node_modules # عدم ماونت node_modules از هاست (برای جلوگیری از مشکلات پلتفرم)
-      - /tmp/.X11-unix:/tmp/.X11-unix # برای نمایش گرافیکی اگر نیاز شد (مثلا برای بعضی ابزارهای SDK)
-      - $HOME/.gradle:/root/.gradle # کش Gradle برای بیلد اندروید (اختیاری)
+  expo-app:
+    build: .
     ports:
-      - "19000:19000" # Expo Dev Tools
-      - "19001:19001" # Metro Bundler
-      - "8081:8081"   # پورت تونلینگ (اگر نیاز شد)
+      - "19000:19000"
+      - "19001:19001"
+      - "19002:19002"
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - ~/.android:/root/.android
     environment:
-      # تنظیم متغیرهای محیطی برای دسترسی به Genymotion (نیاز به تنظیم IP مناسب دارید)
-      - ADB_SERVER_SOCKET=tcp:host.docker.internal:5037 # فرض بر این است که adb server روی هاست اجرا شده
-      - DISPLAY=$DISPLAY # برای دسترسی به سرور X (اختیاری، فقط اگر نیاز به UI در کانتینر بود)
-    tty: true # برای فعال نگه داشتن کانتینر و مشاهده لاگ‌ها
-    stdin_open: true # برای امکان ورودی کاربر (مثلا برای expo-cli)
-    network_mode: "host" # (فقط اوبونتو) برای دسترسی مستقیم به Genymotion و ADB
-    # این خط فقط برای لینوکس کار میکنه و باعث میشه کانتینر به شبکه هاست وصل شه.
-    # اگر از ویندوز یا مک استفاده میکنید، این خط رو حذف کنید و از adb port forwarding استفاده کنید.
-    # و همچنین خطوط ADB_SERVER_SOCKET و DISPLAY را تنظیم کنید.
+      - ANDROID_SDK_ROOT=/opt/android-sdk
+    command: bash

@@ -1,67 +1,60 @@
-# استفاده از یک تصویر پایه اوبونتو 24.04 (نزدیک به 25.04 شما و پایدارتر)
-FROM ubuntu:24.04
+# Use multi-stage build to optimize image size
 
-# برای اینکه دستورات بدون پرسش اجرا بشن
+# Stage 1: Build environment
+FROM ubuntu:24.04 AS build
+
+# Set environment variables to avoid user interaction during installs
 ENV DEBIAN_FRONTEND=noninteractive
+ENV TZ=Etc/UTC
+ENV ANDROID_SDK_ROOT=/opt/android-sdk
 
-# آپدیت سیستم و نصب پیش‌نیازها
-RUN apt-get update && apt-get install -y \
+# Update and install core dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
   curl \
-  git \
   wget \
-  gnupg \
   unzip \
-  openjdk-17-jdk \
+  git \
+  ca-certificates \
+  build-essential \
+  openjdk-17-jdk-headless \
+  gradle \
+  nodejs \
+  npm \
   && rm -rf /var/lib/apt/lists/*
 
-# نصب Node.js (پیشنهاد میشه از nvm برای مدیریت ورژن استفاده کنید، ولی برای سادگی اینجا مستقیم نصب می‌کنیم)
-# Node.js 20 LTS برای React 19 مناسبه.
-RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
-  apt-get install -y nodejs && \
-  npm install -g npm@latest
+# Install Node.js 20 (official NodeSource PPA)
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+  && apt-get install -y nodejs \
+  && npm install -g npm@latest
 
-# نصب Expo CLI و watchman
-RUN npm install -g expo-cli watchman
+# Install Expo CLI globally
+RUN npm install -g expo-cli
 
-# تنظیم متغیرهای محیطی برای Android SDK
-# SDK رو داخل کانتینر نصب می‌کنیم، چون Realm بهش نیاز داره برای بیلد کردن native modules
-ENV ANDROID_HOME=/opt/android/sdk
-ENV PATH="$PATH:${ANDROID_HOME}/cmdline-tools/latest/bin:${ANDROID_HOME}/platform-tools"
+# Install Android SDK Command-line Tools and platform tools
+RUN mkdir -p ${ANDROID_SDK_ROOT}/cmdline-tools \
+  && cd /opt \
+  && wget https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -O cmdline-tools.zip \
+  && unzip cmdline-tools.zip -d ${ANDROID_SDK_ROOT}/cmdline-tools \
+  && mv ${ANDROID_SDK_ROOT}/cmdline-tools/cmdline-tools ${ANDROID_SDK_ROOT}/cmdline-tools/latest \
+  && rm cmdline-tools.zip
 
-# ساخت دایرکتوری‌های لازم برای SDK
-RUN mkdir -p ${ANDROID_HOME}/cmdline-tools
+# Add Android SDK tools to PATH
+ENV PATH="${ANDROID_SDK_ROOT}/cmdline-tools/latest/bin:${ANDROID_SDK_ROOT}/platform-tools:${PATH}"
 
-# دانلود Command Line Tools
-WORKDIR /tmp
-RUN wget https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -O cmdline-tools.zip && \
-  unzip cmdline-tools.zip -d ${ANDROID_HOME}/cmdline-tools/latest && \
-  rm cmdline-tools.zip
+# Accept Android licenses
+RUN yes | sdkmanager --licenses
 
-# پذیرش لایسنس‌ها و نصب Platform-Tools و Build-Tools
-# Realm برای کامپایل به build-tools و platform-tools نیاز داره.
-# ورژن 34.0.0 از build-tools با Android 14 (API 34) سازگاره که با Expo 53 همخوانی داره.
-RUN yes | sdkmanager --licenses && \
-  sdkmanager "platform-tools" "build-tools;34.0.0" "platforms;android-34"
+# Install required Android SDK components: platform-tools, build-tools, platforms
+RUN sdkmanager "platform-tools" "build-tools;33.0.2" "platforms;android-33"
 
-# تعریف دایرکتوری کاری پروژه
+# Set working directory
 WORKDIR /app
 
-# کپی کردن فایل‌های package.json و app.json (برای استفاده از کش NPM)
-COPY package.json ./
-COPY app.json ./
+# Expose ports commonly used by Expo (19000,19001,19002)
+EXPOSE 19000 19001 19002
 
-# نصب وابستگی‌های پروژه
-# از `npm ci` استفاده میشه که سرعت بالاتری داره و بر اساس package-lock.json نصب می‌کنه
-RUN npm ci
+# Volume for node_modules and Android SDK caching
+VOLUME ["/app/node_modules", "/root/.android"]
 
-# در نهایت، کپی کردن بقیه فایل‌های پروژه
-# این مرحله باید بعد از npm ci باشه تا اگر تغییری در کد اصلی پروژه دادید، کش npm خراب نشه.
-COPY . .
-
-# پورتی که Expo dev server استفاده می‌کنه
-EXPOSE 8081
-EXPOSE 19000
-EXPOSE 19001
-
-# دستور پیش‌فرض برای اجرای پروژه
-CMD ["expo", "start", "--no-hmr", "--tunnel"]
+# Default command - open a shell
+CMD ["bash"]
