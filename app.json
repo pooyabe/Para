@@ -17,7 +17,7 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.pooya_beh.Para"
+      "package": "com.union.Para"
     },
     "web": {
       "bundler": "metro",
