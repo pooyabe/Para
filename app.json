@@ -16,8 +16,7 @@
         "foregroundImage": "./assets/images/icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true,
-      "package": "com.union.Para"
+      "edgeToEdgeEnabled": true
     },
     "web": {
       "bundler": "metro",
