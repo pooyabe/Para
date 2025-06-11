@@ -10,12 +10,18 @@ import numberToText from "@/hooks/numberToText";
 import { useState } from "react";
 import { StyleSheet } from "react-native";
 
+import { getAllIncomes } from "@/hooks/DB";
+
 export default function IncomePage() {
   const [thePriceString, setThePriceString] = useState("");
 
   const printPriceString = (val: any) => {
     setThePriceString(numberToText(val));
   };
+
+  const the_incomes = getAllIncomes();
+
+  console.log(the_incomes);
 
   return (
     <Mother>
