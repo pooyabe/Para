@@ -6,10 +6,10 @@ import { SButton } from "@/components/SButton";
 import { Select } from "@/components/Select";
 import { Spacer } from "@/components/Spacer";
 import { Span } from "@/components/Span";
+import { dbInit } from "@/hooks/DB";
 import numberToText from "@/hooks/numberToText";
 import { useState } from "react";
 import { StyleSheet } from "react-native";
-
 
 export default function IncomePage() {
   const [thePriceString, setThePriceString] = useState("");
@@ -17,6 +17,8 @@ export default function IncomePage() {
   const printPriceString = (val: any) => {
     setThePriceString(numberToText(val));
   };
+
+  dbInit();
 
   return (
     <Mother>

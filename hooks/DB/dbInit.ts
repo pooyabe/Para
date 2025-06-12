@@ -1,47 +1,21 @@
-import Realm from "realm";
+import * as SQLite from "expo-sqlite";
 
-import {
-    IncomeSchema,
-    IncomeSourceSchema,
-    IncomeStorageLocationSchema,
-} from "./schemas/IncomeSchemas";
-import {
-    SpendingGoodSchema,
-    SpendingImportanceSchema,
-    SpendingSchema,
-} from "./schemas/SpendingSchemas";
+export const dbInit = async () => {
+  const db = await SQLite.openDatabaseAsync("para.db");
 
-const databaseOptions = {
-  path: "theLocalDb.realm",
-  schema: [
-    SpendingGoodSchema,
-    SpendingImportanceSchema,
-    SpendingSchema,
-    IncomeSourceSchema,
-    IncomeStorageLocationSchema,
-    IncomeSchema,
-  ],
-  schemaVersion: 1,
+  await db.execAsync(`
+  PRAGMA journal_mode = WAL;
+  CREATE TABLE IF NOT EXISTS test (id INTEGER PRIMARY KEY NOT NULL, value TEXT NOT NULL, intValue INTEGER);
+  INSERT INTO test (value, intValue) VALUES ('test1', 123);
+  INSERT INTO test (value, intValue) VALUES ('test2', 456);
+  INSERT INTO test (value, intValue) VALUES ('test3', 789);
+  `);
+
+  // `runAsync()` is useful when you want to execute some write operations.
+  const result = await db.runAsync(
+    "INSERT INTO test (value, intValue) VALUES (?, ?)",
+    "aaa",
+    100
+  );
+  console.log(result.lastInsertRowId, result.changes);
 };
-
-let realmInstance: Realm | null = null;
-
-export function getRealm() {
-  if (realmInstance === null) {
-    realmInstance = new Realm(databaseOptions);
-
-    // درج دیتا پیش‌فرض برای importance
-    realmInstance.write(() => {
-      const existing = realmInstance.objects("SpendingImportance");
-      if (existing.length === 0) {
-        realmInstance.create("SpendingImportance", { id: 0, title: "الکی" });
-        realmInstance.create("SpendingImportance", {
-          id: 1,
-          title: "میشد خرج نکرد",
-        });
-        realmInstance.create("SpendingImportance", { id: 2, title: "ضروری" });
-      }
-    });
-  }
-  return realmInstance;
-}
