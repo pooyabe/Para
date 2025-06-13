@@ -14,7 +14,18 @@ import { useColorScheme } from "@/hooks/useColorScheme";
 import { useEffect } from "react";
 
 export default function RootLayout() {
+  
   const colorScheme = useColorScheme();
+
+  useEffect(() => {
+    /**
+     * This effect is for initializing the database.
+     * It runs once when the component mounts.
+     * The `initializeDatabase` function is responsible for setting up the database.
+     */
+    initializeDatabase();
+  }, []);
+
   const [loaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
     VazirRegular: require("../assets/fonts/Vazir-Regular.ttf"),
@@ -27,15 +38,6 @@ export default function RootLayout() {
     // Async font loading only occurs in development.
     return null;
   }
-
-  useEffect(() => {
-    /**
-     * This effect is for initializing the database.
-     * It runs once when the component mounts.
-     * The `initializeDatabase` function is responsible for setting up the database.
-     */
-    initializeDatabase();
-  }, []);
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
