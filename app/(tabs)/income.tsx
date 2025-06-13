@@ -11,10 +11,21 @@ import { useState } from "react";
 import { StyleSheet } from "react-native";
 
 export default function IncomePage() {
+
+  // The inputs states
+  const [income_amount, setAmount] = useState("");
+  const [income_reason, setReason] = useState("");
+  const [where_stored, setWhereStored] = useState("");
+  const [income_date, setDate] = useState("");
+
+  // This state is for converting the number input to a text representation
+  // which can be used for display purposes, like showing the amount in words.
   const [thePriceString, setThePriceString] = useState("");
 
   const printPriceString = (val: any) => {
     setThePriceString(numberToText(val));
+
+    setAmount(val); // Update the amount state with the numeric value
   };
 
   return (
@@ -36,6 +47,9 @@ export default function IncomePage() {
           label="واسه چی گرفتی؟"
           searchable={true}
           placeholder="چرا بهت پول دادن؟"
+          onValueChange={(value: string) => {
+            setReason(value);
+          }}
         />
 
         <Spacer height={40} />
@@ -44,13 +58,16 @@ export default function IncomePage() {
           label="کجا ریختن؟"
           searchable={true}
           placeholder="نقده؟ بانکیه؟ چیه؟"
+          onValueChange={(value: string) => {
+            setWhereStored(value);
+          }}
         />
 
         <Spacer height={40} />
 
         <Date
           onDateChange={(date: Date) => {
-            console.log(date);
+            setDate(date.toISOString().split("T")[0]); // Format date to YYYY-MM-DD
           }}
         />
 
