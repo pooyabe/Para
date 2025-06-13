@@ -1,40 +1,44 @@
 import { useThemeColor } from "@/hooks/useThemeColor";
+import { useEffect, useState } from "react";
 import { StyleSheet, View, type ViewProps } from "react-native";
+import DropDownPicker from "react-native-dropdown-picker";
 import { Span } from "./Span";
 
-import { useState } from "react";
-import DropDownPicker from "react-native-dropdown-picker";
-
 export type SelectProps = ViewProps & {
-  placeholder?: undefined | string;
-  items_array?: Array<{ label: string; value: any }>;
-  label?: null | string;
+  placeholder?: string;
+  items_array?: Array<{ label: string; value: string }>;
+  label?: string | null;
   searchable?: boolean;
-  onValueChange?: (value: any) => void;
+  onValueChange?: (value: string) => void;
+  initialValue?: string | null;
 };
 
 export function Select({
   style,
   placeholder = "انتخاب",
   label = "",
-  items_array = [{ label: "", value: "" }],
+  items_array = [],
   searchable = false,
   onValueChange,
+  initialValue = null,
   ...rest
 }: SelectProps) {
-  // Theme color retrive
   const textColor = useThemeColor({}, "text");
   const backgroundColor = useThemeColor({}, "background");
   const tintColor = useThemeColor({}, "tint");
 
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState([]);
-  const [items, setItems] =
-    useState<Array<{ label: string; value: any }>>(items_array);
+  const [value, setValue] = useState<string | null>(initialValue);
+  const [items, setItems] = useState(items_array);
+
+  // Sync external changes to items_array
+  useEffect(() => {
+    setItems(items_array);
+  }, [items_array]);
 
   return (
     <View style={[styles.SelectInputGroup, style]}>
-      <Span style={styles.SelectoverLabel}>{label}</Span>
+      {label && <Span style={styles.SelectoverLabel}>{label}</Span>}
       <DropDownPicker
         open={open}
         value={value}
@@ -114,21 +118,13 @@ export function Select({
   );
 }
 
-/**
- *
- * Styles
- *
- */
-
-// Theme styles
-const borderColor = useThemeColor({}, "border");
-
+// === Style ===
 const styles = StyleSheet.create({
   SelectInputGroup: {
     borderWidth: 1.5,
     width: "100%",
     borderRadius: 100,
-    borderColor,
+    borderColor: useThemeColor({}, "border"),
     zIndex: 1,
     height: 60,
     display: "flex",
@@ -136,11 +132,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingBottom: 10,
   },
-  /**
-   *
-   * Label Style
-   *
-   */
   SelectoverLabel: {
     backgroundColor: "rgb(24, 31, 47)",
     zIndex: 2,
