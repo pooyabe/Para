@@ -44,7 +44,7 @@ export async function addSpending({
   const reasonId = await getOrCreateId("spending_items", reasonTitle);
 
   await db.runAsync(
-    `INSERT INTO spending (amount, reason_id, importance, transaction_date)
+    `INSERT INTO spendings (amount, item_id, importance, transaction_date)
      VALUES (?, ?, ?, ?)`,
     [amount, reasonId, importance, transactionDate]
   );
