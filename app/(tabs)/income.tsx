@@ -7,16 +7,16 @@ import { Select } from "@/components/Select";
 import { Spacer } from "@/components/Spacer";
 import { Span } from "@/components/Span";
 import { useShamsiDate } from "@/hooks/BackEnd/useShamsiDate";
-import { addIncome } from "@/hooks/DB";
+import { addIncome, getIncomeDestinations, getIncomeReasons } from "@/hooks/DB";
 import numberToText from "@/hooks/numberToText";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 
 export default function IncomePage() {
   // The inputs states
   const [income_amount, setAmount] = useState("");
-  const [income_reason, setReason] = useState("");
-  const [where_stored, setWhereStored] = useState("");
+  const [income_reason, setReason] = useState(null);
+  const [where_stored, setWhereStored] = useState(null);
   const [income_date, setDate] = useState("");
 
   // This state is for converting the number input to a text representation
@@ -29,6 +29,8 @@ export default function IncomePage() {
     setAmount(val); // Update the amount state with the numeric value
   };
 
+  
+
   const handleDateChange = (date: any) => {
     const { toGregorian } = useShamsiDate();
     const georgianDate = toGregorian(date);
@@ -37,10 +39,31 @@ export default function IncomePage() {
 
   /**
    *
+   * Fill income options from database
+   *
+   */
+  const [reasons, setReasons] = useState([]);
+  const [destinations, setDestinations] = useState([]);
+
+  useEffect(() => {
+    const fetchOptions = async () => {
+      const [reasonOpts, destinationOpts] = await Promise.all([
+        getIncomeReasons(),
+        getIncomeDestinations(),
+      ]);
+      setReasons(reasonOpts);
+      setDestinations(destinationOpts);
+    };
+
+    fetchOptions();
+  }, []);
+
+  /**
+   *
    * This function is called when the user clicks the "ثبت شه" button.
    * It should handle the logic for saving the income data.
    *
-  **/
+   **/
   const saveIncome = async () => {
     try {
       await addIncome({
@@ -78,6 +101,7 @@ export default function IncomePage() {
           onValueChange={(value: string) => {
             setReason(value);
           }}
+          items_array={reasons}
         />
 
         <Spacer height={40} />
@@ -89,6 +113,7 @@ export default function IncomePage() {
           onValueChange={(value: string) => {
             setWhereStored(value);
           }}
+          items_array={destinations}
         />
 
         <Spacer height={40} />
