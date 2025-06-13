@@ -6,5 +6,6 @@ export { getDbConnection } from "./helpers";
 
 // Actions for managing incomes
 export * from "./actions/addIncome";
+export * from "./actions/getIncomeOptions";
 export * from "./actions/getIncomes";
 
