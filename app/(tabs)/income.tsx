@@ -1,11 +1,4 @@
-import { Date } from "@/components/Date";
-import { Div } from "@/components/Div";
-import { Input } from "@/components/Input";
-import { Mother } from "@/components/Mother";
-import { SButton } from "@/components/SButton";
-import { Select } from "@/components/Select";
-import { Spacer } from "@/components/Spacer";
-import { Span } from "@/components/Span";
+import { Date, Div, Input, Mother, SButton, Select, Spacer, Span } from "@/components";
 import { useIncomeForm } from "@/hooks/BackEnd/Pages/useIncomeForm";
 import { StyleSheet } from "react-native";
 

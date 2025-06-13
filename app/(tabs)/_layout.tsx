@@ -1,9 +1,8 @@
 import { Tabs } from "expo-router";
 import React from "react";
 
-import { Div } from "@/components/Div";
-import { Span } from "@/components/Span";
-import { IconSymbol } from "@/components/ui/IconSymbol";
+import { Div, IconSymbol, Span } from "@/components";
+
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { Image } from "react-native";

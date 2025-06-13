@@ -1,12 +1,5 @@
-import { Date } from "@/components/Date";
-import { Div } from "@/components/Div";
-import { Input } from "@/components/Input";
-import { Mother } from "@/components/Mother";
-import { Radio } from "@/components/Radio";
-import { SButton } from "@/components/SButton";
-import { Select } from "@/components/Select";
-import { Spacer } from "@/components/Spacer";
-import { Span } from "@/components/Span";
+import { Date, Div, Input, Mother, Radio, SButton, Select, Spacer, Span } from "@/components";
+
 import numberToText from "@/hooks/numberToText";
 import { useState } from "react";
 import { StyleSheet } from "react-native";

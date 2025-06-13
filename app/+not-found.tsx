@@ -1,8 +1,8 @@
 import { Link, Stack } from 'expo-router';
 import { StyleSheet } from 'react-native';
 
-import { Div } from '@/components/Div';
-import { Span } from '@/components/Span';
+import { Div } from '@/components/Elements/Div';
+import { Span } from '@/components/Elements/Span';
 
 export default function NotFoundScreen() {
   return (
