@@ -14,7 +14,7 @@ export async function getIncomeReasons(): Promise<OptionItem[]> {
 
   return rows.map((row) => ({
     label: row.title,
-    value: row.id,
+    value: row.title,
   }));
 }
 
@@ -27,6 +27,6 @@ export async function getIncomeDestinations(): Promise<OptionItem[]> {
 
   return rows.map((row) => ({
     label: row.title,
-    value: row.id,
+    value: row.title,
   }));
 }
