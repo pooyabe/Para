@@ -6,12 +6,12 @@ import { SButton } from "@/components/SButton";
 import { Select } from "@/components/Select";
 import { Spacer } from "@/components/Spacer";
 import { Span } from "@/components/Span";
+import { useShamsiDate } from "@/hooks/BackEnd/useShamsiDate";
 import numberToText from "@/hooks/numberToText";
 import { useState } from "react";
 import { StyleSheet } from "react-native";
 
 export default function IncomePage() {
-
   // The inputs states
   const [income_amount, setAmount] = useState("");
   const [income_reason, setReason] = useState("");
@@ -26,6 +26,12 @@ export default function IncomePage() {
     setThePriceString(numberToText(val));
 
     setAmount(val); // Update the amount state with the numeric value
+  };
+
+  const handleDateChange = (date: any) => {
+    const { toGregorian } = useShamsiDate();
+    const georgianDate = toGregorian(date);
+    setDate(georgianDate);
   };
 
   return (
@@ -66,8 +72,9 @@ export default function IncomePage() {
         <Spacer height={40} />
 
         <Date
+          style={{ width: "100%" }}
           onDateChange={(date: Date) => {
-            setDate(date.toISOString().split("T")[0]); // Format date to YYYY-MM-DD
+            handleDateChange(date);
           }}
         />
 
