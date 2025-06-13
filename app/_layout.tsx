@@ -9,7 +9,9 @@ import { StatusBar } from "expo-status-bar";
 import "react-native-reanimated";
 
 import { Colors } from "@/constants/Colors";
+import { initializeDatabase } from "@/hooks/DB";
 import { useColorScheme } from "@/hooks/useColorScheme";
+import { useEffect } from "react";
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -25,6 +27,15 @@ export default function RootLayout() {
     // Async font loading only occurs in development.
     return null;
   }
+
+  useEffect(() => {
+    /**
+     * This effect is for initializing the database.
+     * It runs once when the component mounts.
+     * The `initializeDatabase` function is responsible for setting up the database.
+     */
+    initializeDatabase();
+  }, []);
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
