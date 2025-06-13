@@ -6,78 +6,24 @@ import { SButton } from "@/components/SButton";
 import { Select } from "@/components/Select";
 import { Spacer } from "@/components/Spacer";
 import { Span } from "@/components/Span";
-import { useShamsiDate } from "@/hooks/BackEnd/useShamsiDate";
-import { addIncome, getIncomeDestinations, getIncomeReasons } from "@/hooks/DB";
-import numberToText from "@/hooks/numberToText";
-import { useEffect, useState } from "react";
+import { useIncomeForm } from "@/hooks/BackEnd/Pages/useIncomeForm";
 import { StyleSheet } from "react-native";
 
 export default function IncomePage() {
-  // The inputs states
-  const [income_amount, setAmount] = useState("");
-  const [income_reason, setReason] = useState(null);
-  const [where_stored, setWhereStored] = useState(null);
-  const [income_date, setDate] = useState("");
-
-  // This state is for converting the number input to a text representation
-  // which can be used for display purposes, like showing the amount in words.
-  const [thePriceString, setThePriceString] = useState("");
-
-  const printPriceString = (val: any) => {
-    setThePriceString(numberToText(val));
-
-    setAmount(val); // Update the amount state with the numeric value
-  };
-
-  
-
-  const handleDateChange = (date: any) => {
-    const { toGregorian } = useShamsiDate();
-    const georgianDate = toGregorian(date);
-    setDate(georgianDate);
-  };
-
-  /**
-   *
-   * Fill income options from database
-   *
-   */
-  const [reasons, setReasons] = useState([]);
-  const [destinations, setDestinations] = useState([]);
-
-  useEffect(() => {
-    const fetchOptions = async () => {
-      const [reasonOpts, destinationOpts] = await Promise.all([
-        getIncomeReasons(),
-        getIncomeDestinations(),
-      ]);
-      setReasons(reasonOpts);
-      setDestinations(destinationOpts);
-    };
-
-    fetchOptions();
-  }, []);
-
-  /**
-   *
-   * This function is called when the user clicks the "ثبت شه" button.
-   * It should handle the logic for saving the income data.
-   *
-   **/
-  const saveIncome = async () => {
-    try {
-      await addIncome({
-        amount: Number(income_amount),
-        reasonTitle: income_reason.trim(),
-        destinationTitle: where_stored.trim(),
-        transactionDate: income_date,
-      });
-      alert("✅ ذخیره شد!");
-    } catch (e) {
-      console.error("❌ خطا در ذخیره:", e);
-    }
-  };
-
+  const {
+    income_amount,
+    income_reason,
+    where_stored,
+    income_date,
+    thePriceString,
+    reasons,
+    destinations,
+    printPriceString,
+    handleDateChange,
+    setReason,
+    setWhereStored,
+    saveIncome,
+  } = useIncomeForm();
   // The UI
   return (
     <Mother>
