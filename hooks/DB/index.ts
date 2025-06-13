@@ -9,3 +9,5 @@ export * from "./actions/addIncome";
 export * from "./actions/getIncomeOptions";
 export * from "./actions/getIncomes";
 
+// Actions for managing spending
+export * from "./actions/getSpendingOptions";
