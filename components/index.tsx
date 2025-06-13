@@ -1,5 +1,6 @@
 export { Date } from "./Elements/Date";
 export { Div } from "./Elements/Div";
+export { IconSymbol } from "./Elements/IconSymbol";
 export { Input } from "./Elements/Input";
 export { Mother } from "./Elements/Mother";
 export { Radio } from "./Elements/Radio";
