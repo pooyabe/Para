@@ -7,6 +7,7 @@ import { Select } from "@/components/Select";
 import { Spacer } from "@/components/Spacer";
 import { Span } from "@/components/Span";
 import { useShamsiDate } from "@/hooks/BackEnd/useShamsiDate";
+import { addIncome } from "@/hooks/DB";
 import numberToText from "@/hooks/numberToText";
 import { useState } from "react";
 import { StyleSheet } from "react-native";
@@ -34,6 +35,27 @@ export default function IncomePage() {
     setDate(georgianDate);
   };
 
+  /**
+   *
+   * This function is called when the user clicks the "ثبت شه" button.
+   * It should handle the logic for saving the income data.
+   *
+  **/
+  const saveIncome = async () => {
+    try {
+      await addIncome({
+        amount: Number(income_amount),
+        reasonTitle: income_reason.trim(),
+        destinationTitle: where_stored.trim(),
+        transactionDate: income_date,
+      });
+      alert("✅ ذخیره شد!");
+    } catch (e) {
+      console.error("❌ خطا در ذخیره:", e);
+    }
+  };
+
+  // The UI
   return (
     <Mother>
       <Div style={styles.container}>
@@ -80,7 +102,7 @@ export default function IncomePage() {
 
         <Spacer height={100} />
 
-        <SButton text="ثبت شه" />
+        <SButton text="ثبت شه" onPress={saveIncome} />
       </Div>
     </Mother>
   );
