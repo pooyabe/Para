@@ -10,7 +10,9 @@ export const useIncomeForm = () => {
   const [income_reason, setReason] = useState<string | null>(null);
   const [where_stored, setWhereStored] = useState<string | null>(null);
   const [income_date, setDate] = useState("");
-  const [shamsiIncomeDate, setShamsiIncomeDate] = useState<string | undefined>();
+  const [shamsiIncomeDate, setShamsiIncomeDate] = useState<
+    string | undefined
+  >();
   const [thePriceString, setThePriceString] = useState("");
 
   // حالت‌های لیست‌های dropdown
@@ -60,6 +62,10 @@ export const useIncomeForm = () => {
     };
 
     fetchOptions();
+
+    // Set the current day as default
+    const { nowJalali } = useShamsiDate();
+    handleDateChange(nowJalali());
   }, []);
 
   // ذخیره‌سازی داده‌ها

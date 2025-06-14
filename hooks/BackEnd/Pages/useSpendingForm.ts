@@ -47,6 +47,10 @@ export const useSpendingForm = () => {
     };
 
     fetchOptions();
+
+    // Set the current day as default
+    const { nowJalali } = useShamsiDate();
+    handleDateChange(nowJalali());
   }, []);
 
   // ذخیره‌سازی داده‌ها
