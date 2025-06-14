@@ -6,8 +6,8 @@ import { useEffect, useState } from "react";
 export const useSpendingForm = () => {
   const [spending_amount, setAmount] = useState();
   const [importance, setImportance] = useState(0);
-  const [spending_date, setDate] = useState();
-  const [shamsiSpendingDate, setShamsiSpendingDate] = useState();
+  const [spending_date, setDate] = useState<string | undefined>();
+  const [shamsiSpendingDate, setShamsiSpendingDate] = useState<string | undefined>();
   const [spendingReason, setSpendingReason] = useState<string | null>(null);
 
   // برای نمایش متن قیمت
@@ -32,13 +32,18 @@ export const useSpendingForm = () => {
   };
 
   // دریافت لیست‌ها از دیتابیس
-  const [reasons, setReasons] = useState<Array<{ id: number; title: string }>>(
+  const [reasons, setReasons] = useState<Array<{ label: string; value: string }>>(
     []
   );
   useEffect(() => {
     const fetchOptions = async () => {
       const [reasonOpts] = await Promise.all([getSpendingOptions()]);
-      setReasons(reasonOpts);
+      setReasons(
+        reasonOpts.map((opt: any) => ({
+          label: opt.label,
+          value: opt.value,
+        }))
+      );
     };
 
     fetchOptions();
@@ -46,7 +51,14 @@ export const useSpendingForm = () => {
 
   // ذخیره‌سازی داده‌ها
   const saveSpending = async () => {
-    if (!spending_amount || !spendingReason || !spending_date || importance === "") {
+    if (
+      spending_amount === undefined ||
+      spending_amount === null ||
+      !spendingReason ||
+      !spending_date ||
+      importance === undefined ||
+      importance === null
+    ) {
       alert("لطفاً همه فیلدها را پر کنید!");
       return;
     }
@@ -55,7 +67,7 @@ export const useSpendingForm = () => {
       await addSpending({
         amount: Number(spending_amount),
         reasonTitle: spendingReason,
-        importance: importance,
+        importance: String(importance),
         transactionDate: spending_date,
       });
       alert("✅ ذخیره شد!");
