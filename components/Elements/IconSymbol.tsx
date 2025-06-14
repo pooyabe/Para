@@ -1,6 +1,8 @@
-// Fallback for using MaterialIcons on Android and web.
+// Import Icon Libraries
 
+import Ionicons from "@expo/vector-icons/Ionicons";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+
 import { OpaqueColorValue, type StyleProp, type TextStyle } from "react-native";
 
 /**
@@ -13,7 +15,7 @@ export function IconSymbol({
   size = 24,
   color,
   style,
-  type = "MaterialIcon",
+  type = "MaterialIcons",
 }: {
   name: ComponentProps<typeof MaterialIcons>["name"];
   size?: number;
@@ -22,10 +24,8 @@ export function IconSymbol({
   type?: string;
 }) {
   switch (type) {
-    case "MaterialIcon":
-      return (
-        <MaterialIcons color={color} size={size} name={name} style={style} />
-      );
+    case "Ionicons":
+      return <Ionicons color={color} size={size} name={name} style={style} />;
     default:
       return (
         <MaterialIcons color={color} size={size} name={name} style={style} />
