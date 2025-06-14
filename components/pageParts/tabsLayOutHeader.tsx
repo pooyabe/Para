@@ -5,8 +5,8 @@ import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
 
 export function TabsHeader() {
-  const colorScheme = useColorScheme();
-  
+  const colorScheme = useColorScheme() as "light" | "dark";
+
   return (
     <Mother
       style={{
@@ -70,7 +70,8 @@ export function TabsHeader() {
           }}
         >
           <IconSymbol
-            name="wallet"
+            type="Ionicons"
+            name="wallet-outline"
             size={25}
             color={Colors[colorScheme].background}
           />
