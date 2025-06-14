@@ -14,7 +14,6 @@ import { useColorScheme } from "@/hooks/useColorScheme";
 import { useEffect } from "react";
 
 export default function RootLayout() {
-  
   const colorScheme = useColorScheme();
 
   useEffect(() => {
@@ -53,6 +52,7 @@ export default function RootLayout() {
         }}
       >
         <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="reports" />
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar style="light" />
