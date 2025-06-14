@@ -3,6 +3,7 @@ import { Div, IconSymbol, Mother, Span } from "../Elements";
 
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
+import { router } from "expo-router";
 
 export function TabsHeader() {
   const colorScheme = useColorScheme() as "light" | "dark";
@@ -53,6 +54,7 @@ export function TabsHeader() {
         }}
       >
         <TouchableOpacity
+          onPress={() => router.navigate("/reports/report")}
           style={{
             borderWidth: 1,
             borderRadius: 50,
