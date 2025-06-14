@@ -5,7 +5,7 @@ import { Div, IconSymbol, Mother, Span } from "@/components";
 
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
-import { Image } from "react-native";
+import { Image, TouchableOpacity } from "react-native";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme() as "light" | "dark";
@@ -77,6 +77,49 @@ export default function TabLayout() {
               <Span type="title" style={{ fontSize: 25, fontWeight: "normal" }}>
                 پارا
               </Span>
+            </Div>
+            <Div
+              style={{
+                flex: 1,
+                direction: "rtl",
+                paddingRight: 20,
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              <TouchableOpacity
+                style={{
+                  borderWidth: 1,
+                  borderRadius: 50,
+                  overflow: "hidden",
+                  display: "flex",
+                  flexDirection: "row",
+                  columnGap: 10,
+                  padding: 5,
+                  paddingRight: 15,
+                  paddingLeft: 15,
+                  justifyContent: "space-around",
+                  alignItems: "center",
+                  backgroundColor: "#20FC8F",
+                  // backgroundColor: "#ECA72C",
+                }}
+              >
+                <IconSymbol
+                  name="wallet"
+                  size={25}
+                  color={Colors[colorScheme].background}
+                />
+                <Span
+                  type="default"
+                  style={{
+                    fontSize: 14,
+                    color: Colors[colorScheme].background,
+                  }}
+                >
+                  اوضاعم چطوره؟
+                </Span>
+              </TouchableOpacity>
             </Div>
           </Mother>
         ),
