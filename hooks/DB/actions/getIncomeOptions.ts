@@ -2,13 +2,13 @@ import { getDbConnection } from "../helpers";
 
 type OptionItem = {
   label: string;
-  value: number;
+  value: string;
 };
 
 export async function getIncomeReasons(): Promise<OptionItem[]> {
   const db = await getDbConnection();
 
-  const rows = await db.getAllAsync<{ id: number; title: string }>(
+  const rows = await db.getAllAsync<{ title: string }>(
     `SELECT id, title FROM income_reasons ORDER BY title ASC`
   );
 
@@ -21,7 +21,7 @@ export async function getIncomeReasons(): Promise<OptionItem[]> {
 export async function getIncomeDestinations(): Promise<OptionItem[]> {
   const db = await getDbConnection();
 
-  const rows = await db.getAllAsync<{ id: number; title: string }>(
+  const rows = await db.getAllAsync<{ title: string }>(
     `SELECT id, title FROM income_destinations ORDER BY title ASC`
   );
 

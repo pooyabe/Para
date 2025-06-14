@@ -2,7 +2,7 @@ import { getDbConnection } from "../helpers";
 
 type OptionItem = {
   label: string;
-  value: number;
+  value: string;
 };
 
 export async function getSpendingOptions(): Promise<OptionItem[]> {
