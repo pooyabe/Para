@@ -16,6 +16,7 @@ export default function IncomePage() {
     setReason,
     setWhereStored,
     saveIncome,
+    shamsiIncomeDate,
   } = useIncomeForm();
   // The UI
   return (
@@ -58,7 +59,7 @@ export default function IncomePage() {
         <Spacer height={40} />
 
         <Date
-          style={{ width: "100%" }}
+          SelectedDate={shamsiIncomeDate}
           onDateChange={(date: Date) => {
             handleDateChange(date);
           }}

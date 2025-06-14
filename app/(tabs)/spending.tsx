@@ -23,6 +23,8 @@ export default function HomeScreen() {
     setImportance,
     handleDateChange,
     saveSpending,
+    spending_date,
+    shamsiSpendingDate,
   } = useSpendingForm();
 
   return (
@@ -62,6 +64,7 @@ export default function HomeScreen() {
         <Spacer height={40} />
 
         <Date
+          SelectedDate={shamsiSpendingDate}
           onDateChange={(date) => {
             handleDateChange(date);
           }}

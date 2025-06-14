@@ -7,6 +7,7 @@ export const useSpendingForm = () => {
   const [spending_amount, setAmount] = useState();
   const [importance, setImportance] = useState("الکی");
   const [spending_date, setDate] = useState();
+  const [shamsiSpendingDate, setShamsiSpendingDate] = useState();
   const [spendingReason, setSpendingReason] = useState<string | null>(null);
 
   // برای نمایش متن قیمت
@@ -22,6 +23,11 @@ export const useSpendingForm = () => {
   const { toGregorian } = useShamsiDate();
   const handleDateChange = (date: string) => {
     const georgianDate = toGregorian(date);
+
+    // Store Shamsi Date for using in UI
+    setShamsiSpendingDate(date);
+
+    // Store GeorgianDate for using in DataBase
     setDate(georgianDate);
   };
 
@@ -79,5 +85,6 @@ export const useSpendingForm = () => {
     reasons,
     setReasons,
     saveSpending,
+    shamsiSpendingDate,
   };
 };

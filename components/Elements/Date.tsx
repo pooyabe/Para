@@ -70,6 +70,7 @@ export function Date({ SelectedDate, ...other }: DateProps) {
               elevation: 5,
               padding: 5,
             }}
+            selected={SelectedDate}
             headerContainerStyle={{ height: "15%" }}
             yearMonthBoxStyle={{
               width: "30%",

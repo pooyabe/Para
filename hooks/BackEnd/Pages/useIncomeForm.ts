@@ -10,6 +10,7 @@ export const useIncomeForm = () => {
   const [income_reason, setReason] = useState<string | null>(null);
   const [where_stored, setWhereStored] = useState<string | null>(null);
   const [income_date, setDate] = useState("");
+  const [shamsiIncomeDate, setShamsiIncomeDate] = useState();
   const [thePriceString, setThePriceString] = useState("");
 
   // حالت‌های لیست‌های dropdown
@@ -29,6 +30,10 @@ export const useIncomeForm = () => {
   // تبدیل تاریخ شمسی به میلادی
   const { toGregorian } = useShamsiDate();
   const handleDateChange = (date: string) => {
+    // Store Shamsi Date for UI
+    setShamsiIncomeDate(date);
+
+    // Store Georgian Date for DataBase
     const georgianDate = toGregorian(date);
     setDate(georgianDate);
   };
@@ -81,5 +86,6 @@ export const useIncomeForm = () => {
     setReason,
     setWhereStored,
     saveIncome,
+    shamsiIncomeDate,
   };
 };
