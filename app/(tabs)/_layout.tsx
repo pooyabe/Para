@@ -1,7 +1,7 @@
 import { Tabs } from "expo-router";
 import React from "react";
 
-import { Div, IconSymbol, Mother, Span } from "@/components";
+import { Div, IconSymbol, Mother, Span } from "@/components/Elements";
 
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";

@@ -7,7 +7,7 @@ import {
   Select,
   Spacer,
   Span,
-} from "@/components";
+} from "@/components/Elements";
 import { useIncomeForm } from "@/hooks/BackEnd/Pages/useIncomeForm";
 import { StyleSheet } from "react-native";
 

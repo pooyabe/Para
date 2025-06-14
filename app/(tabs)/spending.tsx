@@ -8,7 +8,7 @@ import {
   Select,
   Spacer,
   Span,
-} from "@/components";
+} from "@/components/Elements";
 import { useSpendingForm } from "@/hooks/BackEnd/Pages/useSpendingForm";
 
 import { StyleSheet } from "react-native";
