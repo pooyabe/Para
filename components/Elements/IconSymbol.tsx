@@ -1,34 +1,46 @@
-// Import Icon Libraries
-
 import Ionicons from "@expo/vector-icons/Ionicons";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-
-import { OpaqueColorValue, type StyleProp, type TextStyle } from "react-native";
-
-/**
- * An icon component that uses native SF Symbols on iOS, and Material Icons on Android and web.
- */
 import type { ComponentProps } from "react";
+import { OpaqueColorValue, StyleProp, TextStyle } from "react-native";
 
-export function IconSymbol({
-  name,
-  size = 24,
-  color,
-  style,
-  type = "MaterialIcons",
-}: {
-  name: ComponentProps<typeof MaterialIcons>["name"];
-  size?: number;
-  color: string | OpaqueColorValue;
-  style?: StyleProp<TextStyle>;
-  type?: string;
-}) {
-  switch (type) {
-    case "Ionicons":
-      return <Ionicons color={color} size={size} name={name} style={style} />;
-    default:
-      return (
-        <MaterialIcons color={color} size={size} name={name} style={style} />
-      );
+type IoniconsName = ComponentProps<typeof Ionicons>["name"];
+type MaterialIconsName = ComponentProps<typeof MaterialIcons>["name"];
+
+type IconSymbolProps =
+  | {
+      type: "Ionicons";
+      name: IoniconsName;
+      size?: number;
+      color: string | OpaqueColorValue;
+      style?: StyleProp<TextStyle>;
+    }
+  | {
+      type?: "MaterialIcons"; // default type
+      name: MaterialIconsName;
+      size?: number;
+      color: string | OpaqueColorValue;
+      style?: StyleProp<TextStyle>;
+    };
+
+export function IconSymbol(props: IconSymbolProps) {
+  const { size = 24, color, style } = props;
+  if (props.type === "Ionicons") {
+    return (
+      <Ionicons
+        name={props.name as IoniconsName}
+        size={size}
+        color={color}
+        style={style}
+      />
+    );
+  } else {
+    return (
+      <MaterialIcons
+        name={props.name as MaterialIconsName}
+        size={size}
+        color={color}
+        style={style}
+      />
+    );
   }
 }
