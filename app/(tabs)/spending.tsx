@@ -55,7 +55,7 @@ export default function HomeScreen() {
         <Radio
           Items={["الکی", "میشد خرج نشه", "ضروری"]}
           onChangeValueWithIndex={(value, index) => {
-            setImportance(value);
+            setImportance(index);
           }}
         />
 

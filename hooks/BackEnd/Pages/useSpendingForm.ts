@@ -40,7 +40,7 @@ export const useSpendingForm = () => {
 
   // ذخیره‌سازی داده‌ها
   const saveSpending = async () => {
-    if (!spending_amount || !spendingReason || !importance || !spending_date) {
+    if (!spending_amount || !spendingReason || !spending_date || importance === "") {
       alert("لطفاً همه فیلدها را پر کنید!");
       return;
     }
