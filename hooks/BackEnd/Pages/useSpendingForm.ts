@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 
 export const useSpendingForm = () => {
   const [spending_amount, setAmount] = useState();
-  const [importance, setImportance] = useState("الکی");
+  const [importance, setImportance] = useState(0);
   const [spending_date, setDate] = useState();
   const [shamsiSpendingDate, setShamsiSpendingDate] = useState();
   const [spendingReason, setSpendingReason] = useState<string | null>(null);
