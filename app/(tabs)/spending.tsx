@@ -15,7 +15,7 @@ import { StyleSheet } from "react-native";
 
 export default function HomeScreen() {
   // Load BackEnd
-  const { 
+  const {
     reasons,
     printPriceString,
     thePriceString,
@@ -23,7 +23,7 @@ export default function HomeScreen() {
     setImportance,
     handleDateChange,
     saveSpending,
-   } = useSpendingForm;
+  } = useSpendingForm();
 
   return (
     <Mother>
