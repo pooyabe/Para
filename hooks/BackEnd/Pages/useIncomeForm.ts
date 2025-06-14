@@ -10,20 +10,20 @@ export const useIncomeForm = () => {
   const [income_reason, setReason] = useState<string | null>(null);
   const [where_stored, setWhereStored] = useState<string | null>(null);
   const [income_date, setDate] = useState("");
-  const [shamsiIncomeDate, setShamsiIncomeDate] = useState();
+  const [shamsiIncomeDate, setShamsiIncomeDate] = useState<string | undefined>();
   const [thePriceString, setThePriceString] = useState("");
 
   // حالت‌های لیست‌های dropdown
-  const [reasons, setReasons] = useState<Array<{ id: number; title: string }>>(
-    []
-  );
+  const [reasons, setReasons] = useState<
+    Array<{ label: string; value: string }>
+  >([]);
   const [destinations, setDestinations] = useState<
-    Array<{ id: number; title: string }>
+    Array<{ label: string; value: string }>
   >([]);
 
   // تبدیل عدد به متن
   const printPriceString = (val: string) => {
-    setThePriceString(numberToText(val));
+    setThePriceString(numberToText(Number(val)));
     setAmount(val);
   };
 
@@ -45,8 +45,18 @@ export const useIncomeForm = () => {
         getIncomeReasons(),
         getIncomeDestinations(),
       ]);
-      setReasons(reasonOpts);
-      setDestinations(destinationOpts);
+      setReasons(
+        reasonOpts.map((item: any) => ({
+          label: item.label,
+          value: item.value,
+        }))
+      );
+      setDestinations(
+        destinationOpts.map((item: any) => ({
+          label: item.label,
+          value: item.value,
+        }))
+      );
     };
 
     fetchOptions();
