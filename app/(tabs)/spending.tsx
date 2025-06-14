@@ -73,7 +73,7 @@ export default function HomeScreen() {
 
         <Spacer height={100} />
 
-        <SButton text="ثبت شه" onPress={saveSpending} />
+        <SButton text="بردار" onPress={saveSpending} />
       </Div>
     </Mother>
   );

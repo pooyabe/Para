@@ -73,7 +73,7 @@ export default function IncomePage() {
 
         <Spacer height={100} />
 
-        <SButton text="ثبت شه" onPress={saveIncome} />
+        <SButton text="بریز" onPress={saveIncome} />
       </Div>
     </Mother>
   );
