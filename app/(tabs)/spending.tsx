@@ -65,9 +65,10 @@ export default function HomeScreen() {
 
         <Date
           SelectedDate={shamsiSpendingDate}
-          onDateChange={(date) => {
+          onDateChange={(date: string) => {
             handleDateChange(date);
           }}
+          style={{}} // Add an empty style object or customize as needed
         />
 
         <Spacer height={100} />

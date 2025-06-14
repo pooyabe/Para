@@ -1,13 +1,18 @@
-import { Date, Div, Input, Mother, SButton, Select, Spacer, Span } from "@/components";
+import {
+  Date,
+  Div,
+  Input,
+  Mother,
+  SButton,
+  Select,
+  Spacer,
+  Span,
+} from "@/components";
 import { useIncomeForm } from "@/hooks/BackEnd/Pages/useIncomeForm";
 import { StyleSheet } from "react-native";
 
 export default function IncomePage() {
   const {
-    income_amount,
-    income_reason,
-    where_stored,
-    income_date,
     thePriceString,
     reasons,
     destinations,
@@ -60,9 +65,10 @@ export default function IncomePage() {
 
         <Date
           SelectedDate={shamsiIncomeDate}
-          onDateChange={(date: Date) => {
+          onDateChange={(date: string) => {
             handleDateChange(date);
           }}
+          style={{}} // Add an empty style object or customize as needed
         />
 
         <Spacer height={100} />
