@@ -66,7 +66,7 @@ export function Select({
         searchTextInputStyle={{
           borderColor: tintColor,
           fontFamily: "VazirRegular",
-          borderRadius: 50,
+          borderRadius: 100,
           borderWidth: 2,
         }}
         placeholderStyle={{
@@ -112,6 +112,15 @@ export function Select({
           marginLeft: 20,
           marginTop: 0,
           marginBottom: 10,
+        }}
+        customItemLabelStyle={{
+          color: textColor,
+          fontFamily: "VazirRegular",
+          direction: "rtl",
+          fontSize: 18,
+          fontWeight: "normal",
+          fontStyle: "normal",
+          paddingRight: 40,
         }}
       />
     </View>

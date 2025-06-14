@@ -73,6 +73,7 @@ export function Radio({
           borderWidth: 0,
           borderColor: tintColor,
           backgroundColor: theLightBlue,
+          marginBottom: 1,
         }}
         {...otherProps}
       />
