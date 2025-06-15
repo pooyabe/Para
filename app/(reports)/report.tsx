@@ -7,7 +7,7 @@ export default function ReportPage() {
     <Mother style={styles.container}>
       <Div style={styles.Header}>
         <Span type="title" style={styles.headerTitle}>
-          گزارشات
+          گزارش وضعیت
         </Span>
         <TouchableOpacity
           onPress={() => {
@@ -34,5 +34,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    height: 40,
+  },
+  headerTitle: {
+    height: "100%",
+    verticalAlign: "middle",
+    fontSize: 24,
   },
 });
