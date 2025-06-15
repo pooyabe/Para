@@ -52,7 +52,7 @@ export default function RootLayout() {
         }}
       >
         <Stack.Screen name="(tabs)" />
-        <Stack.Screen name="reports" />
+        <Stack.Screen name="(reports)" />
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar style="light" />

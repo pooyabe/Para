@@ -54,7 +54,7 @@ export function TabsHeader() {
         }}
       >
         <TouchableOpacity
-          onPress={() => router.navigate("/reports/report")}
+          onPress={() => router.navigate("/(reports)/report")}
           style={{
             borderWidth: 1,
             borderRadius: 50,
