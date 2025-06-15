@@ -1,5 +1,6 @@
 export { Date } from "./Date";
 export { Div } from "./Div";
+export { GButton } from "./GButton";
 export { IconSymbol } from "./IconSymbol";
 export { Input } from "./Input";
 export { Mother } from "./Mother";

@@ -8,15 +8,31 @@ import { Span } from "./Span";
 
 export type GButtonProps = TouchableOpacityProps & {
   text: string;
+  onPress?: () => void;
+  active?: boolean;
 };
 
 const tintColor = useThemeColor({}, "tint");
-const backgroundColor = useThemeColor({}, "theLightBlue");
+const inActiveBackgroundColor = useThemeColor({}, "tabBackground");
+const activeBackgroundColor = useThemeColor({}, "theLightBlue");
 const textColor = useThemeColor({}, "text");
 
-export function GButton({ text, style, ...rest }: GButtonProps) {
+export function GButton({
+  text,
+  style,
+  onPress,
+  active = false,
+  ...rest
+}: GButtonProps) {
   return (
-    <TouchableOpacity style={[styles.theButtonContainer, style]} {...rest}>
+    <TouchableOpacity
+      style={[
+        styles.theButtonContainer,
+        active ? styles.activeButton : styles.inactiveButton,
+        style,
+      ]}
+      {...rest}
+    >
       <Span type="default" style={styles.theButtonText}>
         {text}
       </Span>
@@ -26,19 +42,23 @@ export function GButton({ text, style, ...rest }: GButtonProps) {
 
 const styles = StyleSheet.create({
   theButtonContainer: {
-    width: "100%",
-    height: 60,
-    borderWidth: 2,
-    borderColor: tintColor,
-    backgroundColor: backgroundColor,
+    borderWidth: 0,
     borderRadius: 100,
     display: "flex",
     justifyContent: "center",
+    paddingRight: 20,
+    paddingLeft: 20,
   },
   theButtonText: {
     color: textColor,
-    fontSize: 18,
+    fontSize: 15,
     width: "100%",
     textAlign: "center",
+  },
+  activeButton: {
+    backgroundColor: activeBackgroundColor,
+  },
+  inactiveButton: {
+    backgroundColor: inActiveBackgroundColor,
   },
 });
