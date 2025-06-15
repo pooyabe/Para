@@ -49,6 +49,9 @@ export default function RootLayout() {
                 ? Colors["dark"].background
                 : Colors["light"].background,
           },
+          animation: "fade",
+          animationMatchesGesture: true,
+          animationTypeForReplace: "pop"
         }}
       >
         <Stack.Screen name="(tabs)" />

@@ -11,16 +11,13 @@ export default function ReportPage() {
         </Span>
         <TouchableOpacity
           onPress={() => {
-            router.back();
+            router.replace("/(tabs)/spending");
           }}
         >
           <IconSymbol type="Ionicons" name="home" size={24} color="white" />
         </TouchableOpacity>
       </Div>
-      <Spacer height={20} />
-      <Span type="subtitle">
-        این بخش در حال توسعه است و به زودی گزارشات مختلفی را ارائه خواهد داد.
-      </Span>
+      <Spacer />
     </Mother>
   );
 }
