@@ -31,6 +31,7 @@ export function GButton({
         active ? styles.activeButton : styles.inactiveButton,
         style,
       ]}
+      onPress={onPress}
       {...rest}
     >
       <Span type="default" style={styles.theButtonText}>
