@@ -10,6 +10,9 @@ import { router } from "expo-router";
 import { useState } from "react";
 import { ScrollView, StyleSheet, TouchableOpacity } from "react-native";
 
+import { Dimensions } from "react-native";
+const screenWidth = Dimensions.get("window").width;
+
 export default function ReportPage() {
   // This states set which date period button selected
   const [selectedDatePeriodButton, setSelectedDatePeriodButton] =
@@ -23,7 +26,7 @@ export default function ReportPage() {
   ];
 
   return (
-    <Mother style={styles.container}>
+    <Mother style={styles.container} _Hpadding={0}>
       <Div style={styles.Header}>
         <Span type="title" style={styles.headerTitle}>
           گزارش وضعیت
@@ -37,22 +40,26 @@ export default function ReportPage() {
         </TouchableOpacity>
       </Div>
       <Spacer height={30} />
-      <ScrollView
-        contentContainerStyle={styles.selectDateButtonsContainer}
-        horizontal
-        overScrollMode="always"
-        showsHorizontalScrollIndicator={true}
-        fadingEdgeLength={20}
-      >
-        {theSelectDateButtons.map(({ key, label }) => (
-          <GButton
-            text={label}
-            key={key}
-            active={selectedDatePeriodButton === key}
-            onPress={() => setSelectedDatePeriodButton(key)}
-          />
-        ))}
-      </ScrollView>
+      <Div style={styles.dateButtonGroup}>
+        <ScrollView
+          contentContainerStyle={styles.selectDateButtonsContainer}
+          horizontal
+          overScrollMode="always"
+          fadingEdgeLength={20}
+          showsHorizontalScrollIndicator={false}
+        >
+          {theSelectDateButtons.map(({ key, label }) => (
+            <GButton
+              text={label}
+              key={key}
+              active={selectedDatePeriodButton === key}
+              onPress={() => setSelectedDatePeriodButton(key)}
+              style={styles.glassTopButtons}
+            />
+          ))}
+        </ScrollView>
+      </Div>
+      <ScrollView style={styles.bottomSection}></ScrollView>
     </Mother>
   );
 }
@@ -60,6 +67,7 @@ export default function ReportPage() {
 const styles = StyleSheet.create({
   container: {
     direction: "rtl",
+    display: "flex",
   },
 
   // Header section
@@ -68,7 +76,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    height: 40,
+    paddingHorizontal: 30,
+    paddingTop: 30,
   },
   headerTitle: {
     height: "100%",
@@ -77,11 +86,20 @@ const styles = StyleSheet.create({
   },
 
   // Select date buttons
+  dateButtonGroup: {
+    paddingVertical: 10,
+    paddingHorizontal: 30,
+  },
   selectDateButtonsContainer: {
     direction: "rtl",
-    display: "flex",
     flexDirection: "row",
-    columnGap: 10,
-    height: 40,
+    columnGap: 20,
+    alignItems: "center", // این خط خیلی مهمه
+  },
+  glassTopButtons: { paddingVertical: 10 },
+
+  // The Bottom Section of data
+  bottomSection: {
+    flex: 1,
   },
 });
