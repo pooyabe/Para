@@ -1,16 +1,21 @@
-import { ScrollView, StyleSheet, type ViewProps } from "react-native";
-
 import { useThemeColor } from "@/hooks/useThemeColor";
+import { ReactNode } from "react";
+import { ScrollView, StyleSheet, View, type ViewProps } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export type MotherProps = ViewProps & {
   lightColor?: string;
   darkColor?: string;
+  children: ReactNode;
+  scrollable?: boolean;
 };
 
 export function Mother({
   style,
   lightColor,
   darkColor,
+  children,
+  scrollable = false,
   ...otherProps
 }: MotherProps) {
   const backgroundColor = useThemeColor(
@@ -19,19 +24,27 @@ export function Mother({
   );
 
   return (
-    <ScrollView
-      contentContainerStyle={[{ backgroundColor }, styles.container, style]}
+    <SafeAreaView
+      style={[{ backgroundColor }, styles.container, style]}
       {...otherProps}
-    />
+    >
+      {scrollable ? (
+        <ScrollView contentContainerStyle={styles.inner}>{children}</ScrollView>
+      ) : (
+        <View style={styles.inner}>{children}</View>
+      )}
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    display: "flex",
     flex: 1,
     width: "100%",
-    height: "100%",
-    padding: "10%",
+    paddingHorizontal: 30,
+  },
+  inner: {
+    flexGrow: 1,
+    paddingVertical: 20,
   },
 });

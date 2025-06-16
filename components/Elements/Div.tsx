@@ -1,8 +1,11 @@
 import { View, type ViewProps } from "react-native";
 
-
 export type DivProps = ViewProps & {};
 
-export function Div({ style, ...otherProps }: DivProps) {
-  return <View style={style} {...otherProps} />;
+export function Div({ style, children, ...otherProps }: ViewProps) {
+  return (
+    <View style={style} {...otherProps}>
+      {children}
+    </View>
+  );
 }
