@@ -1,5 +1,5 @@
 import { Image, TouchableOpacity } from "react-native";
-import { Div, IconSymbol, Mother, Span } from "../Elements";
+import { Div, IconSymbol, Span } from "../Elements";
 
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
@@ -9,7 +9,7 @@ export function TabsHeader() {
   const colorScheme = useColorScheme() as "light" | "dark";
 
   return (
-    <Mother
+    <Div
       style={{
         flexDirection: "row",
         alignItems: "center",
@@ -88,6 +88,6 @@ export function TabsHeader() {
           </Span>
         </TouchableOpacity>
       </Div>
-    </Mother>
+    </Div>
   );
 }
