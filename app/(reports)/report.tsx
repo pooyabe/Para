@@ -41,6 +41,13 @@ export default function ReportPage() {
    *
    */
   const theBGColor = useThemeColor({}, "background");
+  const theTextColor = useThemeColor({}, "text");
+  const theTintColor = useThemeColor({}, "tint");
+  const theTabBgColor = useThemeColor({}, "tabBackground");
+
+  const reverseText = (text: string): string => {
+    return text.split("").reverse().join("");
+  };
 
   return (
     <Mother style={styles.container} _Hpadding={0}>
@@ -85,7 +92,12 @@ export default function ReportPage() {
         <Div style={styles.chart1}>
           <LineChart
             data={{
-              labels: ["January", "February", "March", "April", "May", "June", "July"],
+              legend: ["دخل و خرج"],
+              labels: [
+                "فروردین",
+                "اردیبهشت",
+                "خرداد"
+              ],
               datasets: [
                 {
                   data: [
@@ -120,6 +132,9 @@ export default function ReportPage() {
                 strokeWidth: 2,
                 stroke: "#ffa726",
               },
+              propsForLabels: {
+                fontFamily: "VazirRegular"
+              }
             }}
             bezier
             style={{
@@ -172,6 +187,5 @@ const styles = StyleSheet.create({
   },
 
   // Charts
-  chart1: {
-  },
+  chart1: {},
 });
