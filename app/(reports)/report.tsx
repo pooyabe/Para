@@ -17,8 +17,6 @@ import {
 
 import { useThemeColor } from "@/hooks/useThemeColor";
 
-import { LineChart } from "react-native-chart-kit";
-
 // Get Screen Dimensions
 const screenHeight = Dimensions.get("screen").height;
 const screenWidth = Dimensions.get("window").width;
@@ -44,10 +42,6 @@ export default function ReportPage() {
   const theTextColor = useThemeColor({}, "text");
   const theTintColor = useThemeColor({}, "tint");
   const theTabBgColor = useThemeColor({}, "tabBackground");
-
-  const reverseText = (text: string): string => {
-    return text.split("").reverse().join("");
-  };
 
   return (
     <Mother style={styles.container} _Hpadding={0}>
@@ -90,57 +84,6 @@ export default function ReportPage() {
         fadingEdgeLength={100}
       >
         <Div style={styles.chart1}>
-          <LineChart
-            data={{
-              legend: ["دخل و خرج"],
-              labels: [
-                "فروردین",
-                "اردیبهشت",
-                "خرداد"
-              ],
-              datasets: [
-                {
-                  data: [
-                    Math.random() * 100,
-                    Math.random() * 100,
-                    Math.random() * 100,
-                    Math.random() * 100,
-                    Math.random() * 100,
-                    Math.random() * 100,
-                    Math.random() * 100,
-                  ],
-                },
-              ],
-            }}
-            width={screenWidth} // from react-native
-            height={screenHeight * 0.4}
-            yAxisLabel="$"
-            yAxisSuffix="k"
-            yAxisInterval={1} // optional, defaults to 1
-            chartConfig={{
-              backgroundColor: theBGColor,
-              backgroundGradientFrom: theBGColor,
-              backgroundGradientTo: theBGColor,
-              decimalPlaces: 2, // optional, defaults to 2dp
-              color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-              labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-              style: {
-                borderRadius: 0,
-              },
-              propsForDots: {
-                r: 8,
-                strokeWidth: 2,
-                stroke: "#ffa726",
-              },
-              propsForLabels: {
-                fontFamily: "VazirRegular"
-              }
-            }}
-            bezier
-            style={{
-              borderRadius: 0,
-            }}
-          />
         </Div>
       </ScrollView>
     </Mother>
