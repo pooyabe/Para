@@ -17,8 +17,7 @@ import {
 
 import { useThemeColor } from "@/hooks/useThemeColor";
 
-import { LineChart, PieChartPro } from "react-native-gifted-charts";
-import { LinearGradient, Stop } from "react-native-svg";
+import { LineChart } from "react-native-gifted-charts";
 
 // Get Screen Dimensions
 const screenHeight = Dimensions.get("screen").height;
@@ -43,43 +42,36 @@ export default function ReportPage() {
    */
   const theBGColor = useThemeColor({}, "background");
   const theTextColor = useThemeColor({}, "text");
+  const theLightBlue = useThemeColor({}, "theLightBlue");
   const theTintColor = useThemeColor({}, "tint");
   const theTabBgColor = useThemeColor({}, "tabBackground");
 
   const data = [
-    { value: 15 },
+    { value: 15, label: "فروردین" },
 
-    { value: 10 },
+    { value: 10, label: "اردیبهشت" },
 
-    { value: 8 },
+    { value: 8, label: "خرداد" },
 
-    { value: 58 },
+    { value: 58, label: "تیر" },
 
-    { value: 56 },
+    { value: 56, label: "مرداد" },
 
-    { value: 78 },
-
-    { value: 24 },
-
-    { value: 28 },
+    { value: 78, label: "شهریور" },
   ];
 
   const data2 = [
-    { value: 40 },
-
-    { value: 20 },
-
-    { value: 18 },
-
-    { value: 40 },
-
-    { value: 36 },
-
-    { value: 60 },
+    { value: 1 },
 
     { value: 4 },
 
-    { value: 45 },
+    { value: 3 },
+
+    { value: 6 },
+
+    { value: 4 },
+
+    { value: 5 },
   ];
 
   const pieData = [
@@ -132,28 +124,54 @@ export default function ReportPage() {
         <Div style={styles.singleChart}>
           <LineChart
             data={data}
-            data2={data2}
-            height={screenHeight * 0.35}
             curved
-            spacing={50}
-            width={screenWidth * 0.85}
+            initialSpacing={screenWidth * 0.05}
+            /**
+             *
+             * این عدد مربوط به فاصله بین نقاط روی محور ایکس از کجا اومده؟
+             * خب. ما یک دهم فاصله از سمت راست خالی میذاریم.
+             * یک دهم هم برای اعداد محور.
+             * یک دهم هم برای فاصله اولیه یا همون initialSpacing
+             * پس مقدار سه دهم از کل طول صفحه کسر میشه.
+             * اون رو تقسیم بر تعداد دیتاها منهای یک میکنیم. یعنی تقسیم بر تعداد فواصل
+             * موجود بین دیتاها. به این صورت تعداد دیتا هر چقدر باشه، داخل
+             * نمودار در طول صفحه جا میشه.
+             *
+             */
+            spacing={(screenWidth * 0.75) / (data.length - 1)}
+            height={screenHeight * 0.3}
+            width={screenWidth * 0.79}
             hideDataPoints
-            lineGradient
-            lineGradientId="ggrd" // same as the id passed in <LinearGradient> below
-            lineGradientComponent={() => {
-              return (
-                <LinearGradient id="ggrd" x1="0" y1="0" x2="0" y2="1">
-                  <Stop offset="0" stopColor={"blue"} />
-
-                  <Stop offset="0.5" stopColor={"orange"} />
-
-                  <Stop offset="1" stopColor={"green"} />
-                </LinearGradient>
-              );
+            color={theLightBlue}
+            yAxisColor={theBGColor}
+            yAxisTextStyle={{
+              color: theTextColor,
+              fontFamily: "VazirRegular",
+            }}
+            rulesThickness={2}
+            rulesType="dashed"
+            rulesColor="#c9fbff16"
+            xAxisLabelTextStyle={{
+              color: theTextColor,
+              fontFamily: "VazirRegular",
+            }}
+            noOfSections={5}
+            thickness={2}
+            secondaryData={data2}
+            secondaryLineConfig={{
+              thickness: 2,
+              startFillColor: "white",
+              endFillColor: "black",
+              color: theTintColor,
+            }}
+            secondaryYAxis={{
+              noOfSections: 5,
+              showFractionalValues: true,
+              roundToDigits: 0,
             }}
           />
         </Div>
-        <Div style={styles.singleChart}>
+        {/* <Div style={styles.singleChart}>
           <PieChartPro
             donut
             isThreeD
@@ -165,7 +183,7 @@ export default function ReportPage() {
             textBackgroundRadius={26}
             data={pieData}
           />
-        </Div>
+        </Div> */}
       </ScrollView>
     </Mother>
   );
@@ -213,6 +231,6 @@ const styles = StyleSheet.create({
   // Charts
   singleChart: {
     alignItems: "center",
-    direction: "ltr"
+    direction: "ltr",
   },
 });
