@@ -17,6 +17,9 @@ import {
 
 import { useThemeColor } from "@/hooks/useThemeColor";
 
+import { LineChart, PieChartPro } from "react-native-gifted-charts";
+import { LinearGradient, Stop } from "react-native-svg";
+
 // Get Screen Dimensions
 const screenHeight = Dimensions.get("screen").height;
 const screenWidth = Dimensions.get("window").width;
@@ -43,6 +46,49 @@ export default function ReportPage() {
   const theTintColor = useThemeColor({}, "tint");
   const theTabBgColor = useThemeColor({}, "tabBackground");
 
+  const data = [
+    { value: 15 },
+
+    { value: 10 },
+
+    { value: 8 },
+
+    { value: 58 },
+
+    { value: 56 },
+
+    { value: 78 },
+
+    { value: 24 },
+
+    { value: 28 },
+  ];
+
+  const data2 = [
+    { value: 40 },
+
+    { value: 20 },
+
+    { value: 18 },
+
+    { value: 40 },
+
+    { value: 36 },
+
+    { value: 60 },
+
+    { value: 4 },
+
+    { value: 45 },
+  ];
+
+  const pieData = [
+    { value: 54, color: "#177AD5" },
+
+    { value: 40, color: "#79D2DE" },
+
+    { value: 20, color: "#ED6665" },
+  ];
   return (
     <Mother style={styles.container} _Hpadding={0}>
       <Div style={styles.Header}>
@@ -81,9 +127,44 @@ export default function ReportPage() {
       <ScrollView
         style={styles.bottomSection}
         overScrollMode="always"
-        fadingEdgeLength={100}
+        fadingEdgeLength={80}
       >
-        <Div style={styles.chart1}>
+        <Div style={styles.singleChart}>
+          <LineChart
+            data={data}
+            data2={data2}
+            height={screenHeight * 0.35}
+            curved
+            spacing={50}
+            width={screenWidth * 0.85}
+            hideDataPoints
+            lineGradient
+            lineGradientId="ggrd" // same as the id passed in <LinearGradient> below
+            lineGradientComponent={() => {
+              return (
+                <LinearGradient id="ggrd" x1="0" y1="0" x2="0" y2="1">
+                  <Stop offset="0" stopColor={"blue"} />
+
+                  <Stop offset="0.5" stopColor={"orange"} />
+
+                  <Stop offset="1" stopColor={"green"} />
+                </LinearGradient>
+              );
+            }}
+          />
+        </Div>
+        <Div style={styles.singleChart}>
+          <PieChartPro
+            donut
+            isThreeD
+            showText
+            textColor="black"
+            radius={170}
+            textSize={20}
+            showTextBackground
+            textBackgroundRadius={26}
+            data={pieData}
+          />
         </Div>
       </ScrollView>
     </Mother>
@@ -130,5 +211,8 @@ const styles = StyleSheet.create({
   },
 
   // Charts
-  chart1: {},
+  singleChart: {
+    alignItems: "center",
+    direction: "ltr"
+  },
 });
