@@ -182,7 +182,7 @@ export default function ReportPage() {
             spacing={(screenWidth * chartZoomConstant) / (data.length - 1)}
             initialSpacing={screenWidth * 0.07}
             endSpacing={screenWidth * 0.05}
-            height={screenHeight * 0.3}
+            height={screenHeight * 0.25}
             width={screenWidth * 0.82}
             /**
              * تنظیمات محور x
