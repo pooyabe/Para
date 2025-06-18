@@ -103,6 +103,7 @@ export default function ReportPage() {
           overScrollMode="always"
           fadingEdgeLength={20}
           showsHorizontalScrollIndicator={false}
+          contentOffset={{x:1000, y: 0}}
         >
           {theSelectDateButtons.map(({ key, label }) => (
             <GButton
