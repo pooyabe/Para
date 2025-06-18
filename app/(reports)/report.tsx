@@ -103,7 +103,7 @@ export default function ReportPage() {
           overScrollMode="always"
           fadingEdgeLength={20}
           showsHorizontalScrollIndicator={false}
-          contentOffset={{x:1000, y: 0}}
+          contentOffset={{ x: 1000, y: 0 }}
         >
           {theSelectDateButtons.map(({ key, label }) => (
             <GButton
@@ -123,10 +123,13 @@ export default function ReportPage() {
         fadingEdgeLength={80}
       >
         <Div style={styles.singleChart}>
+          <Span type="title" style={styles.chartTitle}>
+            هزینه و درآمدها
+          </Span>
           <LineChart
             data={data}
             curved
-            initialSpacing={screenWidth * 0.05}
+            hideDataPoints
             /**
              *
              * این عدد مربوط به فاصله بین نقاط روی محور ایکس از کجا اومده؟
@@ -139,38 +142,78 @@ export default function ReportPage() {
              * نمودار در طول صفحه جا میشه.
              *
              */
-            spacing={(screenWidth * 0.75) / (data.length - 1)}
+            spacing={(screenWidth * 0.8) / (data.length - 1)}
+            initialSpacing={screenWidth * 0.07}
+            endSpacing={screenWidth * 0.05}
             height={screenHeight * 0.3}
-            width={screenWidth * 0.79}
-            hideDataPoints
-            color={theLightBlue}
-            yAxisColor={theBGColor}
-            yAxisTextStyle={{
-              color: theTextColor,
-              fontFamily: "VazirRegular",
-            }}
-            rulesThickness={2}
-            rulesType="dashed"
-            rulesColor="#c9fbff16"
+            width={screenWidth * 0.82}
+            /**
+             * تنظیمات محور x
+             */
+            xAxisThickness={0}
             xAxisLabelTextStyle={{
               color: theTextColor,
               fontFamily: "VazirRegular",
             }}
+            showXAxisIndices={true}
+            xAxisIndicesColor="orange"
+            xAxisIndicesHeight={5}
+            /**
+             * تنظیمات محور y
+             */
+            color={theTintColor}
+            yAxisTextStyle={{
+              color: theTintColor,
+              fontFamily: "VazirRegular",
+            }}
+            yAxisExtraHeight={50}
+            yAxisThickness={0}
+            rulesThickness={2}
+            rulesType="dashed"
+            rulesColor="#c9fbff16"
             noOfSections={5}
-            thickness={2}
+            thickness={4}
+            /**
+             * دیتای دوم
+             */
             secondaryData={data2}
             secondaryLineConfig={{
-              thickness: 2,
-              startFillColor: "white",
-              endFillColor: "black",
-              color: theTintColor,
+              color: "orange",
             }}
             secondaryYAxis={{
               noOfSections: 5,
               showFractionalValues: true,
               roundToDigits: 0,
+              yAxisTextStyle: {
+                color: "orange",
+              },
             }}
           />
+          <Span
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              gap: "10",
+              marginTop: 30,
+              opacity: 0.5,
+              alignSelf: "flex-end",
+              marginRight: 10,
+              marginLeft: 10,
+            }}
+          >
+            <IconSymbol
+              type="Ionicons"
+              name="hand-right"
+              size={18}
+              color={theTextColor}
+            />
+            <IconSymbol
+              type="Ionicons"
+              name="swap-horizontal-outline"
+              size={18}
+              color={theTextColor}
+            />
+          </Span>
         </Div>
         {/* <Div style={styles.singleChart}>
           <PieChartPro
@@ -233,5 +276,15 @@ const styles = StyleSheet.create({
   singleChart: {
     alignItems: "center",
     direction: "ltr",
+    backgroundColor: "#c9fbff11",
+    borderRadius: 0,
+    borderBottomWidth: 3,
+    borderBottomColor: "orange",
+    paddingTop: 20,
+    paddingBottom: 20,
+  },
+  chartTitle: {
+    marginBottom: 20,
+    fontSize: 20,
   },
 });
