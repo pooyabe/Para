@@ -81,6 +81,20 @@ export default function ReportPage() {
 
     { value: 20, color: "#ED6665" },
   ];
+
+  /** Zoom in-out the linear chart by changing the spacing constant */
+  const [chartZoomConstant, setChartZoomConstant] = useState<number>(0.8);
+  const changeChartZoom = (theLeveler: number): void => {
+    // if leveler = 2 : reset the zoom
+    if (theLeveler == 2) {
+      setChartZoomConstant(0.8);
+      return;
+    }
+    // The Leveler is +1 or -1
+    const the_new_spacing_constant = chartZoomConstant + theLeveler * 0.2;
+    setChartZoomConstant(the_new_spacing_constant);
+  };
+
   return (
     <Mother style={styles.container} _Hpadding={0}>
       <Div style={styles.Header}>
@@ -126,6 +140,27 @@ export default function ReportPage() {
           <Span type="title" style={styles.chartTitle}>
             هزینه و درآمدها
           </Span>
+          <Div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignSelf: "flex-start",
+              marginRight: 10,
+              marginLeft: 10,
+              justifyContent: "space-between",
+              width: 100,
+            }}
+          >
+            <TouchableOpacity onPress={() => changeChartZoom(+1)}>
+              <IconSymbol name="zoom-in" size={30} color={theTextColor} />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => changeChartZoom(2)}>
+              <IconSymbol name="zoom-in-map" size={30} color={theTextColor} />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => changeChartZoom(-1)}>
+              <IconSymbol name="zoom-out" size={30} color={theTextColor} />
+            </TouchableOpacity>
+          </Div>
           <LineChart
             data={data}
             curved
@@ -142,7 +177,7 @@ export default function ReportPage() {
              * نمودار در طول صفحه جا میشه.
              *
              */
-            spacing={(screenWidth * 0.8) / (data.length - 1)}
+            spacing={(screenWidth * chartZoomConstant) / (data.length - 1)}
             initialSpacing={screenWidth * 0.07}
             endSpacing={screenWidth * 0.05}
             height={screenHeight * 0.3}
