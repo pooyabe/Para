@@ -67,8 +67,7 @@ export function TabsHeader() {
             paddingLeft: 15,
             justifyContent: "space-around",
             alignItems: "center",
-            backgroundColor: "#20FC8F",
-            // backgroundColor: "#ECA72C",
+            backgroundColor: Colors[colorScheme].theGreen,
           }}
         >
           <IconSymbol
