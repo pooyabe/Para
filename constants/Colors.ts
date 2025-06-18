@@ -17,7 +17,7 @@ export const Colors = {
     theDarkBlue: "#1f6bb6",
     theLightBlue: "#118dff",
     theGreen: "#20fb8e",
-    theOrange: "#ffa500",
+    theOrange: "#ECA72C",
     // Bottom Tab Colors
     tabIconDefault: "#687076",
     tabIconSelected: tintColorLight,
@@ -33,7 +33,7 @@ export const Colors = {
     theDarkBlue: "#1f6bb6",
     theLightBlue: "#118dff",
     theGreen: "#20fb8e",
-    theOrange: "#ffa500",
+    theOrange: "#ECA72C",
     // Bottom Tab Colors
     tabIcon: "#9BA1A6",
     tabBackground: "rgb(59, 66, 82)",
