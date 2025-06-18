@@ -45,6 +45,8 @@ export default function ReportPage() {
   const theLightBlue = useThemeColor({}, "theLightBlue");
   const theTintColor = useThemeColor({}, "tint");
   const theTabBgColor = useThemeColor({}, "tabBackground");
+  const theGreenColor = useThemeColor({}, "theGreen");
+  const theOrangeColor = useThemeColor({}, "theOrange");
 
   const data = [
     { value: 15, label: "فروردین" },
@@ -138,7 +140,7 @@ export default function ReportPage() {
       >
         <Div style={styles.singleChart}>
           <Span type="title" style={styles.chartTitle}>
-            هزینه و درآمدها
+            دخل و خرج
           </Span>
           <Div
             style={{
@@ -187,18 +189,19 @@ export default function ReportPage() {
              */
             xAxisThickness={0}
             xAxisLabelTextStyle={{
-              color: theTextColor,
+              color: theGreenColor,
               fontFamily: "VazirRegular",
             }}
             showXAxisIndices={true}
-            xAxisIndicesColor="orange"
+            xAxisIndicesColor={theGreenColor}
             xAxisIndicesHeight={5}
+            xAxisIndicesWidth={2}
             /**
              * تنظیمات محور y
              */
-            color={theTintColor}
+            color={theLightBlue}
             yAxisTextStyle={{
-              color: theTintColor,
+              color: theLightBlue,
               fontFamily: "VazirRegular",
             }}
             yAxisExtraHeight={50}
@@ -213,14 +216,14 @@ export default function ReportPage() {
              */
             secondaryData={data2}
             secondaryLineConfig={{
-              color: "orange",
+              color: theOrangeColor,
             }}
             secondaryYAxis={{
               noOfSections: 5,
               showFractionalValues: true,
               roundToDigits: 0,
               yAxisTextStyle: {
-                color: "orange",
+                color: theOrangeColor,
               },
             }}
           />
