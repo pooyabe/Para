@@ -281,7 +281,7 @@ export default function ReportPage() {
             showTooltip
             tooltipBackgroundColor={theTintColor}
             tooltipWidth={100}
-            tooltipComponent={(item) => (
+            tooltipComponent={(item:number) => (
               <Span
                 style={[
                   styles.tooltipStyle,
@@ -298,7 +298,7 @@ export default function ReportPage() {
 
           <Div style={styles.dataLegendContainer}>
             {pieData.map((item, index) => (
-              <Div style={styles.dataLegendItem}>
+              <Div style={styles.dataLegendItem} key={index}>
                 <Span
                   style={[
                     styles.dataLegendIndicator,
