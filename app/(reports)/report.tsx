@@ -285,11 +285,11 @@ export default function ReportPage() {
             بیشتر چی خریدی؟
           </Span>
           <PieChart
-            strokeColor={theBGColor}
+            strokeColor="#232d3c"
             strokeWidth={2}
             donut
             data={pieData}
-            innerCircleColor={theBGColor}
+            innerCircleColor="#232d3c"
             innerCircleBorderWidth={0}
             innerRadius={70}
             innerCircleBorderColor={theTintColor}
