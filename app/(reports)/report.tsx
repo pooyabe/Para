@@ -257,7 +257,7 @@ export default function ReportPage() {
             />
           </Span>
         </Div>
-        <Div style={styles.rowChart}>
+        <Div style={[styles.chartWithBG, styles.singleChart, {direction: "rtl"}]}>
           <Span type="title" style={styles.chartTitle}>
             بیشتر چی خریدی؟
           </Span>
@@ -363,7 +363,6 @@ const styles = StyleSheet.create({
   singleChart: {
     alignItems: "center",
     direction: "ltr",
-    // backgroundColor: "#c9fbff11",
     paddingTop: 20,
     paddingBottom: 20,
   },
@@ -372,15 +371,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
 
-  rowChart: {
-    display: "flex",
-    alignItems: "center",
-    direction: "rtl",
+  chartWithBG: {
     backgroundColor: "#c9fbff11",
     borderRadius: 0,
     borderBottomWidth: 0,
-    borderBottomColor: "green",
-    padding: 30,
   },
 
   /**
