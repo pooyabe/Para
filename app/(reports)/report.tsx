@@ -17,7 +17,7 @@ import {
 
 import { useThemeColor } from "@/hooks/useThemeColor";
 
-import { LineChart } from "react-native-gifted-charts";
+import { LineChart, PieChart } from "react-native-gifted-charts";
 
 // Get Screen Dimensions
 const screenHeight = Dimensions.get("screen").height;
@@ -77,11 +77,16 @@ export default function ReportPage() {
   ];
 
   const pieData = [
-    { value: 54, color: "#177AD5" },
-
-    { value: 40, color: "#79D2DE" },
-
-    { value: 20, color: "#ED6665" },
+    { value: 20, text: "کرایه خانه", color: theTabBgColor },
+    { value: 15, text: "رستوران", color: theLightBlue },
+    { value: 14, text: "غذای سازمان", color: theGreenColor },
+    { value: 11.2, text: "حمل و نقل", color: theLightBlue },
+    { value: 10, text: "پفک نمکی", color: theOrangeColor },
+    { value: 9, text: "لباس", color: theLightBlue },
+    { value: 7, text: "اینترنت", color: theGreenColor },
+    { value: 6.8, text: "کافه", color: theOrangeColor },
+    { value: 3, text: "سفر", color: theOrangeColor },
+    { value: 1, text: "متفرقه", color: theOrangeColor },
   ];
 
   /** Zoom in-out the linear chart by changing the spacing constant */
@@ -95,6 +100,28 @@ export default function ReportPage() {
     // The Leveler is +1 or -1
     const the_new_spacing_constant = chartZoomConstant + theLeveler * 0.2;
     setChartZoomConstant(the_new_spacing_constant);
+  };
+
+  const renderLegend = (text, color) => {
+    return (
+      <Div style={{ flexDirection: "row" }}>
+        <Div
+          style={{
+            height: 15,
+
+            width: 15,
+
+            marginRight: 10,
+
+            borderRadius: 4,
+
+            backgroundColor: color || "white",
+          }}
+        />
+
+        <Span style={{ color: "white", fontSize: 16 }}>{text || ""}</Span>
+      </Div>
+    );
   };
 
   return (
@@ -253,19 +280,28 @@ export default function ReportPage() {
             />
           </Span>
         </Div>
-        {/* <Div style={styles.singleChart}>
-          <PieChartPro
+        <Div style={styles.rowChart}>
+          <Span type="title" style={styles.chartTitle}>
+            بیشتر چی خریدی؟
+          </Span>
+          <PieChart
+            strokeColor={theBGColor}
+            strokeWidth={2}
             donut
-            isThreeD
-            showText
-            textColor="black"
-            radius={170}
-            textSize={20}
-            showTextBackground
-            textBackgroundRadius={26}
             data={pieData}
+            innerCircleColor={theBGColor}
+            innerCircleBorderWidth={0}
+            innerRadius={70}
+            innerCircleBorderColor={theTintColor}
+            labelsPosition="onBorder"
+            textSize={11}
+            textColor={theBGColor}
+            inwardExtraLengthForFocused={50}
           />
-        </Div> */}
+          <Div style={{ flexDirection: "row", display: "flex" }}>
+            {pieData.map((item, index) => renderLegend(item.text, item.color))}
+          </Div>
+        </Div>
       </ScrollView>
     </Mother>
   );
@@ -324,5 +360,16 @@ const styles = StyleSheet.create({
   chartTitle: {
     marginBottom: 20,
     fontSize: 20,
+  },
+
+  rowChart: {
+    display: "flex",
+    alignItems: "center",
+    direction: "rtl",
+    backgroundColor: "#c9fbff05",
+    borderRadius: 0,
+    borderBottomWidth: 0,
+    borderBottomColor: "green",
+    padding: 30,
   },
 });
