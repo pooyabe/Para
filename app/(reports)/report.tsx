@@ -257,7 +257,9 @@ export default function ReportPage() {
             />
           </Span>
         </Div>
-        <Div style={[styles.chartWithBG, styles.singleChart, {direction: "rtl"}]}>
+        <Div
+          style={[styles.chartWithBG, styles.singleChart, { direction: "rtl" }]}
+        >
           <Span type="title" style={styles.chartTitle}>
             بیشتر چی خریدی؟
           </Span>
@@ -315,6 +317,9 @@ export default function ReportPage() {
             ))}
           </Div>
         </Div>
+        <Span type="subtitle" style={{ textAlign: "center", marginTop: 60 }}>
+          چارت‌های دیگر به زودی...
+        </Span>
       </ScrollView>
     </Mother>
   );
