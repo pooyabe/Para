@@ -77,16 +77,15 @@ export default function ReportPage() {
   ];
 
   const pieData = [
-    { value: 20, text: "کرایه خانه", color: theTabBgColor },
-    { value: 15, text: "رستوران", color: theLightBlue },
-    { value: 14, text: "غذای سازمان", color: theGreenColor },
-    { value: 11.2, text: "حمل و نقل", color: theLightBlue },
-    { value: 10, text: "پفک نمکی", color: theOrangeColor },
-    { value: 9, text: "لباس", color: theLightBlue },
-    { value: 7, text: "اینترنت", color: theGreenColor },
-    { value: 6.8, text: "کافه", color: theOrangeColor },
-    { value: 3, text: "سفر", color: theOrangeColor },
-    { value: 1, text: "متفرقه", color: theOrangeColor },
+    { value: 20, text: "کرایه خانه", color: "#118cfeff" },
+    { value: 15, text: "رستوران", color: "#118cfe9f" },
+    { value: 14, text: "غذای سازمان", color: "#118cfe8f" },
+    { value: 11.2, text: "حمل و نقل", color: "#118cfe7f" },
+    { value: 10, text: "بدهی", color: "#118cfe6f" },
+    { value: 9, text: "لباس", color: "#118cfe5f" },
+    { value: 7, text: "اینترنت", color: "#118cfe4f" },
+    { value: 6.8, text: "کافه", color: "#118cfe3f" },
+    { value: 4, text: "متفرقه", color: "#118cfe2f" },
   ];
 
   /** Zoom in-out the linear chart by changing the spacing constant */
@@ -100,28 +99,6 @@ export default function ReportPage() {
     // The Leveler is +1 or -1
     const the_new_spacing_constant = chartZoomConstant + theLeveler * 0.2;
     setChartZoomConstant(the_new_spacing_constant);
-  };
-
-  const renderLegend = (text, color) => {
-    return (
-      <Div style={{ flexDirection: "row" }}>
-        <Div
-          style={{
-            height: 15,
-
-            width: 15,
-
-            marginRight: 10,
-
-            borderRadius: 4,
-
-            backgroundColor: color || "white",
-          }}
-        />
-
-        <Span style={{ color: "white", fontSize: 16 }}>{text || ""}</Span>
-      </Div>
-    );
   };
 
   return (
@@ -297,9 +274,45 @@ export default function ReportPage() {
             textSize={11}
             textColor={theBGColor}
             inwardExtraLengthForFocused={50}
+            tooltipDuration={1500}
+            showValuesAsTooltipText
+            showTooltip
+            tooltipBackgroundColor={theTintColor}
+            tooltipWidth={100}
+            tooltipComponent={(item) => (
+              <Span
+                style={[
+                  styles.tooltipStyle,
+                  { backgroundColor: theTintColor, color: theBGColor },
+                ]}
+                type="default"
+              >
+                {pieData[item].text}
+                {"\n"}
+                {pieData[item].value}%
+              </Span>
+            )}
           />
-          <Div style={{ flexDirection: "row", display: "flex" }}>
-            {pieData.map((item, index) => renderLegend(item.text, item.color))}
+
+          <Div style={styles.dataLegendContainer}>
+            {pieData.map((item, index) => (
+              <Div style={styles.dataLegendItem}>
+                <Span
+                  style={[
+                    styles.dataLegendIndicator,
+                    {
+                      backgroundColor: item.color || "white",
+                    },
+                  ]}
+                >
+                  {item.value}%
+                </Span>
+
+                <Span style={styles.dataLegendLabel} type="default">
+                  {item.text || ""}
+                </Span>
+              </Div>
+            ))}
           </Div>
         </Div>
       </ScrollView>
@@ -368,5 +381,44 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0,
     borderBottomColor: "green",
     padding: 30,
+  },
+
+  /**
+   *
+   * Pie chart section
+   *
+   */
+  tooltipStyle: {
+    padding: 10,
+    borderRadius: 10,
+    textAlign: "center",
+    lineHeight: 30,
+    opacity: 0.9,
+  },
+  dataLegendContainer: {
+    marginTop: 10,
+    display: "flex",
+    flexDirection: "row",
+    width: screenWidth,
+    flexWrap: "wrap",
+    justifyContent: "center",
+    rowGap: 20,
+  },
+  dataLegendItem: {
+    flexDirection: "row",
+    width: screenWidth * 0.33,
+    alignItems: "center",
+    flexWrap: "wrap",
+  },
+  dataLegendIndicator: {
+    marginRight: 10,
+    borderRadius: 4,
+    padding: 2,
+    width: 40,
+    textAlign: "center",
+  },
+  dataLegendLabel: {
+    fontSize: 16,
+    marginRight: 2,
   },
 });
