@@ -107,7 +107,7 @@ export function OveralLineChart() {
         spacing={(screenWidth * chartZoomConstant) / (data.length - 1)}
         initialSpacing={screenWidth * 0.07}
         endSpacing={screenWidth * 0.05}
-        height={screenHeight * 0.25}
+        height={screenHeight * 0.20}
         width={screenWidth * 0.82}
         /**
          * تنظیمات محور x
