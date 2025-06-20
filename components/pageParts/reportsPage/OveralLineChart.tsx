@@ -107,7 +107,7 @@ export function OveralLineChart() {
         spacing={(screenWidth * chartZoomConstant) / (data.length - 1)}
         initialSpacing={screenWidth * 0.07}
         endSpacing={screenWidth * 0.05}
-        height={screenHeight * 0.20}
+        height={screenHeight * 0.2}
         width={screenWidth * 0.82}
         /**
          * تنظیمات محور x
@@ -151,6 +151,16 @@ export function OveralLineChart() {
             color: theOrangeColor,
           },
         }}
+        /**
+         * Focus
+         */
+        focusEnabled
+        showDataPointLabelOnFocus
+        showStripOnFocus
+        delayBeforeUnFocus={1000}
+        isAnimated
+        animationDuration={500}
+        animateTogether={true}
       />
       <Span
         style={{
