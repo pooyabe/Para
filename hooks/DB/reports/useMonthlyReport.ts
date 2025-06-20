@@ -5,9 +5,7 @@ import { getDbConnection } from "../helpers";
 export async function getMonthlyReport(
   dataSoure: string,
   rangeKey: RangeType
-): Promise<{
-  returnOutput: { value: number; label: string }[];
-}> {
+): Promise<{ value: number; label: string }[]> {
   // Connecting to data base
   const db = await getDbConnection();
 
@@ -34,7 +32,7 @@ export async function getMonthlyReport(
   }
 
   // Decalre the Promised vars
-  const returnOutput: { value: number; label: string }[] = [];
+  const returnOutput = [];
 
   /**
    *
@@ -55,9 +53,9 @@ export async function getMonthlyReport(
         day.format("YYYY-MM-DD"),
       ]);
 
-      if (theResult?.total > 1000) {
+      if (typeof theResult?.total === "number" && theResult.total > 1000) {
         returnOutput.push({
-          value: theResult?.total || 0,
+          value: theResult.total,
           label: day.locale("fa").format("jDD"),
         });
       }
@@ -87,9 +85,9 @@ export async function getMonthlyReport(
         monthEnd.format("YYYY-MM-DD"),
       ]);
 
-      if (theResult?.total > 1000) {
+      if (typeof theResult?.total === "number" && theResult.total > 1000) {
         returnOutput.push({
-          value: theResult?.total || 0,
+          value: theResult.total,
           label: monthLabels[cmi],
         });
       }
