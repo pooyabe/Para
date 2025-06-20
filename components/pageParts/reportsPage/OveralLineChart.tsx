@@ -159,8 +159,9 @@ export function OveralLineChart() {
         showStripOnFocus
         delayBeforeUnFocus={1000}
         isAnimated
-        animationDuration={500}
+        animationDuration={1500}
         animateTogether={true}
+        animationEasing
       />
       <Span
         style={{
