@@ -2,9 +2,11 @@ import { getDateRange, RangeType } from "@/hooks/BackEnd/useDateRange";
 import moment from "jalali-moment";
 import { getDbConnection } from "../helpers";
 
-export async function getMonthlyReport(rangeKey: RangeType): Promise<{
-  spendings: { value: number; label: string }[];
-  incomes: { value: number }[];
+export async function getMonthlyReport(
+  dataSoure: string,
+  rangeKey: RangeType
+): Promise<{
+  returnOutput: { value: number; label: string }[];
 }> {
   // Connecting to data base
   const db = await getDbConnection();
@@ -32,21 +34,7 @@ export async function getMonthlyReport(rangeKey: RangeType): Promise<{
   }
 
   // Decalre the Promised vars
-  const spendings: { value: number; label: string }[] = [];
-  const incomes: { value: number }[] = [];
-
-  /**
-   *
-   * Declare the prepared statements
-   *
-   */
-  const spendingStatement = await db.prepareAsync(
-    `SELECT SUM(amount) as total FROM spendings WHERE transaction_date BETWEEN $startDate AND $endDate`
-  );
-
-  const incomeStatement = await db.prepareAsync(
-    `SELECT SUM(amount) FROM incomes WHERE transaction_date BETWEEN $startDate AND $endDate`
-  );
+  const returnOutput: { value: number; label: string }[] = [];
 
   /**
    *
@@ -54,33 +42,24 @@ export async function getMonthlyReport(rangeKey: RangeType): Promise<{
    *
    */
   const isSingleMonth = rangeKey === "month";
-
+   
   if (isSingleMonth) {
     const daysCount = end.diff(start, "days") + 1;
 
     for (let i = 0; i < daysCount; i++) {
       const day = start.clone().add(i, "days");
 
-      const row = await db.getFirstAsync<{ total: number }>(
+      const theResult = await db.getFirstAsync<{ total: number }>(
         `SELECT SUM(amount) as total FROM spendings WHERE transaction_date = ?`,
         [day.format("YYYY-MM-DD")]
       );
 
-      if (row?.total > 1000) {
-        spendings.push({
-          value: row?.total || 0,
+      if (theResult?.total > 1000) {
+        returnOutput.push({
+          value: theResult?.total || 0,
           label: day.locale("fa").format("jDD"),
         });
       }
-
-      const incomeRow = await db.getFirstAsync<{ total: number }>(
-        `SELECT SUM(amount) as total FROM incomes WHERE transaction_date = ?`,
-        [day.format("YYYY-MM-DD")]
-      );
-
-      incomes.push({
-        value: incomeRow?.total || 0,
-      });
     }
   } else {
     /**
@@ -100,26 +79,20 @@ export async function getMonthlyReport(rangeKey: RangeType): Promise<{
        *
        *
        */
-      const spendingResult = await db.getFirstAsync<{ total: number }>(
+      const theResult = await db.getFirstAsync<{ total: number }>(
         `SELECT SUM(amount) as total FROM spendings WHERE transaction_date BETWEEN ? AND ?`,
-        [monthStart.format("YYYY-MM-DD"), monthEnd.format("YYYY-MM-DD")]
+        [
+          monthStart.format("YYYY-MM-DD"),
+          monthEnd.format("YYYY-MM-DD"),
+        ]
       );
 
-      const incomeResult = await db.getFirstAsync<{ total: number }>(
-        `SELECT SUM(amount) as total FROM incomes WHERE transaction_date BETWEEN ? AND ?`,
-        [monthStart.format("YYYY-MM-DD"), monthEnd.format("YYYY-MM-DD")]
-      );
-
-      if (spendingResult?.total > 0) {
-        spendings.push({
-          value: spendingResult?.total || 0,
+      if (theResult?.total > 1000) {
+        returnOutput.push({
+          value: theResult?.total || 0,
           label: monthLabels[cmi],
         });
       }
-
-      incomes.push({
-        value: incomeResult?.total || 0,
-      });
     }
   }
 
@@ -130,10 +103,6 @@ export async function getMonthlyReport(rangeKey: RangeType): Promise<{
    *
    *
    */
-  const the_return = {
-    spendings,
-    incomes,
-  };
 
-  return the_return;
+  return returnOutput;
 }

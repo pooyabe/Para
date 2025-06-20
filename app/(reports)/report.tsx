@@ -28,13 +28,7 @@ export default function ReportPage() {
   const [selectedRange, setSelectedRange] = useState<RangeType>("month");
 
   // This states hold the Overal top linechart data
-  const [overalReport, setOveralReport] = useState<{
-    spendings: any[];
-    incomes: any[];
-  }>({
-    spendings: [],
-    incomes: [],
-  });
+  const [spendingReport, setSpendingReport] = useState<any[]>([]);
 
   // This is an array of top select date buttons
   const theSelectDateButtons = [
@@ -62,11 +56,11 @@ export default function ReportPage() {
     // Show loading
     setShowLoading(true);
 
-    // Get data from DB
-    const res = await getMonthlyReport(rangeKey);
+    // Get Spending data from DB
+    const res = await getMonthlyReport('spendings', rangeKey);
 
     // Set the statement
-    setOveralReport(res);
+    setSpendingReport(res);
 
     // Hide loading
     setShowLoading(false);
@@ -138,7 +132,7 @@ export default function ReportPage() {
            *
            *
            **/}
-          <OveralLineChart barData={overalReport.spendings} title="خرج این ماه"/>
+          <OveralLineChart barData={spendingReport} title="هزینه" />
 
           <SpendingsPieChart />
 
