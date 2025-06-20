@@ -42,17 +42,18 @@ export async function getMonthlyReport(
    *
    */
   const isSingleMonth = rangeKey === "month";
-   
+
   if (isSingleMonth) {
     const daysCount = end.diff(start, "days") + 1;
 
     for (let i = 0; i < daysCount; i++) {
       const day = start.clone().add(i, "days");
 
-      const theResult = await db.getFirstAsync<{ total: number }>(
-        `SELECT SUM(amount) as total FROM spendings WHERE transaction_date = ?`,
-        [day.format("YYYY-MM-DD")]
-      );
+      const sql = `SELECT SUM(amount) as total FROM ${dataSoure} WHERE transaction_date = ?`;
+
+      const theResult = await db.getFirstAsync<{ total: number }>(sql, [
+        day.format("YYYY-MM-DD"),
+      ]);
 
       if (theResult?.total > 1000) {
         returnOutput.push({
@@ -79,13 +80,12 @@ export async function getMonthlyReport(
        *
        *
        */
-      const theResult = await db.getFirstAsync<{ total: number }>(
-        `SELECT SUM(amount) as total FROM spendings WHERE transaction_date BETWEEN ? AND ?`,
-        [
-          monthStart.format("YYYY-MM-DD"),
-          monthEnd.format("YYYY-MM-DD"),
-        ]
-      );
+      const sql = `SELECT SUM(amount) as total FROM ${dataSoure} WHERE transaction_date BETWEEN ? AND ?`;
+
+      const theResult = await db.getFirstAsync<{ total: number }>(sql, [
+        monthStart.format("YYYY-MM-DD"),
+        monthEnd.format("YYYY-MM-DD"),
+      ]);
 
       if (theResult?.total > 1000) {
         returnOutput.push({
