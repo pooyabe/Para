@@ -48,11 +48,10 @@ export function OveralLineChart({
     setChartZoomConstant(the_new_spacing_constant);
   };
 
-
   /**
-   * 
+   *
    * نمایش رقم به متن در بالای چارت
-   * 
+   *
    */
   const [chartValueHelper, setChartValueHelper] = useState<string>("");
   const handleChangeValueHelper = (value: string) => {
@@ -103,31 +102,46 @@ export function OveralLineChart({
       </Div>
       <BarChart
         data={barData}
+        // style
         barWidth={20}
         spacing={chartZoomConstant}
         roundedTop
         roundedBottom
         frontColor={color}
-        width={screenWidth}
+        width={screenWidth * 0.93}
         hideOrigin
+        // Press
         focusBarOnPress
+        onPress={(data: any) => handleChangeValueHelper(data.value)}
+        focusedBarConfig={{
+          color: theGreenColor
+        }}
         //X Axis
         xAxisThickness={0}
         xAxisLabelTextStyle={{
           color: "gray",
+          fontFamily: "VazirRegular",
+          direction: "rtl",
+          fontSize: 14,
         }}
-        rotateLabel
         // Y Axis
         yAxisThickness={0}
-        yAxisTextStyle={{ color: theTextColor }}
-        yAxisExtraHeight={50}
+        yAxisTextStyle={{
+          color: theTextColor,
+          fontFamily: "VazirRegular",
+          direction: "rtl",
+          fontSize: 12,
+        }}
+        yAxisExtraHeight={20}
         yAxisLabelContainerStyle={{
           justifyContent: "flex-start",
           width: "auto",
         }}
-        rulesThickness={1}
-        rulesColor="rgba(200,200,200,0.2)"
-        onPress={(data:any) => handleChangeValueHelper(data.value)}
+        // Rules
+        noOfSections={5}
+        rulesType="dashed"
+        rulesThickness={2}
+        rulesColor="#eca72c2f"
       />
       <Span
         style={{
