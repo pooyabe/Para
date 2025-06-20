@@ -31,7 +31,7 @@ export default function ReportPage() {
   const [spendingReport, setSpendingReport] = useState<any[]>([]);
 
   // This is an array of top select date buttons
-  const theSelectDateButtons = [
+  const theSelectDateButtons: { key: RangeType; label: string }[] = [
     { key: "month", label: "این ماه" },
     { key: "quarter", label: "سه ماهه" },
     { key: "sixmonth", label: "شش ماهه" },
