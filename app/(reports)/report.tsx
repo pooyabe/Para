@@ -132,7 +132,7 @@ export default function ReportPage() {
            *
            *
            **/}
-          <OveralLineChart barData={spendingReport} title="هزینه" />
+          <OveralLineChart barData={spendingReport} title="هزینه‌ها" />
 
           <SpendingsPieChart />
 

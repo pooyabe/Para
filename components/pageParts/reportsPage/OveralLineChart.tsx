@@ -3,6 +3,7 @@ import { Dimensions, StyleSheet, TouchableOpacity } from "react-native";
 
 import { useThemeColor } from "@/hooks/useThemeColor";
 
+import numberToText from "@/hooks/numberToText";
 import { useState } from "react";
 import { BarChart, BarChartPropsType } from "react-native-gifted-charts";
 
@@ -47,6 +48,16 @@ export function OveralLineChart({
     setChartZoomConstant(the_new_spacing_constant);
   };
 
+
+  /**
+   * 
+   * نمایش رقم به متن در بالای چارت
+   * 
+   */
+  const [chartValueHelper, setChartValueHelper] = useState<string>("");
+  const handleChangeValueHelper = (value: string) => {
+    setChartValueHelper(numberToText(Number(value)));
+  };
   return (
     <Div style={styles.singleChart}>
       <Span type="title" style={styles.chartTitle}>
@@ -57,21 +68,38 @@ export function OveralLineChart({
           display: "flex",
           flexDirection: "row",
           alignSelf: "flex-start",
-          marginRight: 10,
-          marginLeft: 10,
+          paddingRight: 10,
+          paddingLeft: 10,
           justifyContent: "space-between",
-          width: 100,
+          width: "100%",
         }}
       >
-        <TouchableOpacity onPress={() => changeChartZoom(+1)}>
-          <IconSymbol name="zoom-in" size={30} color={theTextColor} />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => changeChartZoom(2)}>
-          <IconSymbol name="zoom-out-map" size={30} color={theTextColor} />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => changeChartZoom(-1)}>
-          <IconSymbol name="zoom-out" size={30} color={theTextColor} />
-        </TouchableOpacity>
+        <Div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignSelf: "flex-start",
+            justifyContent: "space-between",
+          }}
+        >
+          <TouchableOpacity onPress={() => changeChartZoom(+1)}>
+            <IconSymbol name="zoom-in" size={30} color={theTextColor} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => changeChartZoom(2)}>
+            <IconSymbol name="zoom-out-map" size={30} color={theTextColor} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => changeChartZoom(-1)}>
+            <IconSymbol name="zoom-out" size={30} color={theTextColor} />
+          </TouchableOpacity>
+        </Div>
+        <Span
+          style={{
+            alignSelf: "center",
+            color: theTextColor,
+          }}
+        >
+          {chartValueHelper}
+        </Span>
       </Div>
       <BarChart
         data={barData}
@@ -99,7 +127,7 @@ export function OveralLineChart({
         }}
         rulesThickness={1}
         rulesColor="rgba(200,200,200,0.2)"
-        onPress={(data) => console.log(data)}
+        onPress={(data: []) => handleChangeValueHelper(data.value)}
       />
       <Span
         style={{
