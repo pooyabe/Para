@@ -127,7 +127,7 @@ export function OveralLineChart({
         }}
         rulesThickness={1}
         rulesColor="rgba(200,200,200,0.2)"
-        onPress={(data: []) => handleChangeValueHelper(data.value)}
+        onPress={(data:any) => handleChangeValueHelper(data.value)}
       />
       <Span
         style={{
