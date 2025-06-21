@@ -13,7 +13,7 @@ import { OveralLineChart } from "@/components/pageParts/reportsPage/OveralLineCh
 import { SpendingsPieChart } from "@/components/pageParts/reportsPage/SpendingsPieChart";
 import { useEffect, useState } from "react";
 
-import { getDateRange, type RangeType } from "@/hooks/BackEnd/useDateRange";
+import { type RangeType } from "@/hooks/BackEnd/useDateRange";
 import { getMonthlyReport } from "@/hooks/DB/reports/useMonthlyReport";
 
 export default function ReportPage() {
@@ -23,17 +23,19 @@ export default function ReportPage() {
    *
    */
   const [showLoading, setShowLoading] = useState<boolean>(true);
-  /**
-   *
-   *
-   * انتخاب بازه زمانی
-   *
-   *
-   */
 
   // This states set which date period button selected
   const [selectedRange, setSelectedRange] = useState<RangeType>("month");
-  const [dateRange, setDateRange] = useState(() => getDateRange("month"));
+
+  // This states hold the Overal top linechart data
+  const [overalReport, setOveralReport] = useState<{
+    spendings: any[];
+    incomes: any[];
+  }>({
+    spendings: [],
+    incomes: [],
+  });
+
   // This is an array of top select date buttons
   const theSelectDateButtons = [
     { key: "month", label: "این ماه" },
@@ -42,11 +44,10 @@ export default function ReportPage() {
     { key: "year", label: "یک ساله" },
   ];
 
-  const handleSelect = (rangeKey: RangeType) => {
-    setShowLoading(true);
+  const handleSelect = async (rangeKey: RangeType): Promise<void> => {
     setSelectedRange(rangeKey);
-    setDateRange(getDateRange(rangeKey));
-    fetchData();
+
+    fetchData(rangeKey);
   };
 
   /**
@@ -57,22 +58,27 @@ export default function ReportPage() {
    *
    */
 
-  const [overalReport, setOveralReport] = useState<{
-    spendings: any[];
-    incomes: any[];
-  }>({
-    spendings: [],
-    incomes: [],
-  });
+  const fetchData = async (rangeKey: RangeType) => {
+    // Show loading
+    setShowLoading(true);
 
-  const fetchData = async () => {
-    const res = await getMonthlyReport(dateRange.startDate, dateRange.endDate);
+    // Get data from DB
+    const res = await getMonthlyReport(rangeKey);
+
+    // Set the statement
     setOveralReport(res);
+
+    // Hide loading
     setShowLoading(false);
   };
 
+  /**
+   *
+   * دریافت اطلاعات این ماه موقع بارگذاری صفحه
+   *
+   */
   useEffect(() => {
-    fetchData();
+    fetchData("month");
   }, []);
 
   return (
