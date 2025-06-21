@@ -81,75 +81,76 @@ export default function ReportPage() {
     fetchData("month");
   }, []);
 
-  return (
-    <Mother style={styles.container} _Hpadding={0}>
-      <Div style={styles.Header}>
-        <Span type="title" style={styles.headerTitle}>
-          گزارش وضعیت
+  if (showLoading) {
+    return (
+      <Div style={styles.LoadingScreen}>
+        <Span type="title" style={styles.LoadingScreenText}>
+          لطفا صبر کنید...
         </Span>
-        <TouchableOpacity
-          onPress={() => {
-            router.replace("/(tabs)/spending");
-          }}
-        >
-          <IconSymbol type="Ionicons" name="home" size={24} color="white" />
-        </TouchableOpacity>
       </Div>
-      <Spacer height={30} />
-      <Div style={styles.dateButtonGroup}>
+    );
+  } else
+    return (
+      <Mother style={styles.container} _Hpadding={0}>
+        <Div style={styles.Header}>
+          <Span type="title" style={styles.headerTitle}>
+            گزارش وضعیت
+          </Span>
+          <TouchableOpacity
+            onPress={() => {
+              router.replace("/(tabs)/spending");
+            }}
+          >
+            <IconSymbol type="Ionicons" name="home" size={24} color="white" />
+          </TouchableOpacity>
+        </Div>
+        <Spacer height={30} />
+        <Div style={styles.dateButtonGroup}>
+          <ScrollView
+            contentContainerStyle={styles.selectDateButtonsContainer}
+            horizontal
+            overScrollMode="always"
+            fadingEdgeLength={20}
+            showsHorizontalScrollIndicator={false}
+            contentOffset={{ x: 1000, y: 0 }}
+          >
+            {theSelectDateButtons.map(({ key, label }) => (
+              <GButton
+                text={label}
+                key={key}
+                active={selectedRange === key}
+                onPress={() => handleSelect(key)}
+                style={styles.glassTopButtons}
+              />
+            ))}
+          </ScrollView>
+        </Div>
+        <Spacer height={20} />
         <ScrollView
-          contentContainerStyle={styles.selectDateButtonsContainer}
-          horizontal
+          style={styles.bottomSection}
           overScrollMode="always"
-          fadingEdgeLength={20}
-          showsHorizontalScrollIndicator={false}
-          contentOffset={{ x: 1000, y: 0 }}
+          fadingEdgeLength={80}
         >
-          {theSelectDateButtons.map(({ key, label }) => (
-            <GButton
-              text={label}
-              key={key}
-              active={selectedRange === key}
-              onPress={() => handleSelect(key)}
-              style={styles.glassTopButtons}
-            />
-          ))}
+          {/****
+           *
+           *
+           * Import Chart Components from Comonents/PageParts/ReportPage
+           *
+           *
+           **/}
+          <OveralLineChart
+            spendingData={overalReport.spendings}
+            incomeData={overalReport.incomes}
+          />
+
+          <SpendingsPieChart />
+
+          <Span type="subtitle" style={{ textAlign: "center", marginTop: 60 }}>
+            چارت‌های دیگر به زودی...
+          </Span>
         </ScrollView>
-      </Div>
-      <Spacer height={20} />
-      <ScrollView
-        style={styles.bottomSection}
-        overScrollMode="always"
-        fadingEdgeLength={80}
-      >
-        {showLoading && (
-          <Div style={styles.LoadingScreen}>
-            <Span type="title" style={styles.LoadingScreenText}>
-              لطفا صبر کنید...
-            </Span>
-          </Div>
-        )}
-
-        {/****
-         *
-         *
-         * Import Chart Components from Comonents/PageParts/ReportPage
-         *
-         *
-         **/}
-        <OveralLineChart
-          spendingData={overalReport.spendings}
-          incomeData={overalReport.incomes}
-        />
-
-        <SpendingsPieChart />
-
-        <Span type="subtitle" style={{ textAlign: "center", marginTop: 60 }}>
-          چارت‌های دیگر به زودی...
-        </Span>
-      </ScrollView>
-    </Mother>
-  );
+      </Mother>
+    );
 }
 
 const styles = StyleSheet.create({
@@ -195,13 +196,15 @@ const styles = StyleSheet.create({
   LoadingScreen: {
     width: "100%",
     height: "100%",
-    backgroundColor: "rgba(0,0,0,0.9)",
+    backgroundColor: "#181f2f",
     position: "absolute",
     zIndex: 1000,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
   },
   LoadingScreenText: {
     fontSize: 30,
     textAlign: "center",
-    marginTop: 200,
   },
 });
