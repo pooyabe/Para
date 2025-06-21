@@ -38,7 +38,7 @@ export function getDateRange(type: RangeType): {
   }
 
   return {
-    startDate: start.clone().locale("fa").format("YYYY-MM-DD"),
-    endDate: end.clone().locale("fa").format("YYYY-MM-DD"),
+    startDate: start.clone().locale("en").format("YYYY-MM-DD"),
+    endDate: end.clone().locale("en").format("YYYY-MM-DD"),
   };
 }
