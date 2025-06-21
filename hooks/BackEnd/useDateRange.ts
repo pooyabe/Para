@@ -3,10 +3,10 @@ import moment from "jalali-moment";
 
 export type RangeType = "month" | "quarter" | "sixmonth" | "year";
 
-export function getDateRange(type: RangeType): {
+export async function getDateRange(type: RangeType): Promise<{
   startDate: string; // ISO string
   endDate: string; // ISO string
-} {
+}> {
   const today = moment(); // امروز شمسی
 
   let start: moment.Moment;
