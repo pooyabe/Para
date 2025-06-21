@@ -1,4 +1,3 @@
-// hooks/useDateRange.ts
 import moment from "jalali-moment";
 
 export type RangeType = "month" | "quarter" | "sixmonth" | "year";
@@ -7,30 +6,26 @@ export async function getDateRange(type: RangeType): Promise<{
   startDate: string; // ISO string
   endDate: string; // ISO string
 }> {
-  const today = moment(); // امروز شمسی
+  const today = moment(); // ← میلادی، هم برای کوئری هم برای حلقه
+  const end = today.clone().endOf("day"); // ← پایان امروز، همیشه ثابت
 
   let start: moment.Moment;
-  let end: moment.Moment;
 
   switch (type) {
     case "month":
-      start = today.clone().startOf("jMonth");
-      end = today.clone().endOf("jMonth");
+      start = today.clone().startOf("month");
       break;
 
     case "quarter":
-      end = today.clone().startOf("jMonth").subtract(1, "day");
-      start = end.clone().subtract(2, "jMonth").startOf("jMonth"); // سه ماه شامل ماه قبل هم باشه
+      start = today.clone().subtract(3, "month").startOf("month");
       break;
 
     case "sixmonth":
-      end = today.clone().startOf("jMonth").subtract(1, "day");
-      start = end.clone().subtract(5, "jMonth").startOf("jMonth"); // سه ماه شامل ماه قبل هم باشه
+      start = today.clone().subtract(6, "month").startOf("month");
       break;
 
     case "year":
-      start = today.clone().startOf("jYear");
-      end = today.clone().endOf("jYear");
+      start = today.clone().subtract(12, "month").startOf("month");
       break;
 
     default:
@@ -38,7 +33,7 @@ export async function getDateRange(type: RangeType): Promise<{
   }
 
   return {
-    startDate: start.clone().locale("en").format("YYYY-MM-DD"),
-    endDate: end.clone().locale("en").format("YYYY-MM-DD"),
+    startDate: start.format("YYYY-MM-DD"),
+    endDate: end.format("YYYY-MM-DD"),
   };
 }
