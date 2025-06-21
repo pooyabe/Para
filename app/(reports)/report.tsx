@@ -1,4 +1,11 @@
-import { Div, GButton, IconSymbol, Mother, Spacer, Span } from "@/components/Elements";
+import {
+  Div,
+  GButton,
+  IconSymbol,
+  Mother,
+  Spacer,
+  Span,
+} from "@/components/Elements";
 import { router } from "expo-router";
 import { ScrollView, StyleSheet, TouchableOpacity } from "react-native";
 
@@ -6,19 +13,24 @@ import { OveralLineChart } from "@/components/pageParts/reportsPage/OveralLineCh
 import { SpendingsPieChart } from "@/components/pageParts/reportsPage/SpendingsPieChart";
 import { useState } from "react";
 
+import { getDateRange, type RangeType } from "@/hooks/BackEnd/useDateRange";
 
 export default function ReportPage() {
   // This states set which date period button selected
-  const [selectedDatePeriodButton, setSelectedDatePeriodButton] =
-    useState<string>("month");
+  const [selectedRange, setSelectedRange] = useState<RangeType>("month");
+  const [dateRange, setDateRange] = useState(() => getDateRange("month"));
   // This is an array of top select date buttons
   const theSelectDateButtons = [
     { key: "month", label: "این ماه" },
     { key: "quarter", label: "سه ماهه" },
+    { key: "sixmonth", label: "شش ماهه" },
     { key: "year", label: "یک ساله" },
-    { key: "custom", label: "تاریخ دلخواه" },
   ];
 
+  const handleSelect = (rangeKey: RangeType) => {
+    setSelectedRange(rangeKey);
+    setDateRange(getDateRange(rangeKey));
+  };
 
   return (
     <Mother style={styles.container} _Hpadding={0}>
@@ -48,8 +60,8 @@ export default function ReportPage() {
             <GButton
               text={label}
               key={key}
-              active={selectedDatePeriodButton === key}
-              onPress={() => setSelectedDatePeriodButton(key)}
+              active={selectedRange === key}
+              onPress={() => handleSelect(key)}
               style={styles.glassTopButtons}
             />
           ))}
