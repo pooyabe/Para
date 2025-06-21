@@ -1,7 +1,7 @@
 // hooks/useDateRange.ts
 import moment from "jalali-moment";
 
-export type RangeType = "month" | "quarter" | "year";
+export type RangeType = "month" | "quarter" | "sixmonth" | "year";
 
 export function getDateRange(type: RangeType): {
   startDate: string; // ISO string
@@ -23,6 +23,11 @@ export function getDateRange(type: RangeType): {
       start = end.clone().subtract(2, "jMonth").startOf("jMonth"); // سه ماه شامل ماه قبل هم باشه
       break;
 
+    case "sixmonth":
+      end = today.clone().startOf("jMonth").subtract(1, "day");
+      start = end.clone().subtract(5, "jMonth").startOf("jMonth"); // سه ماه شامل ماه قبل هم باشه
+      break;
+
     case "year":
       start = today.clone().startOf("jYear");
       end = today.clone().endOf("jYear");
@@ -33,7 +38,7 @@ export function getDateRange(type: RangeType): {
   }
 
   return {
-    startDate: start.clone().locale("en").format("YYYY-MM-DD"),
-    endDate: end.clone().locale("en").format("YYYY-MM-DD"),
+    startDate: start.clone().locale("fa").format("YYYY-MM-DD"),
+    endDate: end.clone().locale("fa").format("YYYY-MM-DD"),
   };
 }
