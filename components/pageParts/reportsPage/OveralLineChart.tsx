@@ -4,13 +4,21 @@ import { Dimensions, StyleSheet, TouchableOpacity } from "react-native";
 import { useThemeColor } from "@/hooks/useThemeColor";
 
 import { useState } from "react";
-import { LineChart } from "react-native-gifted-charts";
+import { LineChart, LineChartPropsType } from "react-native-gifted-charts";
 
 // Get Screen Dimensions
 const screenHeight = Dimensions.get("screen").height;
 const screenWidth = Dimensions.get("window").width;
 
-export function OveralLineChart() {
+type OverChartProps = LineChartPropsType & {
+  spendingData?: Array<{ value: number; label: string }>;
+  incomeData?: Array<{ value: number }>;
+};
+
+export function OveralLineChart({
+  spendingData = [{ value: 0, label: "01-01" }],
+  incomeData = [{ value: 0 }],
+}: OverChartProps) {
   /**
    *
    * Get the Colors
@@ -21,33 +29,6 @@ export function OveralLineChart() {
   const theGreenColor = useThemeColor({}, "theGreen");
   const theOrangeColor = useThemeColor({}, "theOrange");
 
-  const data = [
-    { value: 15, label: "فروردین" },
-
-    { value: 10, label: "اردیبهشت" },
-
-    { value: 8, label: "خرداد" },
-
-    { value: 58, label: "تیر" },
-
-    { value: 56, label: "مرداد" },
-
-    { value: 78, label: "شهریور" },
-  ];
-
-  const data2 = [
-    { value: 1 },
-
-    { value: 4 },
-
-    { value: 3 },
-
-    { value: 6 },
-
-    { value: 4 },
-
-    { value: 5 },
-  ];
 
   /** Zoom in-out the linear chart by changing the spacing constant */
   const [chartZoomConstant, setChartZoomConstant] = useState<number>(0.8);
@@ -89,7 +70,7 @@ export function OveralLineChart() {
         </TouchableOpacity>
       </Div>
       <LineChart
-        data={data}
+        data={spendingData}
         curved
         hideDataPoints
         /**
@@ -104,7 +85,7 @@ export function OveralLineChart() {
          * نمودار در طول صفحه جا میشه.
          *
          */
-        spacing={(screenWidth * chartZoomConstant) / (data.length - 1)}
+        spacing={(screenWidth * chartZoomConstant) / (spendingData.length - 1)}
         initialSpacing={screenWidth * 0.07}
         endSpacing={screenWidth * 0.05}
         height={screenHeight * 0.2}
@@ -139,7 +120,7 @@ export function OveralLineChart() {
         /**
          * دیتای دوم
          */
-        secondaryData={data2}
+        secondaryData={incomeData}
         secondaryLineConfig={{
           color: theOrangeColor,
         }}
