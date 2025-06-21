@@ -71,7 +71,7 @@ export async function getMonthlyReport(rangeKey: RangeType): Promise<{
 
       spendings.push({
         value: row?.total || 0,
-        label: day.locale("fa").format("jDD/jMM"),
+        label: day.locale("fa").format("jDD"),
       });
 
       const incomeRow = await db.getFirstAsync<{ total: number }>(
