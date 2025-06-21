@@ -29,7 +29,6 @@ export function OveralLineChart({
   const theGreenColor = useThemeColor({}, "theGreen");
   const theOrangeColor = useThemeColor({}, "theOrange");
 
-
   /** Zoom in-out the linear chart by changing the spacing constant */
   const [chartZoomConstant, setChartZoomConstant] = useState<number>(0.8);
   const changeChartZoom = (theLeveler: number): void => {
@@ -42,6 +41,10 @@ export function OveralLineChart({
     const the_new_spacing_constant = chartZoomConstant + theLeveler * 0.2;
     setChartZoomConstant(the_new_spacing_constant);
   };
+
+  // Get default spacing length
+  const default_spacing_length =
+    spendingData.length - 1 >= 1 ? spendingData.length - 1 : 1;
 
   return (
     <Div style={styles.singleChart}>
@@ -70,9 +73,24 @@ export function OveralLineChart({
         </TouchableOpacity>
       </Div>
       <LineChart
+        hideOrigin
         data={spendingData}
+        /**
+         * دیتای دوم
+         */
+        secondaryData={incomeData}
+        secondaryLineConfig={{
+          color: theOrangeColor,
+        }}
+        secondaryYAxis={{
+          noOfSections: 5,
+          showFractionalValues: true,
+          roundToDigits: 0,
+          yAxisTextStyle: {
+            color: theOrangeColor,
+          },
+        }}
         curved
-        hideDataPoints
         /**
          *
          * این عدد مربوط به فاصله بین نقاط روی محور ایکس از کجا اومده؟
@@ -85,7 +103,7 @@ export function OveralLineChart({
          * نمودار در طول صفحه جا میشه.
          *
          */
-        spacing={(screenWidth * chartZoomConstant) / (spendingData.length - 1)}
+        spacing={(screenWidth * chartZoomConstant) / default_spacing_length}
         initialSpacing={screenWidth * 0.07}
         endSpacing={screenWidth * 0.05}
         height={screenHeight * 0.2}
@@ -117,21 +135,6 @@ export function OveralLineChart({
         rulesColor="#c9fbff16"
         noOfSections={5}
         thickness={4}
-        /**
-         * دیتای دوم
-         */
-        secondaryData={incomeData}
-        secondaryLineConfig={{
-          color: theOrangeColor,
-        }}
-        secondaryYAxis={{
-          noOfSections: 5,
-          showFractionalValues: true,
-          roundToDigits: 0,
-          yAxisTextStyle: {
-            color: theOrangeColor,
-          },
-        }}
         /**
          * Focus
          */
