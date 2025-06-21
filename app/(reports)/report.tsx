@@ -11,11 +11,20 @@ import { ScrollView, StyleSheet, TouchableOpacity } from "react-native";
 
 import { OveralLineChart } from "@/components/pageParts/reportsPage/OveralLineChart";
 import { SpendingsPieChart } from "@/components/pageParts/reportsPage/SpendingsPieChart";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { getDateRange, type RangeType } from "@/hooks/BackEnd/useDateRange";
+import { getMonthlyReport } from "@/hooks/DB/reports/useMonthlyReport";
 
 export default function ReportPage() {
+  /**
+   *
+   *
+   * انتخاب بازه زمانی
+   *
+   *
+   */
+
   // This states set which date period button selected
   const [selectedRange, setSelectedRange] = useState<RangeType>("month");
   const [dateRange, setDateRange] = useState(() => getDateRange("month"));
@@ -31,6 +40,34 @@ export default function ReportPage() {
     setSelectedRange(rangeKey);
     setDateRange(getDateRange(rangeKey));
   };
+
+  /**
+   *
+   *
+   * ارتباط با دیتابیس و گرفتن گزارشات
+   *
+   *
+   */
+
+  const [overalReport, setOveralReport] = useState<{
+    spendings: any[];
+    incomes: any[];
+  }>({
+    spendings: [],
+    incomes: [],
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await getMonthlyReport(
+        dateRange.startDate,
+        dateRange.endDate
+      );
+      setOveralReport(res);
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <Mother style={styles.container} _Hpadding={0}>
@@ -80,7 +117,10 @@ export default function ReportPage() {
          *
          *
          **/}
-        <OveralLineChart />
+        <OveralLineChart
+          spendingData={overalReport.spendings}
+          incomeData={overalReport.incomes}
+        />
 
         <SpendingsPieChart />
 
