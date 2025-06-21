@@ -4,20 +4,22 @@ import { Dimensions, StyleSheet, TouchableOpacity } from "react-native";
 import { useThemeColor } from "@/hooks/useThemeColor";
 
 import { useState } from "react";
-import { LineChart, LineChartPropsType } from "react-native-gifted-charts";
+import { BarChart, BarChartPropsType } from "react-native-gifted-charts";
 
 // Get Screen Dimensions
 const screenHeight = Dimensions.get("screen").height;
 const screenWidth = Dimensions.get("window").width;
 
-type OverChartProps = LineChartPropsType & {
-  spendingData?: Array<{ value: number; label: string }>;
-  incomeData?: Array<{ value: number }>;
+type OverChartProps = BarChartPropsType & {
+  barData?: Array<{ value: number; label: string }>;
+  title: string;
+  color?: string;
 };
 
 export function OveralLineChart({
-  spendingData = [{ value: 0, label: "01-01" }],
-  incomeData = [{ value: 0 }],
+  barData = [{ value: 0, label: "01-01" }],
+  title = "عنوان",
+  color = "#ec6665",
 }: OverChartProps) {
   /**
    *
@@ -30,21 +32,19 @@ export function OveralLineChart({
   const theOrangeColor = useThemeColor({}, "theOrange");
 
   /** Zoom in-out the linear chart by changing the spacing constant */
-  const [chartZoomConstant, setChartZoomConstant] = useState<number>(0.8);
+  const [chartZoomConstant, setChartZoomConstant] = useState<number>(
+    (screenWidth * 0.5) / (barData.length + 1)
+  );
   const changeChartZoom = (theLeveler: number): void => {
     // if leveler = 2 : reset the zoom
     if (theLeveler == 2) {
-      setChartZoomConstant(0.8);
+      setChartZoomConstant(screenWidth / (barData.length - 1));
       return;
     }
     // The Leveler is +1 or -1
-    const the_new_spacing_constant = chartZoomConstant + theLeveler * 0.2;
+    const the_new_spacing_constant = chartZoomConstant + theLeveler * 4;
     setChartZoomConstant(the_new_spacing_constant);
   };
-
-  // Get default spacing length
-  const default_spacing_length =
-    spendingData.length - 1 >= 1 ? spendingData.length - 1 : 1;
 
   return (
     <Div style={styles.singleChart}>
@@ -72,80 +72,22 @@ export function OveralLineChart({
           <IconSymbol name="zoom-out" size={30} color={theTextColor} />
         </TouchableOpacity>
       </Div>
-      <LineChart
-        hideOrigin
-        data={spendingData}
-        /**
-         * دیتای دوم
-         */
-        secondaryData={incomeData}
-        secondaryLineConfig={{
-          color: theOrangeColor,
-        }}
-        secondaryYAxis={{
-          noOfSections: 5,
-          showFractionalValues: true,
-          roundToDigits: 0,
-          yAxisTextStyle: {
-            color: theOrangeColor,
-          },
-        }}
-        curved
-        /**
-         *
-         * این عدد مربوط به فاصله بین نقاط روی محور ایکس از کجا اومده؟
-         * خب. ما یک دهم فاصله از سمت راست خالی میذاریم.
-         * یک دهم هم برای اعداد محور.
-         * یک دهم هم برای فاصله اولیه یا همون initialSpacing
-         * پس مقدار سه دهم از کل طول صفحه کسر میشه.
-         * اون رو تقسیم بر تعداد دیتاها منهای یک میکنیم. یعنی تقسیم بر تعداد فواصل
-         * موجود بین دیتاها. به این صورت تعداد دیتا هر چقدر باشه، داخل
-         * نمودار در طول صفحه جا میشه.
-         *
-         */
-        spacing={(screenWidth * chartZoomConstant) / default_spacing_length}
-        initialSpacing={screenWidth * 0.07}
-        endSpacing={screenWidth * 0.05}
-        height={screenHeight * 0.2}
-        width={screenWidth * 0.82}
-        /**
-         * تنظیمات محور x
-         */
-        xAxisThickness={0}
+      <BarChart
+        data={barData}
+        barWidth={10}
+        spacing={chartZoomConstant}
+        roundedTop
+        roundedBottom
+        hideRules
+        xAxisThickness={5}
+        yAxisThickness={5}
+        yAxisTextStyle={{ color: theGreenColor }}
+        frontColor={color}
         xAxisLabelTextStyle={{
-          color: theGreenColor,
-          fontFamily: "VazirRegular",
+          color: color,
         }}
-        showXAxisIndices={true}
-        xAxisIndicesColor={theGreenColor}
-        xAxisIndicesHeight={5}
-        xAxisIndicesWidth={2}
-        /**
-         * تنظیمات محور y
-         */
-        color={theLightBlue}
-        yAxisTextStyle={{
-          color: theLightBlue,
-          fontFamily: "VazirRegular",
-        }}
-        yAxisExtraHeight={50}
-        yAxisThickness={0}
-        rulesThickness={2}
-        rulesType="dashed"
-        rulesColor="#c9fbff16"
-        noOfSections={5}
-        thickness={4}
-        /**
-         * Focus
-         */
-        focusEnabled
-        showDataPointLabelOnFocus
-        showStripOnFocus
-        delayBeforeUnFocus={1000}
-        isAnimated
-        animationDuration={1500}
-        animateTogether={true}
-        animationEasing
+        xAxisColor={theLightBlue}
+        yAxisColor={theLightBlue}
       />
       <Span
         style={{

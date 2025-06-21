@@ -138,10 +138,7 @@ export default function ReportPage() {
            *
            *
            **/}
-          <OveralLineChart
-            spendingData={overalReport.spendings}
-            incomeData={overalReport.incomes}
-          />
+          <OveralLineChart barData={overalReport.spendings} />
 
           <SpendingsPieChart />
 
