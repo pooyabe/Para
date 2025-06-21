@@ -19,6 +19,12 @@ import { getMonthlyReport } from "@/hooks/DB/reports/useMonthlyReport";
 export default function ReportPage() {
   /**
    *
+   * نمایش صفحه صبر
+   *
+   */
+  const [showLoading, setShowLoading] = useState<boolean>(true);
+  /**
+   *
    *
    * انتخاب بازه زمانی
    *
@@ -37,8 +43,10 @@ export default function ReportPage() {
   ];
 
   const handleSelect = (rangeKey: RangeType) => {
+    setShowLoading(true);
     setSelectedRange(rangeKey);
     setDateRange(getDateRange(rangeKey));
+    fetchData();
   };
 
   /**
@@ -57,15 +65,13 @@ export default function ReportPage() {
     incomes: [],
   });
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const res = await getMonthlyReport(
-        dateRange.startDate,
-        dateRange.endDate
-      );
-      setOveralReport(res);
-    };
+  const fetchData = async () => {
+    const res = await getMonthlyReport(dateRange.startDate, dateRange.endDate);
+    setOveralReport(res);
+    setShowLoading(false);
+  };
 
+  useEffect(() => {
     fetchData();
   }, []);
 
@@ -110,6 +116,14 @@ export default function ReportPage() {
         overScrollMode="always"
         fadingEdgeLength={80}
       >
+        {showLoading && (
+          <Div style={styles.LoadingScreen}>
+            <Span type="title" style={styles.LoadingScreenText}>
+              لطفا صبر کنید...
+            </Span>
+          </Div>
+        )}
+
         {/****
          *
          *
@@ -169,5 +183,19 @@ const styles = StyleSheet.create({
   // The Bottom Section of data
   bottomSection: {
     flex: 1,
+  },
+
+  // Loading
+  LoadingScreen: {
+    width: "100%",
+    height: "100%",
+    backgroundColor: "rgba(0,0,0,0.9)",
+    position: "absolute",
+    zIndex: 1000,
+  },
+  LoadingScreenText: {
+    fontSize: 30,
+    textAlign: "center",
+    marginTop: 200,
   },
 });
