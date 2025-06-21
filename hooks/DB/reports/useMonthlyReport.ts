@@ -48,9 +48,50 @@ export async function getMonthlyReport(rangeKey: RangeType): Promise<{
     `SELECT SUM(amount) FROM incomes WHERE transaction_date BETWEEN $startDate AND $endDate`
   );
 
-  // Loop through all months
-  // cmi : Current Month Index
-  try {
+  /**
+   *
+   * Check if the range is this month or not
+   *
+   */
+  const isSingleMonth = start
+    .clone()
+    .startOf("month")
+    .isSame(end.clone().startOf("month"), "month");
+
+  if (isSingleMonth) {
+    const daysCount = end.diff(start, "days") + 1;
+
+    for (let i = 0; i < daysCount; i++) {
+      const day = start.clone().add(i, "days");
+
+      const row = await db.getFirstAsync<{ total: number }>(
+        `SELECT SUM(amount) as total FROM spendings WHERE transaction_date = ?`,
+        [day.format("YYYY-MM-DD")]
+      );
+
+      spendings.push({
+        value: row?.total || 0,
+        label: day.locale("fa").format("jDD/jMM"),
+      });
+
+      const incomeRow = await db.getFirstAsync<{ total: number }>(
+        `SELECT SUM(amount) as total FROM incomes WHERE transaction_date = ?`,
+        [day.format("YYYY-MM-DD")]
+      );
+
+      incomes.push({
+        value: incomeRow?.total || 0,
+      });
+    }
+  } else {
+    /**
+     *
+     * The range is not single month
+     *
+     */
+
+    // Loop through all months
+    // cmi : Current Month Index
     for (var cmi = 0; cmi < months.length; cmi++) {
       const monthStart = moment(months[cmi] + "-01", "YYYY-MM-DD");
       const monthEnd = monthStart.clone().endOf("month");
@@ -69,9 +110,7 @@ export async function getMonthlyReport(rangeKey: RangeType): Promise<{
         `SELECT SUM(amount) as total FROM incomes WHERE transaction_date BETWEEN ? AND ?`,
         [monthStart.format("YYYY-MM-DD"), monthEnd.format("YYYY-MM-DD")]
       );
-      
 
-      
       spendings.push({
         value: spendingResult?.total || 0,
         label: monthLabels[cmi],
@@ -81,9 +120,6 @@ export async function getMonthlyReport(rangeKey: RangeType): Promise<{
         value: incomeResult?.total || 0,
       });
     }
-  } finally {
-    await spendingStatement.finalizeAsync();
-    await incomeStatement.finalizeAsync();
   }
 
   /**
@@ -97,5 +133,9 @@ export async function getMonthlyReport(rangeKey: RangeType): Promise<{
     spendings,
     incomes,
   };
+
+
+  console.log(the_return);
+
   return the_return;
 }
