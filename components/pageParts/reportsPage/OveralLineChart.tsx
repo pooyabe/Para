@@ -19,7 +19,7 @@ type OverChartProps = BarChartPropsType & {
 export function OveralLineChart({
   barData = [{ value: 0, label: "01-01" }],
   title = "عنوان",
-  color = "#ec6665",
+  color = "#118cfe",
 }: OverChartProps) {
   /**
    *
@@ -30,6 +30,7 @@ export function OveralLineChart({
   const theLightBlue = useThemeColor({}, "theLightBlue");
   const theGreenColor = useThemeColor({}, "theGreen");
   const theOrangeColor = useThemeColor({}, "theOrange");
+  const theTintColor = useThemeColor({}, "tint");
 
   /** Zoom in-out the linear chart by changing the spacing constant */
   const [chartZoomConstant, setChartZoomConstant] = useState<number>(
@@ -38,18 +39,18 @@ export function OveralLineChart({
   const changeChartZoom = (theLeveler: number): void => {
     // if leveler = 2 : reset the zoom
     if (theLeveler == 2) {
-      setChartZoomConstant(screenWidth / (barData.length - 1));
+      setChartZoomConstant(screenWidth / barData.length);
       return;
     }
     // The Leveler is +1 or -1
-    const the_new_spacing_constant = chartZoomConstant + theLeveler * 4;
+    const the_new_spacing_constant = chartZoomConstant + theLeveler * 10;
     setChartZoomConstant(the_new_spacing_constant);
   };
 
   return (
     <Div style={styles.singleChart}>
       <Span type="title" style={styles.chartTitle}>
-        دخل و خرج
+        {title}
       </Span>
       <Div
         style={{
@@ -66,7 +67,7 @@ export function OveralLineChart({
           <IconSymbol name="zoom-in" size={30} color={theTextColor} />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => changeChartZoom(2)}>
-          <IconSymbol name="zoom-in-map" size={30} color={theTextColor} />
+          <IconSymbol name="zoom-out-map" size={30} color={theTextColor} />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => changeChartZoom(-1)}>
           <IconSymbol name="zoom-out" size={30} color={theTextColor} />
@@ -74,20 +75,31 @@ export function OveralLineChart({
       </Div>
       <BarChart
         data={barData}
-        barWidth={10}
+        barWidth={20}
         spacing={chartZoomConstant}
         roundedTop
         roundedBottom
-        hideRules
-        xAxisThickness={5}
-        yAxisThickness={5}
-        yAxisTextStyle={{ color: theGreenColor }}
         frontColor={color}
+        width={screenWidth}
+        hideOrigin
+        focusBarOnPress
+        //X Axis
+        xAxisThickness={0}
         xAxisLabelTextStyle={{
-          color: color,
+          color: "gray",
         }}
-        xAxisColor={theLightBlue}
-        yAxisColor={theLightBlue}
+        rotateLabel
+        // Y Axis
+        yAxisThickness={0}
+        yAxisTextStyle={{ color: theTextColor }}
+        yAxisExtraHeight={50}
+        yAxisLabelContainerStyle={{
+          justifyContent: "flex-start",
+          width: "auto",
+        }}
+        rulesThickness={1}
+        rulesColor="rgba(200,200,200,0.2)"
+        onPress={(data) => console.log(data)}
       />
       <Span
         style={{

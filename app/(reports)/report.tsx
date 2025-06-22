@@ -138,7 +138,7 @@ export default function ReportPage() {
            *
            *
            **/}
-          <OveralLineChart barData={overalReport.spendings} />
+          <OveralLineChart barData={overalReport.spendings} title="خرج این ماه"/>
 
           <SpendingsPieChart />
 
