@@ -13,7 +13,7 @@ export async function getDateRange(type: RangeType): Promise<{
 
   switch (type) {
     case "month":
-      start = today.clone().startOf("month");
+      start = today.clone().locale("fa").startOf("month").locale("en");
       break;
 
     case "quarter":
