@@ -2,7 +2,7 @@ import { getDateRange, RangeType } from "@/hooks/BackEnd/useDateRange";
 import { getDbConnection } from "../helpers";
 
 type SpendingCategory = {
-  label: string;
+  text: string;
   value: number; // درصد
 };
 
@@ -45,7 +45,7 @@ export async function getSpendingPercentage(
   // اگر کمتر از 9 مورد داریم، همونا رو خروجی بده
   if (rows.length <= 9) {
     return rows.map((row) => ({
-      label: row.title,
+      text: row.title,
       value: Math.round((row.total / total) * 100),
     }));
   }
@@ -55,14 +55,14 @@ export async function getSpendingPercentage(
   const others = rows.slice(8);
 
   const topOutput = top8.map((row) => ({
-    label: row.title,
+    text: row.title,
     value: Math.round((row.total / total) * 100),
   }));
 
   const otherTotal = others.reduce((acc, item) => acc + item.total, 0);
 
   topOutput.push({
-    label: "سایر هزینه‌ها",
+    text: "سایر هزینه‌ها",
     value: Math.round((otherTotal / total) * 100),
   });
 
