@@ -66,7 +66,7 @@ export async function getMonthlyReport(rangeKey: RangeType): Promise<{
         [day.format("YYYY-MM-DD")]
       );
 
-      if (row?.total > 0) {
+      if (row?.total > 1000) {
         spendings.push({
           value: row?.total || 0,
           label: day.locale("fa").format("jDD"),
