@@ -15,6 +15,7 @@ import { useEffect, useState } from "react";
 
 import { type RangeType } from "@/hooks/BackEnd/useDateRange";
 import { getMonthlyReport } from "@/hooks/DB/reports/useMonthlyReport";
+import { getSpendingPercentage } from "@/hooks/DB/reports/useSpendingPercentage";
 
 export default function ReportPage() {
   /**
@@ -29,6 +30,11 @@ export default function ReportPage() {
 
   // This states hold the Overal top linechart data
   const [overalSpendingReport, setOveralSpendingReport] = useState<any[]>([]);
+
+  // This state holds the spending items percentages
+  const [percentageSpendingReport, setPercentageSpendingReport] = useState<
+    any[]
+  >([]);
 
   // This is an array of top select date buttons
   const theSelectDateButtons: { key: RangeType; label: string }[] = [
@@ -56,11 +62,13 @@ export default function ReportPage() {
     // Show loading
     setShowLoading(true);
 
-    // Get Spending data from DB
-    const res = await getMonthlyReport('spendings', rangeKey);
+    // Get Overal Spending data from DB
+    const osr = await getMonthlyReport("spendings", rangeKey);
+    setOveralSpendingReport(osr);
 
-    // Set the statement
-    setOveralSpendingReport(res);
+    // Get percentage spending report
+    const psr = await getSpendingPercentage("month");
+    setPercentageSpendingReport(psr);
 
     // Hide loading
     setShowLoading(false);
