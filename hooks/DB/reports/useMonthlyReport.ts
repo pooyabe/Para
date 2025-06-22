@@ -53,10 +53,7 @@ export async function getMonthlyReport(rangeKey: RangeType): Promise<{
    * Check if the range is this month or not
    *
    */
-  const isSingleMonth = start
-    .clone()
-    .startOf("month")
-    .isSame(end.clone().startOf("month"), "month");
+  const isSingleMonth = rangeKey === "month";
 
   if (isSingleMonth) {
     const daysCount = end.diff(start, "days") + 1;
@@ -69,10 +66,12 @@ export async function getMonthlyReport(rangeKey: RangeType): Promise<{
         [day.format("YYYY-MM-DD")]
       );
 
-      spendings.push({
-        value: row?.total || 0,
-        label: day.locale("fa").format("jDD"),
-      });
+      if (row?.total > 0) {
+        spendings.push({
+          value: row?.total || 0,
+          label: day.locale("fa").format("jDD"),
+        });
+      }
 
       const incomeRow = await db.getFirstAsync<{ total: number }>(
         `SELECT SUM(amount) as total FROM incomes WHERE transaction_date = ?`,
@@ -111,10 +110,12 @@ export async function getMonthlyReport(rangeKey: RangeType): Promise<{
         [monthStart.format("YYYY-MM-DD"), monthEnd.format("YYYY-MM-DD")]
       );
 
-      spendings.push({
-        value: spendingResult?.total || 0,
-        label: monthLabels[cmi],
-      });
+      if (spendingResult?.total > 0) {
+        spendings.push({
+          value: spendingResult?.total || 0,
+          label: monthLabels[cmi],
+        });
+      }
 
       incomes.push({
         value: incomeResult?.total || 0,
@@ -133,9 +134,6 @@ export async function getMonthlyReport(rangeKey: RangeType): Promise<{
     spendings,
     incomes,
   };
-
-
-  console.log(the_return);
 
   return the_return;
 }
