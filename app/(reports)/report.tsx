@@ -10,12 +10,12 @@ import { router } from "expo-router";
 import { ScrollView, StyleSheet, TouchableOpacity } from "react-native";
 
 import { OveralLineChart } from "@/components/pageParts/reportsPage/OveralLineChart";
-import { SpendingsPieChart } from "@/components/pageParts/reportsPage/SpendingsPieChart";
+import { PieChartOne } from "@/components/pageParts/reportsPage/PieChartOne";
 import { useEffect, useState } from "react";
 
 import { type RangeType } from "@/hooks/BackEnd/useDateRange";
 import { getMonthlyReport } from "@/hooks/DB/reports/useMonthlyReport";
-import { getSpendingPercentage } from "@/hooks/DB/reports/useSpendingPercentage";
+import { getSpendingDistribution } from "@/hooks/DB/reports/useSpendingPercentage";
 
 export default function ReportPage() {
   /**
@@ -67,7 +67,7 @@ export default function ReportPage() {
     setOveralSpendingReport(osr);
 
     // Get percentage spending report
-    const psr = await getSpendingPercentage("month");
+    const psr = await getSpendingDistribution("month");
     setPercentageSpendingReport(psr);
 
     // Hide loading
@@ -146,7 +146,7 @@ export default function ReportPage() {
             color="lightgreen"
           />
 
-          <SpendingsPieChart />
+          <PieChartOne data={percentageSpendingReport} title="بیشتر چی خریدی"/>
 
           <Span type="subtitle" style={{ textAlign: "center", marginTop: 60 }}>
             چارت‌های دیگر به زودی...

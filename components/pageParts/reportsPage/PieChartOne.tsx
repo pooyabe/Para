@@ -13,7 +13,10 @@ type pieChartOneType = PieChartPropsType & {
   title?: string;
 };
 
-export function PieChartOne({ data, title }: pieChartOneType) {
+export function PieChartOne({
+  data,
+  title = "نمودار دایره‌ای",
+}: pieChartOneType) {
   /**
    *
    * Get the Colors
@@ -37,7 +40,7 @@ export function PieChartOne({ data, title }: pieChartOneType) {
   return (
     <Div style={[styles.chartWithBG, styles.singleChart, { direction: "rtl" }]}>
       <Span type="title" style={styles.chartTitle}>
-        بیشتر چی خریدی؟
+        {title}
       </Span>
       <PieChart
         strokeColor="#232d3c"
