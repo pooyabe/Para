@@ -2,18 +2,6 @@ import { getDateRange, RangeType } from "@/hooks/BackEnd/useDateRange";
 import { useShamsiDate } from "@/hooks/BackEnd/useShamsiDate";
 import { getDbConnection } from "../helpers";
 
-const COLORS = [
-  "#118cfeff",
-  "#118cfe9f",
-  "#118cfe8f",
-  "#118cfe7f",
-  "#118cfe6f",
-  "#118cfe5f",
-  "#118cfe4f",
-  "#118cfe3f",
-  "#118cfe2f",
-];
-
 export type PieItem = {
   value: number;
   text: string;
@@ -21,11 +9,27 @@ export type PieItem = {
 };
 
 export async function getSpendingDistribution(
-  rangeKey: RangeType
+  rangeKey: RangeType,
+  colorRange: string[],
 ): Promise<PieItem[]> {
   const db = await getDbConnection();
 
-  const { toGregorian, toJalali } = useShamsiDate();
+  if (!colorRange) {
+    colorRange = [
+      "#118cfeff",
+      "#118cfe9f",
+      "#118cfe8f",
+      "#118cfe7f",
+      "#118cfe6f",
+      "#118cfe5f",
+      "#118cfe4f",
+      "#118cfe3f",
+      "#118cfe2f",
+    ];
+  }
+  
+  
+  const { toGregorian } = useShamsiDate();
 
   const { startDate, endDate } = await getDateRange(rangeKey);
 
@@ -64,7 +68,7 @@ export async function getSpendingDistribution(
     return sorted.map((item, index) => ({
       value: Number(((item.sum * 100) / total).toFixed(1)),
       text: item.title,
-      color: COLORS[index] ?? "#ccc", // fallback color
+      color: colorRange[index] ?? "#ccc", // fallback color
     }));
   }
 
@@ -75,7 +79,7 @@ export async function getSpendingDistribution(
   const topItems = top8.map((item, index) => ({
     value: Number(((item.sum * 100) / total).toFixed(1)),
     text: item.title,
-    color: COLORS[index],
+    color: colorRange[index],
   }));
 
   const othersSum = others.reduce((acc, item) => acc + item.sum, 0);
@@ -83,7 +87,7 @@ export async function getSpendingDistribution(
   topItems.push({
     value: Number(((othersSum * 100) / total).toFixed(1)),
     text: "سایر هزینه‌ها",
-    color: COLORS[8],
+    color: colorRange[8],
   });
 
   return topItems;

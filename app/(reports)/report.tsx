@@ -44,6 +44,25 @@ export default function ReportPage() {
     { key: "year", label: "یک ساله" },
   ];
 
+  /**
+   * 
+   * set Colros
+   * 
+   */
+
+  // spending pie chart
+  const COLORS = [
+    "#118cfeff",
+    "#118cfe9f",
+    "#118cfe8f",
+    "#118cfe7f",
+    "#118cfe6f",
+    "#118cfe5f",
+    "#118cfe4f",
+    "#118cfe3f",
+    "#118cfe2f",
+  ];
+
   const handleSelect = async (rangeKey: RangeType): Promise<void> => {
     setSelectedRange(rangeKey);
 
@@ -67,7 +86,7 @@ export default function ReportPage() {
     setOveralSpendingReport(osr);
 
     // Get percentage spending report
-    const psr = await getSpendingDistribution(rangeKey);
+    const psr = await getSpendingDistribution(rangeKey, COLORS);
     setPercentageSpendingReport(psr);
 
     // Hide loading
