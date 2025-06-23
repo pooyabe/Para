@@ -3,12 +3,17 @@ import { Dimensions, StyleSheet } from "react-native";
 
 import { useThemeColor } from "@/hooks/useThemeColor";
 
-import { PieChart } from "react-native-gifted-charts";
+import { PieChart, PieChartPropsType } from "react-native-gifted-charts";
 
 // Get Screen Dimensions
 const screenWidth = Dimensions.get("window").width;
 
-export function SpendingsPieChart() {
+type pieChartOneType = PieChartPropsType & {
+  data: Array<{ value: number; text: string; color: string }>;
+  title?: string;
+};
+
+export function SpendingsPieChart({ data, title }: pieChartOneType) {
   /**
    *
    * Get the Colors
