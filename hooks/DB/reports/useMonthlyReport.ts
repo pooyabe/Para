@@ -10,10 +10,7 @@ export async function getMonthlyReport(
   const db = await getDbConnection();
 
   // Get the range date and set start date and end date
-  const the_range_date = await getDateRange(rangeKey);
-
-  const startDate = the_range_date.startDate;
-  const endDate = the_range_date.endDate;
+  const { startDate, endDate } = await getDateRange(rangeKey);
 
   // Get date range in Database format
   const start = moment(startDate, "YYYY-MM-DD");
@@ -56,7 +53,7 @@ export async function getMonthlyReport(
       if (typeof theResult?.total === "number" && theResult.total > 1000) {
         returnOutput.push({
           value: theResult.total,
-          label: day.locale("fa").format("jDD"),
+          label: day.locale("fa").format("jDD/MM"),
         });
       }
     }
