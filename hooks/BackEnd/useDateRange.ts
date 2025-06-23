@@ -17,15 +17,30 @@ export async function getDateRange(type: RangeType): Promise<{
       break;
 
     case "quarter":
-      start = today.clone().subtract(3, "month").startOf("month");
+      start = today
+        .clone()
+        .locale("fa")
+        .subtract(3, "month")
+        .startOf("month")
+        .locale("en");
       break;
 
     case "sixmonth":
-      start = today.clone().subtract(6, "month").startOf("month");
+      start = today
+        .clone()
+        .locale("fa")
+        .subtract(6, "month")
+        .startOf("month")
+        .locale("en");
       break;
 
     case "year":
-      start = today.clone().subtract(12, "month").startOf("month");
+      start = today
+        .clone()
+        .locale("fa")
+        .subtract(12, "month")
+        .startOf("month")
+        .locale("en");
       break;
 
     default:
