@@ -69,6 +69,7 @@ export default function HomeScreen() {
             handleDateChange(date);
           }}
           style={{}} // Add an empty style object or customize as needed
+          todayMax
         />
 
         <Spacer height={100} />
