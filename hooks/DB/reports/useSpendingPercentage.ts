@@ -1,4 +1,5 @@
 import { getDateRange, RangeType } from "@/hooks/BackEnd/useDateRange";
+import { useShamsiDate } from "@/hooks/BackEnd/useShamsiDate";
 import { getDbConnection } from "../helpers";
 
 const COLORS = [
@@ -23,12 +24,20 @@ export async function getSpendingDistribution(
   rangeKey: RangeType
 ): Promise<PieItem[]> {
   const db = await getDbConnection();
+
+  const { toGregorian, toJalali } = useShamsiDate();
+
+
   const { startDate, endDate } = await getDateRange(rangeKey);
+
+  const G_StartDate = toGregorian(startDate);
+  const G_EndDate = toGregorian(endDate);
+
 
   // 1. گرفتن کل هزینه‌ها
   const totalRes = await db.getFirstAsync<{ total: number }>(
     `SELECT SUM(amount) as total FROM spendings WHERE transaction_date BETWEEN ? AND ?`,
-    [startDate, endDate]
+    [G_StartDate, G_EndDate]
   );
 
   const total = totalRes?.total ?? 0;
@@ -46,7 +55,7 @@ export async function getSpendingDistribution(
     WHERE s.transaction_date BETWEEN ? AND ?
     GROUP BY s.item_id
     `,
-    [startDate, endDate]
+    [G_StartDate, G_EndDate]
   );
 
   // 3. مرتب‌سازی نزولی بر اساس مقدار
