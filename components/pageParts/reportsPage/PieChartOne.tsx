@@ -25,18 +25,6 @@ export function PieChartOne({
   const theBGColor = useThemeColor({}, "background");
   const theTintColor = useThemeColor({}, "tint");
 
-  const pieData = [
-    { value: 20, text: "کرایه خانه", color: "#118cfeff" },
-    { value: 15, text: "رستوران", color: "#118cfe9f" },
-    { value: 14, text: "غذای سازمان", color: "#118cfe8f" },
-    { value: 11.2, text: "حمل و نقل", color: "#118cfe7f" },
-    { value: 10, text: "بدهی", color: "#118cfe6f" },
-    { value: 9, text: "لباس", color: "#118cfe5f" },
-    { value: 7, text: "اینترنت", color: "#118cfe4f" },
-    { value: 6.8, text: "کافه", color: "#118cfe3f" },
-    { value: 4, text: "متفرقه", color: "#118cfe2f" },
-  ];
-
   return (
     <Div style={[styles.chartWithBG, styles.singleChart, { direction: "rtl" }]}>
       <Span type="title" style={styles.chartTitle}>
@@ -46,7 +34,7 @@ export function PieChartOne({
         strokeColor="#232d3c"
         strokeWidth={2}
         donut
-        data={pieData}
+        data={data}
         innerCircleColor="#232d3c"
         innerCircleBorderWidth={0}
         innerRadius={70}
@@ -68,21 +56,22 @@ export function PieChartOne({
             ]}
             type="default"
           >
-            {pieData[item].text}
+            {data[item].text}
             {"\n"}
-            {pieData[item].value}%
+            {data[item].value}%
           </Span>
         )}
       />
 
       <Div style={styles.dataLegendContainer}>
-        {pieData.map((item, index) => (
+        {data.map((item, index) => (
           <Div style={styles.dataLegendItem} key={index}>
             <Span
               style={[
                 styles.dataLegendIndicator,
                 {
                   backgroundColor: item.color || "white",
+                  fontSize: 12
                 },
               ]}
             >
