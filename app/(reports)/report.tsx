@@ -17,6 +17,10 @@ import { type RangeType } from "@/hooks/BackEnd/useDateRange";
 import { getMonthlyReport } from "@/hooks/DB/reports/useMonthlyReport";
 import { getSpendingDistribution } from "@/hooks/DB/reports/useSpendingPercentage";
 
+
+import { Colors } from "@/constants/Colors";
+import { useColorScheme } from "@/hooks/useColorScheme";
+
 export default function ReportPage() {
   /**
    *
@@ -51,17 +55,13 @@ export default function ReportPage() {
    */
 
   // spending pie chart
-  const COLORS = [
-    "#118cfeff",
-    "#118cfe9f",
-    "#118cfe8f",
-    "#118cfe7f",
-    "#118cfe6f",
-    "#118cfe5f",
-    "#118cfe4f",
-    "#118cfe3f",
-    "#118cfe2f",
-  ];
+  const colorScheme = useColorScheme() as "light" | "dark";
+
+  let SpendingPieColors: string[] = [];
+  for (var i:number = 10; i > 0; i--){
+    const tune = i != 10 ? `${i}f` : `ff`;
+    SpendingPieColors.push(Colors[colorScheme].theLightBlue + tune);
+  }
 
   const handleSelect = async (rangeKey: RangeType): Promise<void> => {
     setSelectedRange(rangeKey);
@@ -86,7 +86,7 @@ export default function ReportPage() {
     setOveralSpendingReport(osr);
 
     // Get percentage spending report
-    const psr = await getSpendingDistribution(rangeKey, COLORS);
+    const psr = await getSpendingDistribution(rangeKey, SpendingPieColors);
     setPercentageSpendingReport(psr);
 
     // Hide loading
@@ -162,7 +162,7 @@ export default function ReportPage() {
           <OveralLineChart
             barData={overalSpendingReport}
             title="هزینه‌ها"
-            color="lightgreen"
+            color={Colors[colorScheme].theOrange}
           />
 
           <PieChartOne data={percentageSpendingReport} title="بیشتر چی خریدی"/>
