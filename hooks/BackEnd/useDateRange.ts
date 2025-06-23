@@ -7,7 +7,7 @@ export async function getDateRange(type: RangeType): Promise<{
   endDate: string; // ISO string
 }> {
   const today = moment(); // ← میلادی، هم برای کوئری هم برای حلقه
-  const end = today.clone().endOf("day"); // ← پایان امروز، همیشه ثابت
+  const end = today.clone().locale("fa").endOf("day"); // ← پایان امروز، همیشه ثابت
 
   let start: moment.Moment;
 
@@ -45,7 +45,7 @@ export async function getDateRange(type: RangeType): Promise<{
   }
 
   return {
-    startDate: start.format("YYYY-MM-DD"),
-    endDate: end.format("YYYY-MM-DD"),
+    startDate: start.format("jYYYY-MM-DD"),
+    endDate: end.format("jYYYY-MM-DD"),
   };
 }

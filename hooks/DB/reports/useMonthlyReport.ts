@@ -1,4 +1,5 @@
 import { getDateRange, RangeType } from "@/hooks/BackEnd/useDateRange";
+import { useShamsiDate } from "@/hooks/BackEnd/useShamsiDate";
 import moment from "jalali-moment";
 import { getDbConnection } from "../helpers";
 
@@ -8,6 +9,9 @@ export async function getMonthlyReport(
 ): Promise<{ value: number; label: string }[]> {
   // Connecting to data base
   const db = await getDbConnection();
+
+  // Use Shamsi date hook for converts
+  const { toGregorian, toJalali } = useShamsiDate();
 
   // Get the range date and set start date and end date
   const { startDate, endDate } = await getDateRange(rangeKey);
@@ -23,10 +27,12 @@ export async function getMonthlyReport(
   const monthLabels: string[] = [];
 
   while (current.isSameOrBefore(end, "month")) {
-    monthLabels.push(current.locale("fa").format("jMM/jYYYY"));
-    months.push(current.locale("en").format("YYYY-MM"));
+    months.push(current.format("YYYY-MM-DD"));
     current.add(1, "month");
   }
+  // An Extra step for this month
+  months.push(current.format("YYYY-MM-DD"));
+  current.add(1, "month");
 
   // Decalre the Promised vars
   const returnOutput = [];
@@ -70,6 +76,12 @@ export async function getMonthlyReport(
       const monthStart = moment(months[cmi] + "-01", "YYYY-MM-DD");
       const monthEnd = monthStart.clone().endOf("month");
 
+      // Converting dates
+      const JMS = monthStart.format("YYYY-MM-DD");
+      const GMS = toGregorian(JMS);
+      const JME = monthEnd.format("YYYY-MM-DD");
+      const GME = toGregorian(JME);
+
       /**
        *
        *
@@ -78,14 +90,14 @@ export async function getMonthlyReport(
       const sql = `SELECT SUM(amount) as total FROM ${dataSoure} WHERE transaction_date BETWEEN ? AND ?`;
 
       const theResult = await db.getFirstAsync<{ total: number }>(sql, [
-        monthStart.format("YYYY-MM-DD"),
-        monthEnd.format("YYYY-MM-DD"),
+        GMS,
+        GME,
       ]);
 
       if (typeof theResult?.total === "number" && theResult.total > 1000) {
         returnOutput.push({
           value: theResult.total,
-          label: monthLabels[cmi],
+          label: toJalali(GMS).substring(0, 7),
         });
       }
     }
