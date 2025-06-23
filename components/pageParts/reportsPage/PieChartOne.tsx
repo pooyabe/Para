@@ -13,7 +13,7 @@ type pieChartOneType = PieChartPropsType & {
   title?: string;
 };
 
-export function SpendingsPieChart({ data, title }: pieChartOneType) {
+export function PieChartOne({ data, title }: pieChartOneType) {
   /**
    *
    * Get the Colors
