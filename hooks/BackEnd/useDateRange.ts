@@ -21,8 +21,7 @@ export async function getDateRange(type: RangeType): Promise<{
         .clone()
         .locale("fa")
         .subtract(3, "month")
-        .startOf("month")
-        .locale("en");
+        .startOf("month");
       break;
 
     case "sixmonth":
@@ -30,8 +29,7 @@ export async function getDateRange(type: RangeType): Promise<{
         .clone()
         .locale("fa")
         .subtract(6, "month")
-        .startOf("month")
-        .locale("en");
+        .startOf("month");
       break;
 
     case "year":
@@ -39,8 +37,7 @@ export async function getDateRange(type: RangeType): Promise<{
         .clone()
         .locale("fa")
         .subtract(12, "month")
-        .startOf("month")
-        .locale("en");
+        .startOf("month");
       break;
 
     default:
