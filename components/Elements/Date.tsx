@@ -14,9 +14,10 @@ import { Span } from "./Span";
 export type DateProps = Props & {
   style?: object;
   SelectedDate?: string;
+  todayMax?: boolean;
 };
 
-export function Date({ SelectedDate, ...other }: DateProps) {
+export function Date({ SelectedDate, todayMax = false, ...other }: DateProps) {
   const [modalVisible, setModalVisible] = useState(false);
 
   const colorScheme = useColorScheme() as "light" | "dark";
@@ -27,6 +28,9 @@ export function Date({ SelectedDate, ...other }: DateProps) {
     SelectedDate ? `تاریخ: ${SelectedDate}` : `امروز: ${nowJalali()}`
   );
 
+  // Get Today Date in Jalali Format
+  const JtodayDate = nowJalali();
+  
   return (
     <>
       <SButton
@@ -159,6 +163,8 @@ export function Date({ SelectedDate, ...other }: DateProps) {
               }
               setModalVisible(false);
             }}
+            // Set maxDate on today if requested
+            {...(todayMax ? { maxDate: JtodayDate } : {})}
           />
           <SButton
             text="بستن"
