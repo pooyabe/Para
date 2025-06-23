@@ -24,7 +24,6 @@ export async function getMonthlyReport(
 
   // Declare months arrays
   const months: string[] = [];
-  const monthLabels: string[] = [];
 
   while (current.isSameOrBefore(end, "month")) {
     months.push(current.format("YYYY-MM-DD"));
@@ -50,16 +49,16 @@ export async function getMonthlyReport(
     for (let i = 0; i < daysCount; i++) {
       const day = start.clone().add(i, "days");
 
+      const G_Day = toGregorian(day.format("YYYY-MM-DD"));
+
       const sql = `SELECT SUM(amount) as total FROM ${dataSoure} WHERE transaction_date = ?`;
 
-      const theResult = await db.getFirstAsync<{ total: number }>(sql, [
-        day.format("YYYY-MM-DD"),
-      ]);
+      const theResult = await db.getFirstAsync<{ total: number }>(sql, [G_Day]);
 
       if (typeof theResult?.total === "number" && theResult.total > 1000) {
         returnOutput.push({
           value: theResult.total,
-          label: day.locale("fa").format("jDD/MM"),
+          label: day.format("DD/MM"),
         });
       }
     }
