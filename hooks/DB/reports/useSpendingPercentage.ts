@@ -1,70 +1,83 @@
 import { getDateRange, RangeType } from "@/hooks/BackEnd/useDateRange";
 import { getDbConnection } from "../helpers";
 
-type SpendingCategory = {
+const COLORS = [
+  "#118cfeff",
+  "#118cfe9f",
+  "#118cfe8f",
+  "#118cfe7f",
+  "#118cfe6f",
+  "#118cfe5f",
+  "#118cfe4f",
+  "#118cfe3f",
+  "#118cfe2f",
+];
+
+export type PieItem = {
+  value: number;
   text: string;
-  value: number; // درصد
+  color: string;
 };
 
-export async function getSpendingPercentage(
+export async function getSpendingDistribution(
   rangeKey: RangeType
-): Promise<SpendingCategory[]> {
+): Promise<PieItem[]> {
   const db = await getDbConnection();
-
-  // گرفتن بازه‌ی تاریخی
   const { startDate, endDate } = await getDateRange(rangeKey);
 
-  // مجموع کل هزینه‌ها در بازه
-  const totalRow = await db.getFirstAsync<{ total: number }>(
+  // 1. گرفتن کل هزینه‌ها
+  const totalRes = await db.getFirstAsync<{ total: number }>(
     `SELECT SUM(amount) as total FROM spendings WHERE transaction_date BETWEEN ? AND ?`,
     [startDate, endDate]
   );
 
-  const total = totalRow?.total || 0;
-
+  const total = totalRes?.total ?? 0;
   if (total === 0) return [];
 
-  // گرفتن هزینه‌ها به تفکیک item
+  // 2. گرفتن مجموع هزینه به تفکیک آیتم
   const rows = await db.getAllAsync<{
     title: string;
-    total: number;
+    sum: number;
   }>(
     `
-    SELECT si.title, SUM(s.amount) as total
+    SELECT si.title as title, SUM(s.amount) as sum
     FROM spendings s
     JOIN spending_items si ON s.item_id = si.id
     WHERE s.transaction_date BETWEEN ? AND ?
-    GROUP BY si.title
-    ORDER BY total DESC
+    GROUP BY s.item_id
     `,
     [startDate, endDate]
   );
 
-  if (!rows || rows.length === 0) return [];
+  // 3. مرتب‌سازی نزولی بر اساس مقدار
+  const sorted = rows.sort((a, b) => b.sum - a.sum);
 
-  // اگر کمتر از 9 مورد داریم، همونا رو خروجی بده
-  if (rows.length <= 9) {
-    return rows.map((row) => ({
-      text: row.title,
-      value: Math.round((row.total / total) * 100),
+  // 4. اگر کمتر از 9 تاست → همه رو نشون بده
+  if (sorted.length <= 9) {
+    return sorted.map((item, index) => ({
+      value: Number(((item.sum * 100) / total).toFixed(1)),
+      text: item.title,
+      color: COLORS[index] ?? "#ccc", // fallback color
     }));
   }
 
-  // در غیر اینصورت: 8 مورد اول + سایر هزینه‌ها
-  const top8 = rows.slice(0, 8);
-  const others = rows.slice(8);
+  // 5. بیشتر از 9 تاست → 8 تای اول + سایر
+  const top8 = sorted.slice(0, 8);
+  const others = sorted.slice(8);
 
-  const topOutput = top8.map((row) => ({
-    text: row.title,
-    value: Math.round((row.total / total) * 100),
+  const topItems = top8.map((item, index) => ({
+    value: Number(((item.sum * 100) / total).toFixed(1)),
+    text: item.title,
+    color: COLORS[index],
   }));
 
-  const otherTotal = others.reduce((acc, item) => acc + item.total, 0);
+  const othersSum = others.reduce((acc, item) => acc + item.sum, 0);
 
-  topOutput.push({
+  topItems.push({
+    value: Number(((othersSum * 100) / total).toFixed(1)),
     text: "سایر هزینه‌ها",
-    value: Math.round((otherTotal / total) * 100),
+    color: COLORS[8],
   });
 
-  return topOutput;
+  return topItems;
 }
