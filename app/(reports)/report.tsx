@@ -67,7 +67,7 @@ export default function ReportPage() {
     setOveralSpendingReport(osr);
 
     // Get percentage spending report
-    const psr = await getSpendingDistribution("month");
+    const psr = await getSpendingDistribution(rangeKey);
     setPercentageSpendingReport(psr);
 
     // Hide loading

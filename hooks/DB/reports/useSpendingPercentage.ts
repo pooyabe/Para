@@ -27,12 +27,10 @@ export async function getSpendingDistribution(
 
   const { toGregorian, toJalali } = useShamsiDate();
 
-
   const { startDate, endDate } = await getDateRange(rangeKey);
 
   const G_StartDate = toGregorian(startDate);
   const G_EndDate = toGregorian(endDate);
-
 
   // 1. گرفتن کل هزینه‌ها
   const totalRes = await db.getFirstAsync<{ total: number }>(
