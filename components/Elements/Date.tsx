@@ -59,7 +59,7 @@ export function Date({ SelectedDate, todayMax = false, ...other }: DateProps) {
             type="defaultMedium"
             style={{ fontWeight: "normal", fontSize: 20, marginBottom: 40 }}
           >
-            انتخاب تاریخ
+            تغییر تاریخ
           </Span>
           <DatePicker
             {...other}
@@ -68,9 +68,9 @@ export function Date({ SelectedDate, todayMax = false, ...other }: DateProps) {
               height: "50%",
               alignSelf: "center",
               backgroundColor: Colors[colorScheme].background,
-              borderWidth: 2,
+              borderWidth: 1,
               borderColor: Colors[colorScheme].border,
-              borderRadius: 10,
+              borderRadius: 15,
               elevation: 5,
               padding: 5,
             }}
@@ -171,8 +171,8 @@ export function Date({ SelectedDate, todayMax = false, ...other }: DateProps) {
             onPress={() => setModalVisible(false)}
             style={{
               width: "80%",
-              borderWidth: 1,
-              borderRadius: 10,
+              borderWidth: 0,
+              borderRadius: 100,
               marginTop: 50,
               height: 50,
               backgroundColor: Colors[colorScheme].theDarkBlue,
