@@ -12,9 +12,11 @@ import { Colors } from "@/constants/Colors";
 import { initializeDatabase } from "@/hooks/DB";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { useEffect } from "react";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { Toaster } from "sonner-native";
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
 
   useEffect(() => {
     /**
@@ -24,6 +26,7 @@ export default function RootLayout() {
      */
     initializeDatabase();
   }, []);
+  const colorScheme = useColorScheme();
 
   const [loaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
@@ -39,26 +42,33 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <Stack
-        screenOptions={{
-          headerShown: false,
-          contentStyle: {
-            backgroundColor:
-              colorScheme === "dark"
-                ? Colors["dark"].background
-                : Colors["light"].background,
-          },
-          animation: "fade",
-          animationMatchesGesture: true,
-          animationTypeForReplace: "pop"
-        }}
-      >
-        <Stack.Screen name="(tabs)" />
-        <Stack.Screen name="(reports)" />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="light" />
-    </ThemeProvider>
+    <SafeAreaProvider>
+      <GestureHandlerRootView>
+        <ThemeProvider
+          value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+        >
+          <Stack
+            screenOptions={{
+              headerShown: false,
+              contentStyle: {
+                backgroundColor:
+                  colorScheme === "dark"
+                    ? Colors["dark"].background
+                    : Colors["light"].background,
+              },
+              animation: "fade",
+              animationMatchesGesture: true,
+              animationTypeForReplace: "pop",
+            }}
+          >
+            <Stack.Screen name="(tabs)" />
+            <Stack.Screen name="(reports)" />
+            <Stack.Screen name="+not-found" />
+          </Stack>
+          <Toaster />
+          <StatusBar style="light" />
+        </ThemeProvider>
+      </GestureHandlerRootView>
+    </SafeAreaProvider>
   );
 }
