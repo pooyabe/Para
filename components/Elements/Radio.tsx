@@ -64,7 +64,7 @@ export function Radio({
         ]}
         fontStyle={{
           fontFamily: "VazirRegular",
-          fontSize: 16,
+          fontSize: 14,
           fontWeight: "normal",
           color: textColor,
         }}

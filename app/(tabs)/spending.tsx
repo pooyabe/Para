@@ -55,7 +55,7 @@ export default function HomeScreen() {
         <Spacer height={20} />
 
         <Radio
-          Items={["الکی", "میشد خرج نشه", "ضروری"]}
+          Items={["الکی", "بگی نگی", "ضروری"]}
           onChangeValueWithIndex={(value, index) => {
             setImportance(index);
           }}
