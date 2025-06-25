@@ -2,14 +2,16 @@ import { useShamsiDate } from "@/hooks/BackEnd/useShamsiDate";
 import { addSpending, getSpendingOptions } from "@/hooks/DB";
 import numberToText from "@/hooks/numberToText";
 import { useEffect, useState } from "react";
+import { toast } from "sonner-native";
 
 export const useSpendingForm = () => {
-  const [spending_amount, setAmount] = useState();
+  const [spending_amount, setAmount] = useState(0);
   const [importance, setImportance] = useState(0);
   const [spending_date, setDate] = useState<string | undefined>();
-  const [shamsiSpendingDate, setShamsiSpendingDate] = useState<string | undefined>();
+  const [shamsiSpendingDate, setShamsiSpendingDate] = useState<
+    string | undefined
+  >();
   const [spendingReason, setSpendingReason] = useState<string | null>(null);
-
   // برای نمایش متن قیمت
   const [thePriceString, setThePriceString] = useState("");
 
@@ -32,9 +34,9 @@ export const useSpendingForm = () => {
   };
 
   // دریافت لیست‌ها از دیتابیس
-  const [reasons, setReasons] = useState<Array<{ label: string; value: string }>>(
-    []
-  );
+  const [reasons, setReasons] = useState<
+    Array<{ label: string; value: string }>
+  >([]);
   useEffect(() => {
     const fetchOptions = async () => {
       const [reasonOpts] = await Promise.all([getSpendingOptions()]);
@@ -63,7 +65,8 @@ export const useSpendingForm = () => {
       importance === undefined ||
       importance === null
     ) {
-      alert("لطفاً همه فیلدها را پر کنید!");
+      // Show a Warning
+      toast.warning("همه گزینه‌ها الزامی ان!");
       return;
     }
 
@@ -74,8 +77,9 @@ export const useSpendingForm = () => {
         importance: String(importance),
         transactionDate: spending_date,
       });
-      alert("✅ ذخیره شد!");
+      toast.success("ذخیره شد ;)");
     } catch (e) {
+      toast.error("خطا در ذخیره سازی داده!");
       console.error("❌ خطا در ذخیره:", e);
     }
   };
