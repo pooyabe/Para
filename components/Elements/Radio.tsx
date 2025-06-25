@@ -13,7 +13,7 @@ export type RadioProps = SegmentedControlProps & {
 
 export function Radio({
   Items = [],
-  label = "برچسب",
+  label = "",
   style,
   onChangeValueWithIndex,
   ...otherProps
