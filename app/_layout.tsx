@@ -66,19 +66,19 @@ export default function RootLayout() {
           </Stack>
           <Toaster
             style={{
-              backgroundColor: Colors[colorScheme].tabBackground,
+              backgroundColor: Colors[colorScheme].text,
               borderRadius: 100,
             }}
             styles={{
               title: {
-                fontFamily: "VazirBold",
+                fontFamily: "VazirSemiBold",
                 direction: "rtl",
-                color: Colors[colorScheme].text,
-                textAlign: "left"
+                color: Colors[colorScheme].tabBackground,
+                textAlign: "left",
               },
               toastContainer: {
                 direction: "ltr",
-              }
+              },
             }}
             position="top-center"
           />
