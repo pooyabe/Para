@@ -72,7 +72,7 @@ export default function HomeScreen() {
           todayMax
         />
 
-        <Spacer height={100} />
+        <Spacer />
 
         <SButton text="بردار" onPress={saveSpending} />
       </Div>

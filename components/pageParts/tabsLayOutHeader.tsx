@@ -14,10 +14,11 @@ export function TabsHeader() {
         flexDirection: "row",
         alignItems: "center",
         margin: 0,
-        paddingTop: 30,
+        paddingTop: 50,
         paddingRight: 0,
         paddingLeft: 0,
         direction: "ltr",
+        height: "auto"
       }}
     >
       <Div

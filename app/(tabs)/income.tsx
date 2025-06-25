@@ -72,7 +72,7 @@ export default function IncomePage() {
           todayMax
         />
 
-        <Spacer height={100} />
+        <Spacer />
 
         <SButton text="بریز" onPress={saveIncome} />
       </Div>
