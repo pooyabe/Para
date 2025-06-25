@@ -3,6 +3,7 @@ import { useShamsiDate } from "@/hooks/BackEnd/useShamsiDate";
 import { addIncome, getIncomeDestinations, getIncomeReasons } from "@/hooks/DB";
 import numberToText from "@/hooks/numberToText";
 import { useEffect, useState } from "react";
+import { toast } from "sonner-native";
 
 export const useIncomeForm = () => {
   // حالت‌های فرم
@@ -71,7 +72,8 @@ export const useIncomeForm = () => {
   // ذخیره‌سازی داده‌ها
   const saveIncome = async () => {
     if (!income_reason || !where_stored || !income_date) {
-      alert("لطفاً همه فیلدها را پر کنید!");
+      // Show a Warning
+      toast.warning("همه گزینه‌ها الزامی ان!");
       return;
     }
 
@@ -82,8 +84,9 @@ export const useIncomeForm = () => {
         destinationTitle: where_stored.trim(),
         transactionDate: income_date,
       });
-      alert("✅ ذخیره شد!");
+      toast.success("ذخیره شد ;)");
     } catch (e) {
+      toast.error("خطا در ذخیره سازی داده!");
       console.error("❌ خطا در ذخیره:", e);
     }
   };
