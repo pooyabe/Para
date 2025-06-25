@@ -17,7 +17,6 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { Toaster } from "sonner-native";
 
 export default function RootLayout() {
-
   useEffect(() => {
     /**
      * This effect is for initializing the database.
@@ -26,7 +25,7 @@ export default function RootLayout() {
      */
     initializeDatabase();
   }, []);
-  const colorScheme = useColorScheme();
+  const colorScheme = useColorScheme() as "light" | "dark";
 
   const [loaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
@@ -65,7 +64,24 @@ export default function RootLayout() {
             <Stack.Screen name="(reports)" />
             <Stack.Screen name="+not-found" />
           </Stack>
-          <Toaster />
+          <Toaster
+            style={{
+              backgroundColor: Colors[colorScheme].tabBackground,
+              borderRadius: 100,
+            }}
+            styles={{
+              title: {
+                fontFamily: "VazirBold",
+                direction: "rtl",
+                color: Colors[colorScheme].text,
+                textAlign: "left"
+              },
+              toastContainer: {
+                direction: "ltr",
+              }
+            }}
+            position="top-center"
+          />
           <StatusBar style="light" />
         </ThemeProvider>
       </GestureHandlerRootView>
