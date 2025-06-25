@@ -22,6 +22,7 @@ export default function IncomePage() {
     setWhereStored,
     saveIncome,
     shamsiIncomeDate,
+    income_amount,
   } = useIncomeForm();
   // The UI
   return (
@@ -31,6 +32,7 @@ export default function IncomePage() {
           label="چقد گرفتی؟"
           type="number"
           onChangeText={(value) => printPriceString(value)}
+          value={income_amount?.toString() ?? ""}
         />
         <Spacer height={5} />
         <Span type="subtitle" style={{ color: "#118cfe" }}>

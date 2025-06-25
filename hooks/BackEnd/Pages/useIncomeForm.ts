@@ -7,7 +7,7 @@ import { toast } from "sonner-native";
 
 export const useIncomeForm = () => {
   // حالت‌های فرم
-  const [income_amount, setAmount] = useState("");
+  const [income_amount, setAmount] = useState<number | null>();
   const [income_reason, setReason] = useState<string | null>(null);
   const [where_stored, setWhereStored] = useState<string | null>(null);
   const [income_date, setDate] = useState("");
@@ -25,8 +25,9 @@ export const useIncomeForm = () => {
   >([]);
 
   // تبدیل عدد به متن
-  const printPriceString = (val: string) => {
+  const printPriceString = (val: number | null) => {
     setThePriceString(numberToText(Number(val)));
+
     setAmount(val);
   };
 
@@ -78,12 +79,18 @@ export const useIncomeForm = () => {
     }
 
     try {
+      // Save Data
       await addIncome({
         amount: Number(income_amount),
         reasonTitle: income_reason.trim(),
         destinationTitle: where_stored.trim(),
         transactionDate: income_date,
       });
+
+      // Reset form
+      printPriceString(null);
+
+      // Show success message
       toast.success("ذخیره شد ;)");
     } catch (e) {
       toast.error("خطا در ذخیره سازی داده!");
