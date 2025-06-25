@@ -1,4 +1,4 @@
-import { Image, TouchableOpacity } from "react-native";
+import { Dimensions, Image, TouchableOpacity } from "react-native";
 import { Div, IconSymbol, Span } from "../Elements";
 
 import { Colors } from "@/constants/Colors";
@@ -6,6 +6,7 @@ import { useColorScheme } from "@/hooks/useColorScheme";
 import { router } from "expo-router";
 
 export function TabsHeader() {
+  const ScreenHeight = Dimensions.get("screen").height;
   const colorScheme = useColorScheme() as "light" | "dark";
 
   return (
@@ -14,7 +15,7 @@ export function TabsHeader() {
         flexDirection: "row",
         alignItems: "center",
         margin: 0,
-        paddingTop: 50,
+        paddingTop: ScreenHeight * 0.06,
         paddingRight: 0,
         paddingLeft: 0,
         direction: "ltr",
