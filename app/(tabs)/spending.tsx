@@ -25,6 +25,7 @@ export default function HomeScreen() {
     saveSpending,
     spending_date,
     shamsiSpendingDate,
+    spending_amount
   } = useSpendingForm();
 
   return (
@@ -34,6 +35,7 @@ export default function HomeScreen() {
           label="چقد شد؟"
           type="number"
           onChangeText={(value) => printPriceString(value)}
+          value={spending_amount?.toString() ?? ""}
         />
         <Spacer height={5} />
         <Span type="subtitle" style={{ color: "#118dff" }}>

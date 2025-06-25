@@ -71,13 +71,20 @@ export const useSpendingForm = () => {
     }
 
     try {
+      // Save Data
+
       await addSpending({
         amount: Number(spending_amount),
         reasonTitle: spendingReason,
         importance: String(importance),
         transactionDate: spending_date,
       });
+
+      // Show success message
       toast.success("ذخیره شد ;)");
+
+      // Reset form
+      printPriceString(0);
     } catch (e) {
       toast.error("خطا در ذخیره سازی داده!");
       console.error("❌ خطا در ذخیره:", e);
