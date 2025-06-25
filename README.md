@@ -1,6 +1,6 @@
 # Para
 
-A modern, file-based Expo app for tracking spending and income, built with React Native and TypeScript.
+Simple personal accountant.
 
 ## Getting Started
 
