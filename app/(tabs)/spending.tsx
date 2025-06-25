@@ -34,7 +34,7 @@ export default function HomeScreen() {
         <Input
           label="چقد شد؟"
           type="number"
-          onChangeText={(value) => printPriceString(value)}
+          onChangeText={(value) => printPriceString(Number(value))}
           value={spending_amount?.toString() ?? ""}
         />
         <Spacer height={5} />

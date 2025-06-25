@@ -31,7 +31,7 @@ export default function IncomePage() {
         <Input
           label="چقد گرفتی؟"
           type="number"
-          onChangeText={(value) => printPriceString(value)}
+          onChangeText={(value) => printPriceString(Number(value))}
           value={income_amount?.toString() ?? ""}
         />
         <Spacer height={5} />

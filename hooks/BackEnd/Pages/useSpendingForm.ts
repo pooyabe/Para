@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner-native";
 
 export const useSpendingForm = () => {
-  const [spending_amount, setAmount] = useState(0);
+  const [spending_amount, setAmount] = useState<number | null>();
   const [importance, setImportance] = useState(0);
   const [spending_date, setDate] = useState<string | undefined>();
   const [shamsiSpendingDate, setShamsiSpendingDate] = useState<
@@ -16,7 +16,7 @@ export const useSpendingForm = () => {
   const [thePriceString, setThePriceString] = useState("");
 
   const printPriceString = (val: any) => {
-    setThePriceString(numberToText(val));
+    setThePriceString(numberToText(Number(val)));
 
     setAmount(val);
   };
@@ -84,7 +84,7 @@ export const useSpendingForm = () => {
       toast.success("ذخیره شد ;)");
 
       // Reset form
-      printPriceString(0);
+      printPriceString(null);
     } catch (e) {
       toast.error("خطا در ذخیره سازی داده!");
       console.error("❌ خطا در ذخیره:", e);
