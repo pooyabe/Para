@@ -17,19 +17,21 @@ export default function TabLayout() {
         tabBarStyle: {
           backgroundColor: Colors[colorScheme].tabBackground,
           borderTopColor: Colors[colorScheme].tabIcon,
-          height: 125,
+          height: 65, // یا مثلاً 50 یا هر عدد دلخواه
+          paddingBottom: 6,
+          paddingTop: 6,
         },
         tabBarInactiveTintColor: Colors[colorScheme].tabIconDefault,
         tabBarLabelStyle: {
-          fontSize: 14,
+          fontSize: 12,
           fontFamily: "VazirMedium",
           marginTop: 0,
         },
         tabBarIconStyle: {
           marginBottom: 0,
-          marginTop: 10,
-          height: 40,
-          width: 40,
+          marginTop: 0,
+          height: 22,
+          width: 22,
           justifyContent: "center",
         },
         tabBarItemStyle: {
@@ -52,7 +54,7 @@ export default function TabLayout() {
         options={{
           title: "هزینه",
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={35} name="data-saver-off" color={color} />
+            <IconSymbol size={22} name="data-saver-off" color={color} />
           ),
         }}
       />
@@ -61,7 +63,7 @@ export default function TabLayout() {
         options={{
           title: "درآمد",
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={35} name="attach-money" color={color} />
+            <IconSymbol size={22} name="attach-money" color={color} />
           ),
         }}
       />
