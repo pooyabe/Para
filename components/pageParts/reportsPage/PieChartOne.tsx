@@ -37,7 +37,7 @@ export function PieChartOne({
         data={data}
         innerCircleColor="#232d3c"
         innerCircleBorderWidth={0}
-        innerRadius={70}
+        innerRadius={80}
         innerCircleBorderColor={theTintColor}
         labelsPosition="onBorder"
         textSize={11}
@@ -97,8 +97,7 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   chartTitle: {
-    marginBottom: 20,
-    fontSize: 20,
+    fontSize: 16,
   },
 
   chartWithBG: {
@@ -116,8 +115,9 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 10,
     textAlign: "center",
-    lineHeight: 30,
+    lineHeight: 20,
     opacity: 0.9,
+    fontSize: 12
   },
   dataLegendContainer: {
     marginTop: 10,
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   dataLegendLabel: {
-    fontSize: 16,
-    marginRight: 2,
+    fontSize: 12,
+    marginRight: 4,
   },
 });

@@ -1,8 +1,8 @@
 import { useThemeColor } from "@/hooks/useThemeColor";
 import {
-    StyleSheet,
-    TouchableOpacity,
-    type TouchableOpacityProps,
+  StyleSheet,
+  TouchableOpacity,
+  type TouchableOpacityProps,
 } from "react-native";
 import { Span } from "./Span";
 
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
   },
   theButtonText: {
     color: textColor,
-    fontSize: 15,
+    fontSize: 14,
     width: "100%",
     textAlign: "center",
   },

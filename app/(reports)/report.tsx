@@ -122,7 +122,7 @@ export default function ReportPage() {
               router.replace("/(tabs)/spending");
             }}
           >
-            <IconSymbol type="Ionicons" name="home" size={24} color="white" />
+            <IconSymbol type="Ionicons" name="home" size={20} color="white" />
           </TouchableOpacity>
         </Div>
         <Spacer height={30} />
@@ -188,12 +188,12 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: 30,
-    paddingTop: 30,
+    paddingTop: 18,
   },
   headerTitle: {
     height: "100%",
     verticalAlign: "middle",
-    fontSize: 24,
+    fontSize: 18,
   },
 
   selectDateButtonsContainer: {
@@ -202,11 +202,11 @@ const styles = StyleSheet.create({
     columnGap: 20,
     alignItems: "center", // این خط خیلی مهمه
   },
-  glassTopButtons: { paddingVertical: 10 },
+  glassTopButtons: { paddingVertical: 5 },
   // Select date buttons
   dateButtonGroup: {
     paddingVertical: 10,
-    paddingHorizontal: 30,
+    paddingHorizontal: 10
   },
 
   // The Bottom Section of data

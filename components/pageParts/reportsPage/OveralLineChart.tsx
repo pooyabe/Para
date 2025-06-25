@@ -37,15 +37,22 @@ export function OveralLineChart({
   const [chartZoomConstant, setChartZoomConstant] = useState<number>(
     (screenWidth * 0.5) / (barData.length + 1)
   );
+  const [barWidth, setBarWidth] = useState<number>(12);
   const changeChartZoom = (theLeveler: number): void => {
     // if leveler = 2 : reset the zoom
     if (theLeveler == 2) {
-      setChartZoomConstant(screenWidth / barData.length);
+      setChartZoomConstant((screenWidth * 0.5) / (barData.length + 1));
+      setBarWidth(12);
       return;
     }
     // The Leveler is +1 or -1
     const the_new_spacing_constant = chartZoomConstant + theLeveler * 10;
-    setChartZoomConstant(the_new_spacing_constant);
+    const the_new_bar_width = barWidth + theLeveler * 2;
+
+    if (barWidth <= 20 && barWidth >= 7) {
+      setChartZoomConstant(the_new_spacing_constant);
+      setBarWidth(the_new_bar_width);
+    }
   };
 
   /**
@@ -79,16 +86,17 @@ export function OveralLineChart({
             flexDirection: "row",
             alignSelf: "flex-start",
             justifyContent: "space-between",
+            columnGap: 5,
           }}
         >
           <TouchableOpacity onPress={() => changeChartZoom(+1)}>
-            <IconSymbol name="zoom-in" size={30} color={theTextColor} />
+            <IconSymbol name="zoom-in" size={22} color={theTextColor} />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => changeChartZoom(2)}>
-            <IconSymbol name="zoom-out-map" size={30} color={theTextColor} />
+            <IconSymbol name="zoom-out-map" size={22} color={theTextColor} />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => changeChartZoom(-1)}>
-            <IconSymbol name="zoom-out" size={30} color={theTextColor} />
+            <IconSymbol name="zoom-out" size={22} color={theTextColor} />
           </TouchableOpacity>
         </Div>
         <Span
@@ -103,10 +111,9 @@ export function OveralLineChart({
       <BarChart
         data={barData}
         // style
-        barWidth={20}
+        barWidth={barWidth}
         spacing={chartZoomConstant}
         roundedTop
-        roundedBottom
         frontColor={color}
         width={screenWidth * 0.93}
         hideOrigin
@@ -114,15 +121,16 @@ export function OveralLineChart({
         focusBarOnPress
         onPress={(data: any) => handleChangeValueHelper(data.value)}
         focusedBarConfig={{
-          color: theGreenColor
+          color: theGreenColor,
         }}
         //X Axis
-        xAxisThickness={0}
+        xAxisThickness={1}
+        xAxisColor="gray"
         xAxisLabelTextStyle={{
           color: "gray",
           fontFamily: "VazirRegular",
           direction: "rtl",
-          fontSize: 14,
+          fontSize: 10,
         }}
         // Y Axis
         yAxisThickness={0}
@@ -130,7 +138,7 @@ export function OveralLineChart({
           color: theTextColor,
           fontFamily: "VazirRegular",
           direction: "rtl",
-          fontSize: 12,
+          fontSize: 10,
         }}
         yAxisExtraHeight={20}
         yAxisLabelContainerStyle={{
@@ -140,7 +148,7 @@ export function OveralLineChart({
         // Rules
         noOfSections={5}
         rulesType="dashed"
-        rulesThickness={2}
+        rulesThickness={1}
         rulesColor="#eca72c2f"
       />
       <Span
@@ -148,7 +156,7 @@ export function OveralLineChart({
           display: "flex",
           flexDirection: "row",
           gap: "10",
-          marginTop: 30,
+          marginTop: 0,
           opacity: 0.5,
           alignSelf: "flex-end",
           marginRight: 10,
@@ -158,13 +166,13 @@ export function OveralLineChart({
         <IconSymbol
           type="Ionicons"
           name="hand-right"
-          size={18}
+          size={12}
           color={theTextColor}
         />
         <IconSymbol
           type="Ionicons"
           name="swap-horizontal-outline"
-          size={18}
+          size={12}
           color={theTextColor}
         />
       </Span>
@@ -181,7 +189,6 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   chartTitle: {
-    marginBottom: 20,
-    fontSize: 20,
+    fontSize: 16,
   },
 });
