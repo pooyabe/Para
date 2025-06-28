@@ -54,7 +54,7 @@ export default function HomeScreen() {
           items_array={reasons}
         />
 
-        <Spacer height={20} />
+        <Spacer height={5} />
 
         <Radio
           Items={["الکی", "بگی نگی", "ضروری"]}
