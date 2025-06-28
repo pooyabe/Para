@@ -19,10 +19,11 @@ export function TabsHeader() {
         paddingRight: 0,
         paddingLeft: 0,
         direction: "ltr",
-        height: "auto"
+        height: "auto",
       }}
     >
-      <Div
+      <TouchableOpacity
+        onPress={() => router.navigate("/about")}
         style={{
           flex: 1,
           display: "flex",
@@ -44,7 +45,7 @@ export function TabsHeader() {
         <Span type="title" style={{ fontSize: 25, fontWeight: "normal" }}>
           پارا
         </Span>
-      </Div>
+      </TouchableOpacity>
       <Div
         style={{
           flex: 1,
