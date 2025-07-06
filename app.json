@@ -10,7 +10,7 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.union.Para"
+      "bundleIdentifier": "com.avroman.Para"
     },
     "android": {
       "versionCode": 1,
@@ -19,7 +19,7 @@
         "backgroundColor": "#181f2f"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.union.Para"
+      "package": "com.avroman.Para"
     },
     "web": {
       "bundler": "metro",
