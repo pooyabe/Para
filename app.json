@@ -19,7 +19,8 @@
         "backgroundColor": "#181f2f"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.avroman.Para"
+      "package": "com.avroman.Para",
+      "permissions": []
     },
     "web": {
       "bundler": "metro",
