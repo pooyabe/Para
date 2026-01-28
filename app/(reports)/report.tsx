@@ -9,11 +9,16 @@ import {
 import { router } from "expo-router";
 import { ScrollView, StyleSheet, TouchableOpacity } from "react-native";
 
+import { ImportanceDisplay } from "@/components/pageParts/reportsPage/ImportanceDisplay";
 import { OveralLineChart } from "@/components/pageParts/reportsPage/OveralLineChart";
 import { PieChartOne } from "@/components/pageParts/reportsPage/PieChartOne";
 import { useEffect, useState } from "react";
 
 import { type RangeType } from "@/hooks/BackEnd/useDateRange";
+import {
+  getImportanceDistribution,
+  type ImportanceData,
+} from "@/hooks/DB/reports/useImportanceDistribution";
 import { getMonthlyReport } from "@/hooks/DB/reports/useMonthlyReport";
 import { getSpendingDistribution } from "@/hooks/DB/reports/useSpendingPercentage";
 
@@ -38,6 +43,14 @@ export default function ReportPage() {
   const [percentageSpendingReport, setPercentageSpendingReport] = useState<
     any[]
   >([]);
+
+  // This state holds the importance distribution data
+  const [importanceData, setImportanceData] = useState<ImportanceData>({
+    alkaaei: 0,
+    borderline: 0,
+    necessary: 0,
+    total: 0,
+  });
 
   // This is an array of top select date buttons
   const theSelectDateButtons: { key: RangeType; label: string }[] = [
@@ -87,6 +100,10 @@ export default function ReportPage() {
     // Get percentage spending report
     const psr = await getSpendingDistribution(rangeKey, SpendingPieColors);
     setPercentageSpendingReport(psr);
+
+    // Get importance distribution data
+    const impData = await getImportanceDistribution(rangeKey);
+    setImportanceData(impData);
 
     // Hide loading
     setShowLoading(false);
@@ -181,6 +198,8 @@ export default function ReportPage() {
           />
 
           <PieChartOne data={percentageSpendingReport} title="بیشتر چی خریدی" />
+
+          <ImportanceDisplay data={importanceData} />
 
           <Span type="subtitle" style={{ textAlign: "center", marginTop: 60 }}>
             چارت و اطلاعات دیگه هم تو راهه...
