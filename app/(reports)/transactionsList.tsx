@@ -26,6 +26,7 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
+import { toast } from "sonner-native";
 
 const PAGE_SIZE = 10;
 
@@ -99,6 +100,8 @@ export default function TransactionsList() {
         setTransactions((prev) =>
           prev.filter((t) => !(t.type === type && t.id === id)),
         );
+
+        toast.success("تراکنش با موفقیت حذف شد");
       }
     } catch (error) {
       console.error("Error deleting transaction:", error);
