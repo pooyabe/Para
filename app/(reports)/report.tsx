@@ -201,9 +201,9 @@ export default function ReportPage() {
 
           <ImportanceDisplay data={importanceData} />
 
-          <Span type="subtitle" style={{ textAlign: "center", marginTop: 60 }}>
+          {/* <Span type="subtitle" style={{ textAlign: "center", marginTop: 60 }}>
             چارت و اطلاعات دیگه هم تو راهه...
-          </Span>
+          </Span> */}
         </ScrollView>
       </Mother>
     );
