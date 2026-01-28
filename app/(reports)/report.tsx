@@ -17,7 +17,6 @@ import { type RangeType } from "@/hooks/BackEnd/useDateRange";
 import { getMonthlyReport } from "@/hooks/DB/reports/useMonthlyReport";
 import { getSpendingDistribution } from "@/hooks/DB/reports/useSpendingPercentage";
 
-
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
 
@@ -49,16 +48,16 @@ export default function ReportPage() {
   ];
 
   /**
-   * 
+   *
    * set Colros
-   * 
+   *
    */
 
   // spending pie chart
   const colorScheme = useColorScheme() as "light" | "dark";
 
   let SpendingPieColors: string[] = [];
-  for (var i:number = 10; i > 0; i--){
+  for (var i: number = 10; i > 0; i--) {
     const tune = i != 10 ? `${i}f` : `ff`;
     SpendingPieColors.push(Colors[colorScheme].theLightBlue + tune);
   }
@@ -117,6 +116,22 @@ export default function ReportPage() {
           <Span type="title" style={styles.headerTitle}>
             گزارش وضعیت
           </Span>
+
+          {/* Transactions List Button */}
+          <TouchableOpacity
+            onPress={() => {
+              router.push("/(reports)/transactionsList");
+            }}
+          >
+            <IconSymbol
+              type="MaterialIcons"
+              name="list-alt"
+              size={20}
+              color="white"
+            />
+          </TouchableOpacity>
+
+          {/* Top Home Icon */}
           <TouchableOpacity
             onPress={() => {
               router.replace("/(tabs)/spending");
@@ -165,10 +180,10 @@ export default function ReportPage() {
             color={Colors[colorScheme].theOrange}
           />
 
-          <PieChartOne data={percentageSpendingReport} title="بیشتر چی خریدی"/>
+          <PieChartOne data={percentageSpendingReport} title="بیشتر چی خریدی" />
 
           <Span type="subtitle" style={{ textAlign: "center", marginTop: 60 }}>
-            چارت‌های دیگر به زودی...
+            چارت و اطلاعات دیگه هم تو راهه...
           </Span>
         </ScrollView>
       </Mother>
@@ -206,7 +221,7 @@ const styles = StyleSheet.create({
   // Select date buttons
   dateButtonGroup: {
     paddingVertical: 10,
-    paddingHorizontal: 10
+    paddingHorizontal: 10,
   },
 
   // The Bottom Section of data

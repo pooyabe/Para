@@ -1,7 +1,7 @@
 import {
-    DarkTheme,
-    DefaultTheme,
-    ThemeProvider,
+  DarkTheme,
+  DefaultTheme,
+  ThemeProvider,
 } from "@react-navigation/native";
 import { Stack } from "expo-router";
 import "react-native-reanimated";
@@ -26,6 +26,7 @@ export default function RootLayout() {
         }}
       >
         <Stack.Screen name="report" />
+        <Stack.Screen name="transactionsList" />
       </Stack>
     </ThemeProvider>
   );
