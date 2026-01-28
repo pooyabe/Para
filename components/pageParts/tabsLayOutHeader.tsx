@@ -23,10 +23,7 @@ export function TabsHeader() {
       }}
     >
       <TouchableOpacity
-        onPress={() =>
-          // router.navigate("/about")
-          console.log("OK")
-        }
+        onPress={() => router.navigate("/about")}
         style={{
           flex: 1,
           display: "flex",
