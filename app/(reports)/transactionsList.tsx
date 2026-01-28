@@ -1,6 +1,8 @@
 import { Div, IconSymbol, Mother, Spacer, Span } from "@/components/Elements";
 import TransactionItem from "@/components/pageParts/reportsPage/TransactionItem";
 import { Colors } from "@/constants/Colors";
+import { deleteIncome } from "@/hooks/DB/actions/deleteIncome";
+import { deleteSpending } from "@/hooks/DB/actions/deleteSpending";
 import {
   Transaction,
   getTransactions,
@@ -67,6 +69,22 @@ export default function TransactionsList() {
     }
   };
 
+  const handleDeleteTransaction = async (type: string, id: number) => {
+    try {
+      const success =
+        type === "income" ? await deleteIncome(id) : await deleteSpending(id);
+
+      if (success) {
+        // Remove the deleted transaction from the list
+        setTransactions((prev) =>
+          prev.filter((t) => !(t.type === type && t.id === id)),
+        );
+      }
+    } catch (error) {
+      console.error("Error deleting transaction:", error);
+    }
+  };
+
   return (
     <Mother style={styles.container} _Hpadding={0}>
       <Div style={styles.Header}>
@@ -98,6 +116,7 @@ export default function TransactionsList() {
           <TransactionItem
             key={`${transaction.type}-${transaction.id}`}
             transaction={transaction}
+            onDelete={handleDeleteTransaction}
           />
         ))}
         {loading && (

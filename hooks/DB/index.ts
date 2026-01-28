@@ -10,5 +10,8 @@ export * from "./actions/getIncomeOptions";
 
 // Actions for managing spending
 export * from "./actions/addSpending";
+export * from "./actions/deleteSpending";
 export * from "./actions/getSpendingOptions";
 
+// Delete actions
+export * from "./actions/deleteIncome";
