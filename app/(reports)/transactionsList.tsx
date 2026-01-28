@@ -1,6 +1,14 @@
-import { Div, IconSymbol, Mother, Spacer, Span } from "@/components/Elements";
+import {
+  Date,
+  Div,
+  IconSymbol,
+  Mother,
+  Spacer,
+  Span,
+} from "@/components/Elements";
 import TransactionItem from "@/components/pageParts/reportsPage/TransactionItem";
 import { Colors } from "@/constants/Colors";
+import { useShamsiDate } from "@/hooks/BackEnd/useShamsiDate";
 import { deleteIncome } from "@/hooks/DB/actions/deleteIncome";
 import { deleteSpending } from "@/hooks/DB/actions/deleteSpending";
 import {
@@ -26,16 +34,28 @@ export default function TransactionsList() {
   const [loading, setLoading] = useState<boolean>(false);
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [offset, setOffset] = useState<number>(0);
+  const [selectedDate, setSelectedDate] = useState<string | undefined>(
+    undefined,
+  );
 
   const colorScheme = useColorScheme() as "light" | "dark";
+  const { toGregorian } = useShamsiDate();
 
-  const loadTransactions = async (reset: boolean = false) => {
+  const loadTransactions = async (
+    reset: boolean = false,
+    dateFilter?: string,
+  ) => {
     if (loading || (!hasMore && !reset)) return;
 
     setLoading(true);
     try {
       const newOffset = reset ? 0 : offset;
-      const newTransactions = await getTransactions(PAGE_SIZE, newOffset);
+      const gregorianDate = dateFilter ? toGregorian(dateFilter) : undefined;
+      const newTransactions = await getTransactions(
+        PAGE_SIZE,
+        newOffset,
+        gregorianDate,
+      );
 
       if (reset) {
         setTransactions(newTransactions);
@@ -56,8 +76,8 @@ export default function TransactionsList() {
   };
 
   useEffect(() => {
-    loadTransactions(true);
-  }, []);
+    loadTransactions(true, selectedDate);
+  }, [selectedDate]);
 
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
@@ -106,7 +126,21 @@ export default function TransactionsList() {
           />
         </TouchableOpacity>
       </Div>
-      <Spacer height={20} />
+      <Spacer height={15} />
+
+      {/* Date Selector */}
+      <Div style={styles.dateSelector}>
+        <Date
+          SelectedDate={selectedDate}
+          onDateChange={(date: string) => {
+            setSelectedDate(date);
+            setHasMore(true);
+          }}
+          style={{}}
+        />
+      </Div>
+
+      <Spacer height={15} />
       <ScrollView
         style={styles.scrollView}
         onScroll={handleScroll}
@@ -157,6 +191,10 @@ const styles = StyleSheet.create({
     height: "100%",
     verticalAlign: "middle",
     fontSize: 18,
+  },
+  dateSelector: {
+    paddingHorizontal: 20,
+    paddingBottom: 10,
   },
   scrollView: {
     flex: 1,
