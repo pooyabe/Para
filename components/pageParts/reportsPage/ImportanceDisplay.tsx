@@ -34,6 +34,15 @@ export function ImportanceDisplay({ data }: ImportanceDisplayProps) {
           بیشتر از این میزان {formatNumber(data.alkaaei)} تومن از هزینه‌های این
           بازه زمانی الکی بوده.
         </Span>
+        {data.alkaaeiTopItem && (
+          <Div style={styles.topItemContainer}>
+            <Span style={styles.topItemLabel}>بیشترین هزینه الکی:</Span>
+            <Span style={styles.topItemValue}>
+              {data.alkaaeiTopItem.title} (
+              {formatNumber(data.alkaaeiTopItem.amount)} تومن)
+            </Span>
+          </Div>
+        )}
       </Div>
 
       <Div style={styles.itemContainer}>
@@ -46,6 +55,15 @@ export function ImportanceDisplay({ data }: ImportanceDisplayProps) {
           مقدار {formatNumber(data.borderline)} تومن هم خرج کردی که میتونستی
           نکنی. بهرحال خودت میدونی.
         </Span>
+        {data.borderlineTopItem && (
+          <Div style={styles.topItemContainer}>
+            <Span style={styles.topItemLabel}>بیشترین هزینه قابل حذف:</Span>
+            <Span style={styles.topItemValue}>
+              {data.borderlineTopItem.title} (
+              {formatNumber(data.borderlineTopItem.amount)} تومن)
+            </Span>
+          </Div>
+        )}
       </Div>
 
       <Div style={styles.summaryContainer}>
@@ -96,6 +114,26 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: "#555",
     lineHeight: 20,
+    textAlign: "right",
+    marginBottom: 10,
+  },
+  topItemContainer: {
+    marginTop: 12,
+    paddingTop: 12,
+    borderTopWidth: 1,
+    borderTopColor: "rgba(17, 141, 255, 0.3)",
+  },
+  topItemLabel: {
+    fontSize: 12,
+    color: "#666",
+    marginBottom: 6,
+    fontWeight: "600",
+    textAlign: "right",
+  },
+  topItemValue: {
+    fontSize: 13,
+    color: "#118dff",
+    fontWeight: "500",
     textAlign: "right",
   },
   summaryContainer: {
