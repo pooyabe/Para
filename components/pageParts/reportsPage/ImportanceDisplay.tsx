@@ -31,8 +31,8 @@ export function ImportanceDisplay({ data }: ImportanceDisplayProps) {
         <Span style={styles.percentage}>{alkaaeiPercent}درصد</Span>
         <Span style={styles.amount}>{formatNumber(data.alkaaei)} تومن</Span>
         <Span style={styles.message}>
-          بیشتر از این میزان {formatNumber(data.alkaaei)} تومن از هزینه‌های این
-          بازه زمانی الکی بوده.
+          یعنی مقدار {formatNumber(data.alkaaei)} تومن خرج کردی که کاملاً
+          بی‌فایده بوده و میتونستی اصلاً انجامش ندی!
         </Span>
         {data.alkaaeiTopItem && (
           <Div style={styles.topItemContainer}>
@@ -69,7 +69,7 @@ export function ImportanceDisplay({ data }: ImportanceDisplayProps) {
       <Div style={styles.summaryContainer}>
         <Span style={styles.summaryText}>
           در مجموع، {formatNumber(data.alkaaei + data.borderline)} تومن (
-          {alkaaeiPercent + borderlinePercent}درصد) از هزینه‌هایت میتونست کاهش
+          {alkaaeiPercent + borderlinePercent}درصد) از هزینه‌هات میتونست کاهش
           پیدا کنه.
         </Span>
       </Div>
