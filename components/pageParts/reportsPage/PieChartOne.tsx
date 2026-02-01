@@ -1,5 +1,5 @@
 import { Div, Span } from "@/components/Elements";
-import { Dimensions, StyleSheet } from "react-native";
+import { Alert, Dimensions, StyleSheet, TouchableOpacity } from "react-native";
 
 import { useThemeColor } from "@/hooks/useThemeColor";
 
@@ -9,7 +9,13 @@ import { PieChart, PieChartPropsType } from "react-native-gifted-charts";
 const screenWidth = Dimensions.get("window").width;
 
 type pieChartOneType = PieChartPropsType & {
-  data: Array<{ value: number; text: string; color: string }>;
+  data: Array<{
+    value: number;
+    text: string;
+    color: string;
+    amount?: number;
+    items?: Array<{ title: string; amount: number; percent: number }>;
+  }>;
   title?: string;
 };
 
@@ -24,6 +30,38 @@ export function PieChartOne({
    */
   const theBGColor = useThemeColor({}, "background");
   const theTintColor = useThemeColor({}, "tint");
+
+  const formatNumber = (num: number) => {
+    if (num == null) return "0";
+    try {
+      return Number(num).toLocaleString();
+    } catch {
+      return String(num);
+    }
+  };
+
+  const showDetails = (item: {
+    text: string;
+    amount?: number;
+    value: number;
+    items?: Array<{ title: string; amount: number; percent: number }>;
+  }) => {
+    if (item.items && item.items.length > 0) {
+      const header = `جمع: ${formatNumber(item.amount)} تومان (${item.value}%)`;
+      const lines = item.items
+        .map(
+          (sub) =>
+            `• ${sub.title}: ${formatNumber(sub.amount)} تومان (${sub.percent}%)`,
+        )
+        .join("\n");
+      Alert.alert(header, lines, [{ text: "باشه" }], { cancelable: true });
+    } else {
+      const message = `مقدار: ${formatNumber(item.amount || 0)} تومان \nدرصد: ${item.value}%`;
+      Alert.alert(item.text || "جزئیات", message, [{ text: "باشه" }], {
+        cancelable: true,
+      });
+    }
+  };
 
   return (
     <Div style={[styles.chartWithBG, styles.singleChart, { direction: "rtl" }]}>
@@ -65,23 +103,30 @@ export function PieChartOne({
 
       <Div style={styles.dataLegendContainer}>
         {data.map((item, index) => (
-          <Div style={styles.dataLegendItem} key={index}>
-            <Span
-              style={[
-                styles.dataLegendIndicator,
-                {
-                  backgroundColor: item.color || "white",
-                  fontSize: 12,
-                },
-              ]}
-            >
-              {item.value}%
-            </Span>
+          <TouchableOpacity
+            key={index}
+            onPress={() => showDetails(item)}
+            activeOpacity={0.7}
+            style={styles.legendTouchable}
+          >
+            <Div style={styles.dataLegendItem}>
+              <Span
+                style={[
+                  styles.dataLegendIndicator,
+                  {
+                    backgroundColor: item.color || "white",
+                    fontSize: 12,
+                  },
+                ]}
+              >
+                {item.value}%
+              </Span>
 
-            <Span style={styles.dataLegendLabel} type="default">
-              {item.text || ""}
-            </Span>
-          </Div>
+              <Span style={styles.dataLegendLabel} type="default">
+                {item.text || ""}
+              </Span>
+            </Div>
+          </TouchableOpacity>
         ))}
       </Div>
     </Div>
@@ -150,5 +195,8 @@ const styles = StyleSheet.create({
   dataLegendLabel: {
     fontSize: 12,
     marginRight: 4,
+  },
+  legendTouchable: {
+    marginRight: 6,
   },
 });

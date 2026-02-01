@@ -3,9 +3,11 @@ import { useShamsiDate } from "@/hooks/BackEnd/useShamsiDate";
 import { getDbConnection } from "../helpers";
 
 export type PieItem = {
-  value: number;
+  value: number; // percent
   text: string;
   color: string;
+  amount: number; // raw amount
+  items?: Array<{ title: string; amount: number; percent: number }>;
 };
 
 export async function getSpendingDistribution(
@@ -66,6 +68,7 @@ export async function getSpendingDistribution(
   if (sorted.length <= 9) {
     return sorted.map((item, index) => ({
       value: Number(((item.sum * 100) / total).toFixed(1)),
+      amount: item.sum,
       text: item.title,
       color: colorRange[index] ?? "#ccc", // fallback color
     }));
@@ -77,6 +80,7 @@ export async function getSpendingDistribution(
 
   const topItems = top8.map((item, index) => ({
     value: Number(((item.sum * 100) / total).toFixed(1)),
+    amount: item.sum,
     text: item.title,
     color: colorRange[index],
   }));
@@ -85,8 +89,14 @@ export async function getSpendingDistribution(
 
   topItems.push({
     value: Number(((othersSum * 100) / total).toFixed(1)),
+    amount: othersSum,
     text: "سایر",
     color: colorRange[8],
+    items: others.map((it) => ({
+      title: it.title,
+      amount: it.sum,
+      percent: Number(((it.sum * 100) / total).toFixed(1)),
+    })),
   });
 
   return topItems;
