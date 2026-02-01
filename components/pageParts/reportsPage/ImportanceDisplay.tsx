@@ -20,11 +20,7 @@ export function ImportanceDisplay({ data }: ImportanceDisplayProps) {
 
   return (
     <Div style={styles.container}>
-      <Span type="title" style={styles.title}>
-        تحلیل اهمیت هزینه‌ها
-      </Span>
-
-      <Div style={styles.itemContainer}>
+      <Div style={[styles.itemContainer, { borderColor: "#ffc107" }]}>
         <Span type="subtitle" style={styles.itemLabel}>
           🚫 هزینه‌های الکی
         </Span>
@@ -45,7 +41,12 @@ export function ImportanceDisplay({ data }: ImportanceDisplayProps) {
         )}
       </Div>
 
-      <Div style={styles.itemContainer}>
+      <Div
+        style={[
+          styles.itemContainer,
+          { borderLeftWidth: 0, borderRightWidth: 4, borderColor: "#118dff" },
+        ]}
+      >
         <Span type="subtitle" style={styles.itemLabel}>
           ⚠️ هزینه‌های قابل حذف
         </Span>
@@ -80,7 +81,7 @@ export function ImportanceDisplay({ data }: ImportanceDisplayProps) {
 const styles = StyleSheet.create({
   container: {
     marginVertical: 30,
-    paddingHorizontal: 20,
+    paddingHorizontal: "2.5%",
     gap: 20,
   },
   title: {

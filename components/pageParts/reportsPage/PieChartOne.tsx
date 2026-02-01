@@ -71,7 +71,7 @@ export function PieChartOne({
                 styles.dataLegendIndicator,
                 {
                   backgroundColor: item.color || "white",
-                  fontSize: 12
+                  fontSize: 12,
                 },
               ]}
             >
@@ -98,12 +98,17 @@ const styles = StyleSheet.create({
   },
   chartTitle: {
     fontSize: 16,
+    marginBottom: 20,
   },
 
   chartWithBG: {
     backgroundColor: "#c9fbff11",
-    borderRadius: 0,
-    borderBottomWidth: 0,
+    borderRadius: 12,
+    borderRightWidth: 4,
+    width: screenWidth * 0.95,
+    marginTop: 20,
+    alignSelf: "center",
+    borderColor: "#118dff",
   },
 
   /**
@@ -117,20 +122,21 @@ const styles = StyleSheet.create({
     textAlign: "center",
     lineHeight: 20,
     opacity: 0.9,
-    fontSize: 12
+    fontSize: 12,
   },
   dataLegendContainer: {
-    marginTop: 10,
+    marginTop: 20,
     display: "flex",
     flexDirection: "row",
     width: screenWidth,
     flexWrap: "wrap",
     justifyContent: "center",
     rowGap: 20,
+    paddingHorizontal: 2,
   },
   dataLegendItem: {
     flexDirection: "row",
-    width: screenWidth * 0.33,
+    width: screenWidth * 0.3,
     alignItems: "center",
     flexWrap: "wrap",
   },
@@ -138,7 +144,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
     borderRadius: 4,
     padding: 2,
-    width: 40,
+    width: 45,
     textAlign: "center",
   },
   dataLegendLabel: {
