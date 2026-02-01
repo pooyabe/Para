@@ -27,8 +27,7 @@ export async function getSpendingDistribution(
       "#118cfe2f",
     ];
   }
-  
-  
+
   const { toGregorian } = useShamsiDate();
 
   const { startDate, endDate } = await getDateRange(rangeKey);
@@ -39,7 +38,7 @@ export async function getSpendingDistribution(
   // 1. گرفتن کل هزینه‌ها
   const totalRes = await db.getFirstAsync<{ total: number }>(
     `SELECT SUM(amount) as total FROM spendings WHERE transaction_date BETWEEN ? AND ?`,
-    [G_StartDate, G_EndDate]
+    [G_StartDate, G_EndDate],
   );
 
   const total = totalRes?.total ?? 0;
@@ -57,7 +56,7 @@ export async function getSpendingDistribution(
     WHERE s.transaction_date BETWEEN ? AND ?
     GROUP BY s.item_id
     `,
-    [G_StartDate, G_EndDate]
+    [G_StartDate, G_EndDate],
   );
 
   // 3. مرتب‌سازی نزولی بر اساس مقدار
@@ -86,7 +85,7 @@ export async function getSpendingDistribution(
 
   topItems.push({
     value: Number(((othersSum * 100) / total).toFixed(1)),
-    text: "سایر هزینه‌ها",
+    text: "سایر",
     color: colorRange[8],
   });
 
