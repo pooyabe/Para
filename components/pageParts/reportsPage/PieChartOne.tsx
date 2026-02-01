@@ -1,7 +1,15 @@
 import { Div, Span } from "@/components/Elements";
-import { Alert, Dimensions, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  Dimensions,
+  Modal,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 import { useThemeColor } from "@/hooks/useThemeColor";
+import { useState } from "react";
 
 import { PieChart, PieChartPropsType } from "react-native-gifted-charts";
 
@@ -40,27 +48,22 @@ export function PieChartOne({
     }
   };
 
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<{
+    text: string;
+    amount?: number;
+    value: number;
+    items?: Array<{ title: string; amount: number; percent: number }>;
+  } | null>(null);
+
   const showDetails = (item: {
     text: string;
     amount?: number;
     value: number;
     items?: Array<{ title: string; amount: number; percent: number }>;
   }) => {
-    if (item.items && item.items.length > 0) {
-      const header = `جمع: ${formatNumber(item.amount)} تومان (${item.value}%)`;
-      const lines = item.items
-        .map(
-          (sub) =>
-            `• ${sub.title}: ${formatNumber(sub.amount)} تومان (${sub.percent}%)`,
-        )
-        .join("\n");
-      Alert.alert(header, lines, [{ text: "باشه" }], { cancelable: true });
-    } else {
-      const message = `مقدار: ${formatNumber(item.amount || 0)} تومان \nدرصد: ${item.value}%`;
-      Alert.alert(item.text || "جزئیات", message, [{ text: "باشه" }], {
-        cancelable: true,
-      });
-    }
+    setSelectedItem(item);
+    setModalVisible(true);
   };
 
   return (
@@ -129,6 +132,56 @@ export function PieChartOne({
           </TouchableOpacity>
         ))}
       </Div>
+
+      {/* Details Modal */}
+      {selectedItem && (
+        <Modal
+          visible={modalVisible}
+          transparent
+          animationType="fade"
+          onRequestClose={() => setModalVisible(false)}
+        >
+          <View style={styles.modalOverlay}>
+            <Div style={styles.modalContent}>
+              <Span type="title" style={styles.modalTitle}>
+                {selectedItem.text}
+                {selectedItem.amount
+                  ? ` — جمع: ${formatNumber(selectedItem.amount)} تومان`
+                  : ""}
+              </Span>
+
+              <Span style={styles.modalSubtitle}>
+                درصد: {selectedItem.value}%
+              </Span>
+
+              {selectedItem.items && selectedItem.items.length > 0 ? (
+                <ScrollView style={styles.modalItems}>
+                  {selectedItem.items.map((sub, idx) => (
+                    <Div style={styles.modalItem} key={idx}>
+                      <Span style={styles.modalItemTitle}>{sub.title}</Span>
+                      <Span style={styles.modalItemAmount}>
+                        {formatNumber(sub.amount)} تومان ({sub.percent}%)
+                      </Span>
+                    </Div>
+                  ))}
+                </ScrollView>
+              ) : (
+                <Div style={styles.modalSingle}>
+                  <Span>{formatNumber(selectedItem.amount || 0)} تومان</Span>
+                </Div>
+              )}
+
+              <TouchableOpacity
+                onPress={() => setModalVisible(false)}
+                style={styles.modalCloseButton}
+                activeOpacity={0.8}
+              >
+                <Span type="default">باشه</Span>
+              </TouchableOpacity>
+            </Div>
+          </View>
+        </Modal>
+      )}
     </Div>
   );
 }
@@ -198,5 +251,57 @@ const styles = StyleSheet.create({
   },
   legendTouchable: {
     marginRight: 6,
+  },
+
+  // Modal styles
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.6)",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 20,
+  },
+  modalContent: {
+    backgroundColor: "#0f1724",
+    borderRadius: 12,
+    padding: 18,
+    width: "100%",
+    maxHeight: "80%",
+  },
+  modalTitle: {
+    fontSize: 16,
+    marginBottom: 8,
+  },
+  modalSubtitle: {
+    fontSize: 13,
+    color: "#9aa4b2",
+    marginBottom: 12,
+  },
+  modalItems: {
+    marginBottom: 12,
+  },
+  modalItem: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: "#1e2938",
+  },
+  modalItemTitle: {
+    fontSize: 13,
+  },
+  modalItemAmount: {
+    fontSize: 13,
+    color: "#9aa4b2",
+  },
+  modalSingle: {
+    marginBottom: 12,
+  },
+  modalCloseButton: {
+    alignSelf: "flex-end",
+    paddingVertical: 8,
+    paddingHorizontal: 14,
+    borderRadius: 8,
+    backgroundColor: "#118dff",
   },
 });
