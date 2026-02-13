@@ -28,6 +28,15 @@ export default function IncomePage() {
   return (
     <Mother>
       <Div style={styles.container}>
+        <Span
+          type="title"
+          style={{
+            marginVertical: 40,
+            fontSize: 24,
+          }}
+        >
+          درآمد
+        </Span>
         <Input
           label="چقد گرفتی؟"
           type="number"

@@ -25,12 +25,21 @@ export default function HomeScreen() {
     saveSpending,
     spending_date,
     shamsiSpendingDate,
-    spending_amount
+    spending_amount,
   } = useSpendingForm();
 
   return (
     <Mother>
       <Div style={styles.container}>
+        <Span
+          type="title"
+          style={{
+            marginVertical: 40,
+            fontSize: 24,
+          }}
+        >
+          هزینه
+        </Span>
         <Input
           label="چقد شد؟"
           type="number"
