@@ -16,10 +16,11 @@ export function TabsHeader() {
         alignItems: "center",
         margin: 0,
         paddingTop: ScreenHeight * 0.06,
-        paddingRight: 0,
-        paddingLeft: 0,
-        direction: "ltr",
+        paddingHorizontal: 35,
+        direction: "rtl",
         height: "auto",
+        display: "flex",
+        columnGap: 10,
       }}
     >
       <TouchableOpacity
@@ -46,50 +47,73 @@ export function TabsHeader() {
           پارا
         </Span>
       </TouchableOpacity>
-      <Div
+      <TouchableOpacity
+        onPress={() => router.navigate("/(reports)/report")}
         style={{
-          flex: 1,
-          direction: "rtl",
-          paddingRight: 20,
+          borderWidth: 2,
+          borderRadius: 100,
+          overflow: "hidden",
           display: "flex",
           flexDirection: "row",
+          columnGap: 5,
+          padding: 1,
+          paddingRight: 10,
+          paddingLeft: 10,
+          justifyContent: "space-around",
           alignItems: "center",
+          borderColor: Colors[colorScheme].theGreen,
         }}
       >
-        <TouchableOpacity
-          onPress={() => router.navigate("/(reports)/report")}
+        <IconSymbol
+          type="Ionicons"
+          name="wallet-outline"
+          size={15}
+          color={Colors[colorScheme].text}
+        />
+        <Span
+          type="default"
           style={{
-            borderWidth: 1,
-            borderRadius: 50,
-            overflow: "hidden",
-            display: "flex",
-            flexDirection: "row",
-            columnGap: 10,
-            padding: 5,
-            paddingRight: 15,
-            paddingLeft: 15,
-            justifyContent: "space-around",
-            alignItems: "center",
-            backgroundColor: Colors[colorScheme].theGreen,
+            fontSize: 12,
+            color: Colors[colorScheme].text,
           }}
         >
-          <IconSymbol
-            type="Ionicons"
-            name="wallet-outline"
-            size={25}
-            color={Colors[colorScheme].background}
-          />
-          <Span
-            type="default"
-            style={{
-              fontSize: 14,
-              color: Colors[colorScheme].background,
-            }}
-          >
-            اوضاعم چطوره؟
-          </Span>
-        </TouchableOpacity>
-      </Div>
+          اوضاعم چطوره؟
+        </Span>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        onPress={() => router.navigate("/(reports)/transactionsList")}
+        style={{
+          borderWidth: 2,
+          borderRadius: 100,
+          overflow: "hidden",
+          display: "flex",
+          flexDirection: "row",
+          columnGap: 5,
+          padding: 1,
+          paddingRight: 10,
+          paddingLeft: 10,
+          justifyContent: "space-around",
+          alignItems: "center",
+          borderColor: Colors[colorScheme].theOrange,
+        }}
+      >
+        <IconSymbol
+          type="MaterialIcons"
+          name="list-alt"
+          size={15}
+          color={Colors[colorScheme].text}
+        />
+        <Span
+          type="default"
+          style={{
+            fontSize: 12,
+            color: Colors[colorScheme].text,
+          }}
+        >
+          تراکنش‌ها
+        </Span>
+      </TouchableOpacity>
     </Div>
   );
 }

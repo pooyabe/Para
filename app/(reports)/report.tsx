@@ -134,20 +134,6 @@ export default function ReportPage() {
             گزارش وضعیت
           </Span>
 
-          {/* Transactions List Button */}
-          <TouchableOpacity
-            onPress={() => {
-              router.push("/(reports)/transactionsList");
-            }}
-          >
-            <IconSymbol
-              type="MaterialIcons"
-              name="list-alt"
-              size={20}
-              color="white"
-            />
-          </TouchableOpacity>
-
           {/* Top Home Icon */}
           <TouchableOpacity
             onPress={() => {
@@ -200,10 +186,6 @@ export default function ReportPage() {
           <PieChartOne data={percentageSpendingReport} title="بیشتر چی خریدی" />
 
           <ImportanceDisplay data={importanceData} />
-
-          {/* <Span type="subtitle" style={{ textAlign: "center", marginTop: 60 }}>
-            چارت و اطلاعات دیگه هم تو راهه...
-          </Span> */}
         </ScrollView>
       </Mother>
     );
