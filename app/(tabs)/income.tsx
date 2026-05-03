@@ -28,14 +28,8 @@ export default function IncomePage() {
   return (
     <Mother>
       <Div style={styles.container}>
-        <Span
-          type="title"
-          style={{
-            marginVertical: 40,
-            fontSize: 24,
-          }}
-        >
-          درآمد
+        <Span type="title" style={styles.pageTitle}>
+          ایول پول اومده :)
         </Span>
         <Input
           label="چقد گرفتی؟"
@@ -96,5 +90,10 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+  },
+
+  pageTitle: {
+    marginVertical: 20,
+    fontSize: 24,
   },
 });

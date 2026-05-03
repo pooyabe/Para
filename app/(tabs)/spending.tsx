@@ -31,14 +31,8 @@ export default function HomeScreen() {
   return (
     <Mother>
       <Div style={styles.container}>
-        <Span
-          type="title"
-          style={{
-            marginVertical: 40,
-            fontSize: 24,
-          }}
-        >
-          هزینه
+        <Span type="title" style={styles.pageTitle}>
+          پول پرید؟
         </Span>
         <Input
           label="چقد شد؟"
@@ -96,5 +90,10 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+  },
+
+  pageTitle: {
+    marginVertical: 20,
+    fontSize: 24,
   },
 });
