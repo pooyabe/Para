@@ -1,17 +1,21 @@
-import { Div, Span } from "@/components/Elements";
+import { Div, IconSymbol, Span } from "@/components/Elements";
 import { useShamsiDate } from "@/hooks/BackEnd/useShamsiDate";
 import { Transaction } from "@/hooks/DB/reports/useTransactions";
 import numberToText from "@/hooks/numberToText";
 import { Alert, StyleSheet, TouchableOpacity } from "react-native";
+import { useState } from "react";
+import EditTransactionModal from "./EditTransactionModal";
 
 interface TransactionItemProps {
   transaction: Transaction;
   onDelete?: (type: string, id: number) => Promise<void>;
+  onRefresh?: () => void;
 }
 
 export default function TransactionItem({
   transaction,
   onDelete,
+  onRefresh,
 }: TransactionItemProps) {
   const { toJalali } = useShamsiDate();
 
@@ -20,7 +24,13 @@ export default function TransactionItem({
 
   const isIncome = transaction.type === "income";
 
-  const handleLongPress = () => {
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const handleEdit = () => {
+    setModalVisible(true);
+  };
+
+  const handleDelete = () => {
     Alert.alert(
       "حذف تراکنش",
       `آیا می‌خواهید این ${isIncome ? "دریافتی" : "هزینه"} را حذف کنید؟`,
@@ -44,7 +54,7 @@ export default function TransactionItem({
   };
 
   return (
-    <TouchableOpacity onLongPress={handleLongPress} activeOpacity={0.8}>
+    <TouchableOpacity activeOpacity={0.8}>
       <Div style={styles.container}>
         <Div style={styles.leftSection}>
           <Span
@@ -62,10 +72,39 @@ export default function TransactionItem({
           )}
         </Div>
         <Div style={styles.rightSection}>
-          <Span style={styles.date}>{formattedDate}</Span>
-          <Span style={styles.type}>{isIncome ? "دریافتی" : "هزینه"}</Span>
+          <Div style={styles.rightTopRow}>
+            <Span style={styles.date}>{formattedDate}</Span>
+            <Span style={styles.type}>{isIncome ? "دریافتی" : "هزینه"}</Span>
+          </Div>
+          <Div style={styles.actionButtons}>
+            <TouchableOpacity onPress={handleEdit} style={styles.iconButton}>
+              <IconSymbol
+                type="Ionicons"
+                name="create-outline"
+                size={20}
+                color="#2196F3"
+              />
+            </TouchableOpacity>
+            {onDelete && (
+              <TouchableOpacity onPress={handleDelete} style={styles.iconButton}>
+                <IconSymbol
+                  type="Ionicons"
+                  name="trash-outline"
+                  size={20}
+                  color="#F44336"
+                />
+              </TouchableOpacity>
+            )}
+          </Div>
         </Div>
       </Div>
+
+      <EditTransactionModal
+        visible={modalVisible}
+        transaction={transaction}
+        onClose={() => setModalVisible(false)}
+        onSave={onRefresh || (() => {})}
+      />
     </TouchableOpacity>
   );
 }
@@ -85,6 +124,20 @@ const styles = StyleSheet.create({
   },
   rightSection: {
     alignItems: "flex-end",
+  },
+  rightTopRow: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    alignItems: "center",
+    marginBottom: 8,
+  },
+  actionButtons: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+  },
+  iconButton: {
+    padding: 8,
   },
   amount: {
     fontSize: 16,

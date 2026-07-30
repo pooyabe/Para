@@ -154,6 +154,7 @@ export default function TransactionsList() {
             key={`${transaction.type}-${transaction.id}`}
             transaction={transaction}
             onDelete={handleDeleteTransaction}
+            onRefresh={() => loadTransactions(true, selectedDate)}
           />
         ))}
         {loading && (
