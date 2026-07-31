@@ -334,6 +334,7 @@ export default function EditTransactionModal({
 const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
+    direction: "ltr",
   },
   header: {
     flexDirection: "row",
