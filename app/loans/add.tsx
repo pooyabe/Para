@@ -46,7 +46,7 @@ export default function AddLoanPage() {
         <Spacer height={20} />
 
         <Input
-          label="مبلغ وام"
+          label="مبلغ نهایی پرداخت"
           type="number"
           onChangeText={(value) => printPriceString(Number(value))}
           value={loan_amount?.toString() ?? ""}
