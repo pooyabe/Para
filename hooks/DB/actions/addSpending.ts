@@ -62,18 +62,18 @@ export async function addSpending({
     const reasonId = await getOrCreateId("spending_items", `پرداخت وام: ${loan?.source || "نامشخص"}`);
 
     await db.runAsync(
-      `INSERT INTO spendings (amount, item_id, importance, transaction_date)
-       VALUES (?, ?, ?, ?)`,
-      [amount, reasonId, importance, transactionDate]
+      `INSERT INTO spendings (amount, item_id, importance, transaction_date, loan_id)
+       VALUES (?, ?, ?, ?, ?)`,
+      [amount, reasonId, importance, transactionDate, loanId]
     );
   } else {
     // Regular spending
     const reasonId = await getOrCreateId("spending_items", reasonTitle);
 
     await db.runAsync(
-      `INSERT INTO spendings (amount, item_id, importance, transaction_date)
-       VALUES (?, ?, ?, ?)`,
-      [amount, reasonId, importance, transactionDate]
+      `INSERT INTO spendings (amount, item_id, importance, transaction_date, loan_id)
+       VALUES (?, ?, ?, ?, ?)`,
+      [amount, reasonId, importance, transactionDate, null]
     );
   }
 }

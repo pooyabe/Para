@@ -66,9 +66,9 @@ export async function addIncome({
     );
 
     await db.runAsync(
-      `INSERT INTO incomes (amount, reason_id, destination_id, transaction_date)
-       VALUES (?, ?, ?, ?)`,
-      [amount, reasonId, destinationId, transactionDate]
+      `INSERT INTO incomes (amount, reason_id, destination_id, transaction_date, loan_id)
+       VALUES (?, ?, ?, ?, ?)`,
+      [amount, reasonId, destinationId, transactionDate, loanId]
     );
   } else {
     // Regular income
@@ -79,9 +79,9 @@ export async function addIncome({
     );
 
     await db.runAsync(
-      `INSERT INTO incomes (amount, reason_id, destination_id, transaction_date)
-       VALUES (?, ?, ?, ?)`,
-      [amount, reasonId, destinationId, transactionDate]
+      `INSERT INTO incomes (amount, reason_id, destination_id, transaction_date, loan_id)
+       VALUES (?, ?, ?, ?, ?)`,
+      [amount, reasonId, destinationId, transactionDate, null]
     );
   }
 }

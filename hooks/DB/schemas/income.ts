@@ -6,7 +6,9 @@ export const incomeTableSQL = `
     destination_id INTEGER,
     transaction_date TEXT NOT NULL,
     create_date TEXT DEFAULT CURRENT_TIMESTAMP,
+    loan_id INTEGER,
     FOREIGN KEY (reason_id) REFERENCES income_reasons(id),
-    FOREIGN KEY (destination_id) REFERENCES income_destinations(id)
+    FOREIGN KEY (destination_id) REFERENCES income_destinations(id),
+    FOREIGN KEY (loan_id) REFERENCES loans(id) ON DELETE SET NULL
   );
 `;
