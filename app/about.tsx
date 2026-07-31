@@ -1,4 +1,5 @@
 import { Div, Mother, Span } from "@/components/Elements";
+import Constants from "expo-constants";
 import { Dimensions, Image, ScrollView, StyleSheet } from "react-native";
 
 const screenWidth = Dimensions.get("screen").width;
@@ -21,7 +22,10 @@ export default function aboutPage() {
         <Span type="title" style={styles.titleSpan}>
           پارا
         </Span>
-
+        <Span type="subtitle" style={{ textAlign: "center", marginBottom: 20 }}>
+          نسخه {process.env.EXPO_OS}_{Constants.expoConfig.version}_
+          {Constants.expoConfig?.android?.versionCode}
+        </Span>
         <Span
           style={{
             marginTop: 20,
