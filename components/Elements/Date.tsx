@@ -15,14 +15,15 @@ export type DateProps = Props & {
   style?: object;
   SelectedDate?: string;
   todayMax?: boolean;
+  futureYears?: number; // Number of years in future to allow (default 100)
 };
 
-export function Date({ SelectedDate, todayMax = false, ...other }: DateProps) {
+export function Date({ SelectedDate, todayMax = false, futureYears = 100, ...other }: DateProps) {
   const [modalVisible, setModalVisible] = useState(false);
 
   const colorScheme = useColorScheme() as "light" | "dark";
 
-  const { nowJalali } = useShamsiDate();
+  const { nowJalali, toGregorian } = useShamsiDate();
 
   const [OpenLabel, setOpenLabel] = useState(
     SelectedDate ? `تاریخ: ${SelectedDate}` : `امروز: ${nowJalali()}`
@@ -30,7 +31,11 @@ export function Date({ SelectedDate, todayMax = false, ...other }: DateProps) {
 
   // Get Today Date in Jalali Format
   const JtodayDate = nowJalali();
-  
+
+  // Create a far future date in Jalali (current year + futureYears)
+  const todayParts = JtodayDate.split('/');
+  const futureMaxDateJalali = `${parseInt(todayParts[0]) + futureYears}/${todayParts[1]}/${todayParts[2]}`;
+
   return (
     <>
       <SButton
@@ -163,8 +168,8 @@ export function Date({ SelectedDate, todayMax = false, ...other }: DateProps) {
               }
               setModalVisible(false);
             }}
-            // Set maxDate on today if requested
-            {...(todayMax ? { maxDate: JtodayDate } : {})}
+            // Set maxDate based on todayMax or futureYears
+            {...(todayMax ? { maxDate: JtodayDate } : { maxDate: futureMaxDateJalali })}
           />
           <SButton
             text="بستن"
