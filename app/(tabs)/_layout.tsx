@@ -80,7 +80,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="loans"
         options={{
-          title: "وام‌ها",
+          title: "بده‌بستون",
           headerShown: false,
           tabBarIcon: ({ color }) => (
             <IconSymbol

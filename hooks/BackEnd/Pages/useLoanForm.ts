@@ -10,7 +10,7 @@ import { toast } from "sonner-native";
 
 export const useLoanForm = () => {
   const [loan_type, setLoanType] = useState<"receivable" | "payable">(
-    "receivable"
+    "receivable",
   );
   const [loan_amount, setLoanAmount] = useState<number | null>(null);
   const [loan_source, setLoanSource] = useState<string | null>(null);
@@ -20,7 +20,6 @@ export const useLoanForm = () => {
   const [shamsiStartDate, setShamsiStartDate] = useState<string | undefined>();
   const [shamsiEndDate, setShamsiEndDate] = useState<string | undefined>();
   const [thePriceString, setThePriceString] = useState("");
-
   // تبدیل عدد به متن
   const printPriceString = (val: number | null) => {
     setThePriceString(numberToText(Number(val)));

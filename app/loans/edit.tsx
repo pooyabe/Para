@@ -9,13 +9,13 @@ import {
   Span,
 } from "@/components/Elements";
 import { useLoanForm } from "@/hooks/BackEnd/Pages/useLoanForm";
+import { useShamsiDate } from "@/hooks/BackEnd/useShamsiDate";
 import { updateLoan } from "@/hooks/DB";
 import { Loan } from "@/hooks/DB/actions/getLoans";
-import { useEffect, useState } from "react";
 import { router, useLocalSearchParams } from "expo-router";
+import { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import { toast } from "sonner-native";
-import { useShamsiDate } from "@/hooks/BackEnd/useShamsiDate";
 
 export default function EditLoanPage() {
   const { loan } = useLocalSearchParams<{ loan: string }>();
@@ -72,12 +72,14 @@ export default function EditLoanPage() {
   }, [loan]);
 
   const handleSave = async () => {
-    if (!loanData ||
-        !loan_source ||
-        !loan_start_date ||
-        !loan_end_date ||
-        loan_amount === null ||
-        loan_amount === undefined) {
+    if (
+      !loanData ||
+      !loan_source ||
+      !loan_start_date ||
+      !loan_end_date ||
+      loan_amount === null ||
+      loan_amount === undefined
+    ) {
       toast.warning("همه گزینه‌های الزامی را پر کنید!");
       return;
     }
@@ -117,7 +119,7 @@ export default function EditLoanPage() {
         </Span>
 
         <Radio
-          Items={["بدهکار (پول داده‌ام)", "بستانکار (پول گرفته‌ام)"]}
+          Items={["قرض دادم", "پول گرفتم"]}
           onChangeValueWithIndex={(value, index) => {
             setLoanType(index === 0 ? "receivable" : "payable");
           }}
@@ -140,7 +142,7 @@ export default function EditLoanPage() {
 
         <Input
           label="محل/شخص وام"
-          placeholder="نام بانک، شخص یا منبع وام"
+          placeholder="عنوان وام"
           onChangeText={(value) => setLoanSource(value)}
           value={loan_source ?? ""}
         />
@@ -149,7 +151,7 @@ export default function EditLoanPage() {
 
         <Input
           label="توضیحات (اختیاری)"
-          placeholder="توضیحات بیشتر در مورد وام"
+          placeholder="توضیحات بیشتر"
           onChangeText={(value) => setLoanDescription(value)}
           value={loan_description ?? ""}
         />

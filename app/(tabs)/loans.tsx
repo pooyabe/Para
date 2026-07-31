@@ -1,12 +1,4 @@
-import {
-  Date as DatePicker,
-  Div,
-  IconSymbol,
-  Mother,
-  SButton,
-  Spacer,
-  Span,
-} from "@/components/Elements";
+import { Div, IconSymbol, Mother, Spacer, Span } from "@/components/Elements";
 import { Colors } from "@/constants/Colors";
 import { useShamsiDate } from "@/hooks/BackEnd/useShamsiDate";
 import { deleteLoan, getLoans } from "@/hooks/DB";
@@ -14,14 +6,7 @@ import { Loan } from "@/hooks/DB/actions/getLoans";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { router, useFocusEffect } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
-import {
-  Alert,
-  NativeScrollEvent,
-  NativeSyntheticEvent,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-} from "react-native";
+import { Alert, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
 import { toast } from "sonner-native";
 
 export default function LoansPage() {
@@ -53,36 +38,32 @@ export default function LoansPage() {
   useFocusEffect(
     useCallback(() => {
       loadLoans();
-    }, [loadLoans])
+    }, [loadLoans]),
   );
 
   const handleDeleteLoan = async (id: number) => {
-    Alert.alert(
-      "حذف وام",
-      "آیا می‌خواهید این وام را حذف کنید؟",
-      [
-        {
-          text: "لغو",
-          onPress: () => {},
-          style: "cancel",
-        },
-        {
-          text: "حذف",
-          onPress: async () => {
-            try {
-              const success = await deleteLoan(id);
-              if (success) {
-                setLoans((prev) => prev.filter((l) => l.id !== id));
-                toast.success("وام با موفقیت حذف شد");
-              }
-            } catch (error) {
-              console.error("Error deleting loan:", error);
+    Alert.alert("حذف وام", "آیا می‌خواهید این وام را حذف کنید؟", [
+      {
+        text: "لغو",
+        onPress: () => {},
+        style: "cancel",
+      },
+      {
+        text: "حذف",
+        onPress: async () => {
+          try {
+            const success = await deleteLoan(id);
+            if (success) {
+              setLoans((prev) => prev.filter((l) => l.id !== id));
+              toast.success("وام با موفقیت حذف شد");
             }
-          },
-          style: "destructive",
+          } catch (error) {
+            console.error("Error deleting loan:", error);
+          }
         },
-      ],
-    );
+        style: "destructive",
+      },
+    ]);
   };
 
   const handleEditLoan = (loan: Loan) => {
@@ -118,7 +99,7 @@ export default function LoansPage() {
     <Mother style={styles.container} _Hpadding={0}>
       <Div style={styles.Header}>
         <Span type="title" style={styles.headerTitle}>
-          لیست وام‌ها
+          مدیریت وام و طلب
         </Span>
 
         <Div style={styles.headerButtons}>
@@ -154,25 +135,25 @@ export default function LoansPage() {
       <Div style={styles.toggleContainer}>
         <TouchableOpacity
           onPress={() => setShowAll(!showAll)}
-          style={[
-            styles.toggleButton,
-            showAll && styles.toggleButtonActive,
-          ]}
+          style={[styles.toggleButton, showAll && styles.toggleButtonActive]}
         >
           <IconSymbol
             type="MaterialIcons"
             name={showAll ? "expand-less" : "expand-more"}
             size={18}
-            color={showAll ? Colors[colorScheme].tabBackground : Colors[colorScheme].text}
+            color={
+              showAll
+                ? Colors[colorScheme].tabBackground
+                : Colors[colorScheme].text
+            }
           />
           <Span
             type="default"
             style={{
               fontSize: 12,
-              color:
-                showAll
-                  ? Colors[colorScheme].tabBackground
-                  : Colors[colorScheme].text,
+              color: showAll
+                ? Colors[colorScheme].tabBackground
+                : Colors[colorScheme].text,
               marginRight: 5,
             }}
           >
@@ -191,7 +172,6 @@ export default function LoansPage() {
           <TouchableOpacity
             key={loan.id}
             activeOpacity={0.8}
-            onPress={() => handleEditLoan(loan)}
             style={styles.loanCard}
           >
             <Div style={styles.loanHeader}>
@@ -205,7 +185,7 @@ export default function LoansPage() {
                       : styles.payableBadge,
                   ]}
                 >
-                  {loan.type === "receivable" ? "بدهکار" : "بستانکار"}
+                  {loan.type === "receivable" ? "طلبکار" : "بدهکار"}
                 </Span>
               </Div>
               <Div style={styles.loanSource}>
@@ -253,8 +233,8 @@ export default function LoansPage() {
                     getRemaining(loan) === 0
                       ? styles.settledColor
                       : loan.type === "receivable"
-                      ? styles.incomeColor
-                      : styles.spendingColor,
+                        ? styles.incomeColor
+                        : styles.spendingColor,
                   ]}
                 >
                   {formatAmount(getRemaining(loan))}
@@ -275,8 +255,8 @@ export default function LoansPage() {
                       getRemaining(loan) === 0
                         ? Colors[colorScheme].theGreen
                         : loan.type === "receivable"
-                        ? "#2196F3"
-                        : "#F44336",
+                          ? "#2196F3"
+                          : "#F44336",
                   },
                 ]}
               />
@@ -370,9 +350,7 @@ export default function LoansPage() {
             />
             <Spacer height={10} />
             <Span style={styles.emptyText}>
-              {showAll
-                ? "هیچامی یافت نشد"
-                : "هیچ وام فعالی یافت نشد"}
+              {showAll ? "هیچامی یافت نشد" : "هیچ وام فعالی یافت نشد"}
             </Span>
           </Div>
         )}

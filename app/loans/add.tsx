@@ -37,7 +37,7 @@ export default function AddLoanPage() {
         </Span>
 
         <Radio
-          Items={["بدهکار (پول داده‌ام)", "بستانکار (پول گرفته‌ام)"]}
+          Items={["قرض دادم", "پول گرفتم"]}
           onChangeValueWithIndex={(value, index) => {
             setLoanType(index === 0 ? "receivable" : "payable");
           }}
@@ -60,7 +60,7 @@ export default function AddLoanPage() {
 
         <Input
           label="محل/شخص وام"
-          placeholder="نام بانک، شخص یا منبع وام"
+          placeholder="عنوان وام"
           onChangeText={(value) => setLoanSource(value)}
           value={loan_source ?? ""}
         />
@@ -69,7 +69,7 @@ export default function AddLoanPage() {
 
         <Input
           label="توضیحات (اختیاری)"
-          placeholder="توضیحات بیشتر در مورد وام"
+          placeholder="توضیحات بیشتر"
           onChangeText={(value) => setLoanDescription(value)}
           value={loan_description ?? ""}
         />
