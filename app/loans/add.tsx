@@ -76,6 +76,7 @@ export default function AddLoanPage() {
 
         <Spacer height={20} />
 
+        <Span type="subtitle">تاریخ شروع</Span>
         <Date
           SelectedDate={shamsiStartDate}
           onDateChange={(date: string) => {
@@ -87,6 +88,7 @@ export default function AddLoanPage() {
 
         <Spacer height={20} />
 
+        <Span type="subtitle">تاریخ تسویه</Span>
         <Date
           SelectedDate={shamsiEndDate}
           onDateChange={(date: string) => {
