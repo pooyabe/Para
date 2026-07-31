@@ -77,6 +77,21 @@ export default function TabLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="loans"
+        options={{
+          title: "وام‌ها",
+          headerShown: false,
+          tabBarIcon: ({ color }) => (
+            <IconSymbol
+              type="MaterialIcons"
+              size={ScreenHeight * 0.035}
+              name="account-balance-wallet"
+              color={color}
+            />
+          ),
+        }}
+      />
     </Tabs>
   );
 }

@@ -1,5 +1,5 @@
 import { useShamsiDate } from "@/hooks/BackEnd/useShamsiDate";
-import { addSpending, getSpendingOptions } from "@/hooks/DB";
+import { addSpending, getSpendingOptions, getPayableLoanOptions } from "@/hooks/DB";
 import numberToText from "@/hooks/numberToText";
 import { useEffect, useState } from "react";
 import { toast } from "sonner-native";
@@ -37,15 +37,23 @@ export const useSpendingForm = () => {
   const [reasons, setReasons] = useState<
     Array<{ label: string; value: string }>
   >([]);
+  const [payableLoans, setPayableLoans] = useState<
+    Array<{ id: number; label: string; value: string; type: string }>
+  >([]);
+
   useEffect(() => {
     const fetchOptions = async () => {
-      const [reasonOpts] = await Promise.all([getSpendingOptions()]);
+      const [reasonOpts, loanOpts] = await Promise.all([
+        getSpendingOptions(),
+        getPayableLoanOptions(),
+      ]);
       setReasons(
         reasonOpts.map((opt: any) => ({
           label: opt.label,
           value: opt.value,
         }))
       );
+      setPayableLoans(loanOpts);
     };
 
     fetchOptions();
@@ -72,7 +80,6 @@ export const useSpendingForm = () => {
 
     try {
       // Save Data
-
       await addSpending({
         amount: Number(spending_amount),
         reasonTitle: spendingReason,
@@ -111,6 +118,7 @@ export const useSpendingForm = () => {
     handleDateChange,
     reasons,
     setReasons,
+    payableLoans,
     saveSpending,
     shamsiSpendingDate,
   };

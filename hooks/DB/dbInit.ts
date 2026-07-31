@@ -5,6 +5,8 @@ import { incomeDestinationsTableSQL } from "./schemas/income_destinations";
 import { incomeReasonsTableSQL } from "./schemas/income_reasons";
 import { spendingTableSQL } from "./schemas/spending";
 import { spendingItemsTableSQL } from "./schemas/spending_items";
+import { loansTableSQL } from "./schemas/loans";
+import { loanPaymentsTableSQL } from "./schemas/loan_payments";
 
 export const initializeDatabase = async () => {
   try {
@@ -20,6 +22,8 @@ export const initializeDatabase = async () => {
       ${spendingItemsTableSQL}
       ${incomeTableSQL}
       ${spendingTableSQL}
+      ${loansTableSQL}
+      ${loanPaymentsTableSQL}
     `);
 
     console.log("[DB] ✅ All tables are ready.");

@@ -21,3 +21,15 @@ export * from "./actions/updateIncome";
 
 // Delete actions
 export * from "./actions/deleteIncome";
+export * from "./actions/deleteSpending";
+
+// Loan actions
+export * from "./actions/addLoan";
+export * from "./actions/getLoans";
+export * from "./actions/updateLoan";
+export * from "./actions/deleteLoan";
+export * from "./actions/addLoanPayment";
+export * from "./actions/getLoanPayments";
+export * from "./actions/getLoanOptions";
+export * from "./actions/getSettledLoans";
+export { getLoanById } from "./actions/getLoans";

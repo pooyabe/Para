@@ -16,6 +16,7 @@ export default function IncomePage() {
     thePriceString,
     reasons,
     destinations,
+    receivableLoans,
     printPriceString,
     handleDateChange,
     setReason,
@@ -51,7 +52,13 @@ export default function IncomePage() {
           onValueChange={(value: string) => {
             setReason(value);
           }}
-          items_array={reasons}
+          items_array={[
+            ...reasons,
+            ...receivableLoans.map((loan) => ({
+              label: `💰 ${loan.label}`,
+              value: loan.value,
+            })),
+          ]}
         />
 
         <Spacer height={40} />

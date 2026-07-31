@@ -1,4 +1,5 @@
 import { getDbConnection } from "../helpers";
+import { addLoanPayment, getLoanById } from "..";
 
 /**
  * دریافت ID از جدول خاص؛ در صورت نبود، درج و برگشت ID
@@ -41,15 +42,46 @@ export async function addIncome({
 }: AddIncomeInput): Promise<void> {
   const db = await getDbConnection();
 
-  const reasonId = await getOrCreateId("income_reasons", reasonTitle);
-  const destinationId = await getOrCreateId(
-    "income_destinations",
-    destinationTitle
-  );
+  // Check if reasonTitle is a loan ID (numeric string)
+  const loanId = parseInt(reasonTitle, 10);
+  const isLoanReceipt = !isNaN(loanId);
 
-  await db.runAsync(
-    `INSERT INTO incomes (amount, reason_id, destination_id, transaction_date)
-     VALUES (?, ?, ?, ?)`,
-    [amount, reasonId, destinationId, transactionDate]
-  );
+  if (isLoanReceipt) {
+    // This is a loan receipt - verify the loan exists and is receivable
+    const loan = await getLoanById(loanId);
+    if (loan && loan.type === "receivable") {
+      // Add loan receipt (payment received)
+      await addLoanPayment({
+        loanId,
+        amount,
+        paymentDate: transactionDate,
+        type: "receipt",
+      });
+    }
+    // Still record the income for tracking
+    const reasonId = await getOrCreateId("income_reasons", `دریافت وام: ${loan?.source || "نامشخص"}`);
+    const destinationId = await getOrCreateId(
+      "income_destinations",
+      destinationTitle
+    );
+
+    await db.runAsync(
+      `INSERT INTO incomes (amount, reason_id, destination_id, transaction_date)
+       VALUES (?, ?, ?, ?)`,
+      [amount, reasonId, destinationId, transactionDate]
+    );
+  } else {
+    // Regular income
+    const reasonId = await getOrCreateId("income_reasons", reasonTitle);
+    const destinationId = await getOrCreateId(
+      "income_destinations",
+      destinationTitle
+    );
+
+    await db.runAsync(
+      `INSERT INTO incomes (amount, reason_id, destination_id, transaction_date)
+       VALUES (?, ?, ?, ?)`,
+      [amount, reasonId, destinationId, transactionDate]
+    );
+  }
 }

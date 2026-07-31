@@ -1,6 +1,6 @@
 // hooks/useIncomeForm.ts
 import { useShamsiDate } from "@/hooks/BackEnd/useShamsiDate";
-import { addIncome, getIncomeDestinations, getIncomeReasons } from "@/hooks/DB";
+import { addIncome, getIncomeDestinations, getIncomeReasons, getReceivableLoanOptions } from "@/hooks/DB";
 import numberToText from "@/hooks/numberToText";
 import { useEffect, useState } from "react";
 import { toast } from "sonner-native";
@@ -22,6 +22,9 @@ export const useIncomeForm = () => {
   >([]);
   const [destinations, setDestinations] = useState<
     Array<{ label: string; value: string }>
+  >([]);
+  const [receivableLoans, setReceivableLoans] = useState<
+    Array<{ id: number; label: string; value: string; type: string }>
   >([]);
 
   // تبدیل عدد به متن
@@ -45,9 +48,10 @@ export const useIncomeForm = () => {
   // دریافت لیست‌ها از دیتابیس
   useEffect(() => {
     const fetchOptions = async () => {
-      const [reasonOpts, destinationOpts] = await Promise.all([
+      const [reasonOpts, destinationOpts, loanOpts] = await Promise.all([
         getIncomeReasons(),
         getIncomeDestinations(),
+        getReceivableLoanOptions(),
       ]);
       setReasons(
         reasonOpts.map((item: any) => ({
@@ -61,6 +65,7 @@ export const useIncomeForm = () => {
           value: item.value,
         }))
       );
+      setReceivableLoans(loanOpts);
     };
 
     fetchOptions();
@@ -107,6 +112,7 @@ export const useIncomeForm = () => {
     thePriceString,
     reasons,
     destinations,
+    receivableLoans,
     printPriceString,
     handleDateChange,
     setReason,

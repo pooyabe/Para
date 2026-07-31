@@ -17,6 +17,7 @@ export default function HomeScreen() {
   // Load BackEnd
   const {
     reasons,
+    payableLoans,
     printPriceString,
     thePriceString,
     setSpendingReason,
@@ -54,7 +55,13 @@ export default function HomeScreen() {
           onValueChange={(value: string) => {
             setSpendingReason(value);
           }}
-          items_array={reasons}
+          items_array={[
+            ...reasons,
+            ...payableLoans.map((loan) => ({
+              label: `💳 ${loan.label}`,
+              value: loan.value,
+            })),
+          ]}
         />
 
         <Spacer height={5} />
