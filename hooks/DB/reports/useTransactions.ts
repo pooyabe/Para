@@ -34,7 +34,7 @@ export async function getTransactions(
     FROM spendings s
     LEFT JOIN spending_items si ON s.item_id = si.id
     WHERE 1=1 ${dateFilterSpending}
-    ORDER BY transaction_date DESC
+    ORDER BY transaction_date DESC, 2 DESC
     LIMIT ? OFFSET ?
   `;
 
