@@ -29,6 +29,7 @@ export default function IncomePage() {
   return (
     <Mother>
       <Div style={styles.container}>
+        <Spacer />
         <Span type="title" style={styles.pageTitle}>
           ایول پول اومده :)
         </Span>
