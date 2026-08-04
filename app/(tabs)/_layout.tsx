@@ -7,10 +7,13 @@ import { TabsHeader } from "@/components/pageParts/tabsLayOutHeader";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { Dimensions } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme() as "light" | "dark";
-  const ScreenHeight = Dimensions.get("screen").height;
+  const ScreenHeight = Dimensions.get("window").height;
+
+  const insets = useSafeAreaInsets();
 
   return (
     <Tabs
@@ -19,8 +22,8 @@ export default function TabLayout() {
         tabBarStyle: {
           backgroundColor: Colors[colorScheme].tabBackground,
           borderTopColor: Colors[colorScheme].tabIcon,
-          height: ScreenHeight * 0.085,
-          paddingBottom: 6,
+          height: ScreenHeight * 0.085 + insets.bottom,
+          paddingBottom: insets.bottom,
           paddingTop: 6,
         },
         tabBarInactiveTintColor: Colors[colorScheme].tabIconDefault,
