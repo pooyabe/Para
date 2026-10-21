@@ -9,16 +9,25 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner-native";
 
 export const useLoanForm = () => {
+  // تبدیل تاریخ شمسی به میلادی
+  const { toGregorian, nowJalali } = useShamsiDate();
+  const todayJalali = nowJalali();
+  const todayGregorian = toGregorian(todayJalali);
+
   const [loan_type, setLoanType] = useState<"receivable" | "payable">(
     "receivable",
   );
   const [loan_amount, setLoanAmount] = useState<number | null>(null);
   const [loan_source, setLoanSource] = useState<string | null>(null);
   const [loan_description, setLoanDescription] = useState<string>("");
-  const [loan_start_date, setLoanStartDate] = useState<string>("");
-  const [loan_end_date, setLoanEndDate] = useState<string>("");
-  const [shamsiStartDate, setShamsiStartDate] = useState<string | undefined>();
-  const [shamsiEndDate, setShamsiEndDate] = useState<string | undefined>();
+  const [loan_start_date, setLoanStartDate] = useState<string>(todayGregorian);
+  const [loan_end_date, setLoanEndDate] = useState<string>(todayGregorian);
+  const [shamsiStartDate, setShamsiStartDate] = useState<string | undefined>(
+    todayJalali,
+  );
+  const [shamsiEndDate, setShamsiEndDate] = useState<string | undefined>(
+    todayJalali,
+  );
   const [thePriceString, setThePriceString] = useState("");
   // تبدیل عدد به متن
   const printPriceString = (val: number | null) => {
@@ -26,8 +35,6 @@ export const useLoanForm = () => {
     setLoanAmount(val);
   };
 
-  // تبدیل تاریخ شمسی به میلادی
-  const { toGregorian, nowJalali } = useShamsiDate();
   const handleStartDateChange = (date: string) => {
     setShamsiStartDate(date);
     const georgianDate = toGregorian(date);
@@ -70,7 +77,7 @@ export const useLoanForm = () => {
       loan_amount === undefined
     ) {
       toast.warning("همه گزینه‌های الزامی را پر کنید!");
-      return;
+      return false;
     }
 
     try {
@@ -86,10 +93,16 @@ export const useLoanForm = () => {
       printPriceString(null);
       setLoanSource(null);
       setLoanDescription("");
+      setLoanType("receivable");
+      const currentToday = nowJalali();
+      handleStartDateChange(currentToday);
+      handleEndDateChange(currentToday);
       toast.success("وام با موفقیت ذخیره شد ;)");
+      return true;
     } catch (e) {
       toast.error("خطا در ذخیره‌سازی وام!");
       console.error("❌ خطا در ذخیره:", e);
+      return false;
     }
   };
 

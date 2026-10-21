@@ -25,12 +25,11 @@ export function Date({ SelectedDate, todayMax = false, futureYears = 100, ...oth
 
   const { nowJalali, toGregorian } = useShamsiDate();
 
-  const [OpenLabel, setOpenLabel] = useState(
-    SelectedDate ? `تاریخ: ${SelectedDate}` : `امروز: ${nowJalali()}`
-  );
-
-  // Get Today Date in Jalali Format
   const JtodayDate = nowJalali();
+
+  const displayDate = SelectedDate || JtodayDate;
+  const labelPrefix = SelectedDate ? "تاریخ: " : "امروز: ";
+  const OpenLabel = `${labelPrefix}${displayDate}`;
 
   // Create a far future date in Jalali (current year + futureYears)
   const todayParts = JtodayDate.split('/');
@@ -164,7 +163,6 @@ export function Date({ SelectedDate, todayMax = false, futureYears = 100, ...oth
             onDateChange={(date: Date) => {
               if (typeof other.onDateChange === "function") {
                 other.onDateChange(date);
-                setOpenLabel(`تاریخ: ${date}`);
               }
               setModalVisible(false);
             }}

@@ -39,6 +39,8 @@ export default function EditLoanPage() {
     handleEndDateChange,
   } = useLoanForm();
 
+  const isReceivable = loan_type === "receivable";
+
   const [loanData, setLoanData] = useState<Loan | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -120,6 +122,7 @@ export default function EditLoanPage() {
 
         <Radio
           Items={["قرض دادم", "پول گرفتم"]}
+          selectedIndex={isReceivable ? 0 : 1}
           onChangeValueWithIndex={(value, index) => {
             setLoanType(index === 0 ? "receivable" : "payable");
           }}
@@ -128,7 +131,7 @@ export default function EditLoanPage() {
         <Spacer height={20} />
 
         <Input
-          label="مبلغ نهایی پرداخت"
+          label={isReceivable ? "چقدر قرض دادی؟" : "چقدر گرفتی؟"}
           type="number"
           onChangeText={(value) => printPriceString(Number(value))}
           value={loan_amount?.toString() ?? ""}
@@ -141,8 +144,8 @@ export default function EditLoanPage() {
         <Spacer height={20} />
 
         <Input
-          label="محل/شخص وام"
-          placeholder="عنوان وام"
+          label={isReceivable ? "به کی دادی؟" : "از کی گرفتی؟"}
+          placeholder={isReceivable ? "نام شخص یا محل" : "نام وام یا شخص"}
           onChangeText={(value) => setLoanSource(value)}
           value={loan_source ?? ""}
         />
@@ -158,7 +161,9 @@ export default function EditLoanPage() {
 
         <Spacer height={20} />
 
-        <Span type="subtitle">تاریخ شروع</Span>
+        <Span type="subtitle">
+          {isReceivable ? "تاریخ قرض دادن" : "تاریخ دریافت"}
+        </Span>
         <Date
           SelectedDate={shamsiStartDate}
           onDateChange={(date: string) => {
@@ -170,7 +175,9 @@ export default function EditLoanPage() {
 
         <Spacer height={20} />
 
-        <Span type="subtitle">تاریخ تسویه</Span>
+        <Span type="subtitle">
+          {isReceivable ? "تاریخ پس گرفتن" : "تاریخ سررسید بازپرداخت"}
+        </Span>
         <Date
           SelectedDate={shamsiEndDate}
           onDateChange={(date: string) => {

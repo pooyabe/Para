@@ -9,6 +9,7 @@ import {
   Span,
 } from "@/components/Elements";
 import { useLoanForm } from "@/hooks/BackEnd/Pages/useLoanForm";
+import { router } from "expo-router";
 import { StyleSheet } from "react-native";
 
 export default function AddLoanPage() {
@@ -29,6 +30,15 @@ export default function AddLoanPage() {
     setLoanDescription,
   } = useLoanForm();
 
+  const isReceivable = loan_type === "receivable";
+
+  const handleSave = async () => {
+    const success = await saveLoan();
+    if (success) {
+      router.back();
+    }
+  };
+
   return (
     <Mother>
       <Div style={styles.container}>
@@ -38,6 +48,7 @@ export default function AddLoanPage() {
 
         <Radio
           Items={["قرض دادم", "پول گرفتم"]}
+          selectedIndex={isReceivable ? 0 : 1}
           onChangeValueWithIndex={(value, index) => {
             setLoanType(index === 0 ? "receivable" : "payable");
           }}
@@ -46,7 +57,7 @@ export default function AddLoanPage() {
         <Spacer height={20} />
 
         <Input
-          label="مبلغ نهایی پرداخت"
+          label={isReceivable ? "چقدر قرض دادی؟" : "چقدر گرفتی؟"}
           type="number"
           onChangeText={(value) => printPriceString(Number(value))}
           value={loan_amount?.toString() ?? ""}
@@ -59,8 +70,8 @@ export default function AddLoanPage() {
         <Spacer height={20} />
 
         <Input
-          label="محل/شخص وام"
-          placeholder="عنوان وام"
+          label={isReceivable ? "به کی دادی؟" : "از کی گرفتی؟"}
+          placeholder={isReceivable ? "نام شخص یا محل" : "نام وام یا شخص"}
           onChangeText={(value) => setLoanSource(value)}
           value={loan_source ?? ""}
         />
@@ -76,7 +87,9 @@ export default function AddLoanPage() {
 
         <Spacer height={20} />
 
-        <Span type="subtitle">تاریخ شروع</Span>
+        <Span type="subtitle">
+          {isReceivable ? "تاریخ قرض دادن" : "تاریخ دریافت"}
+        </Span>
         <Date
           SelectedDate={shamsiStartDate}
           onDateChange={(date: string) => {
@@ -88,7 +101,9 @@ export default function AddLoanPage() {
 
         <Spacer height={20} />
 
-        <Span type="subtitle">تاریخ تسویه</Span>
+        <Span type="subtitle">
+          {isReceivable ? "تاریخ پس گرفتن" : "تاریخ سررسید بازپرداخت"}
+        </Span>
         <Date
           SelectedDate={shamsiEndDate}
           onDateChange={(date: string) => {
@@ -99,7 +114,7 @@ export default function AddLoanPage() {
 
         <Spacer />
 
-        <SButton text="ذخیره وام" onPress={saveLoan} />
+        <SButton text="ذخیره وام" onPress={handleSave} />
       </Div>
     </Mother>
   );

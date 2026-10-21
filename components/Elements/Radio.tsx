@@ -2,7 +2,7 @@ import { useThemeColor } from "@/hooks/useThemeColor";
 import SegmentedControl, {
   SegmentedControlProps,
 } from "@react-native-segmented-control/segmented-control";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Span } from "./Span";
 
 export type RadioProps = SegmentedControlProps & {
@@ -15,15 +15,25 @@ export function Radio({
   Items = [],
   label = "",
   style,
+  selectedIndex: propSelectedIndex,
   onChangeValueWithIndex,
   ...otherProps
 }: RadioProps) {
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [selectedIndex, setSelectedIndex] = useState(propSelectedIndex ?? 0);
+
+  useEffect(() => {
+    if (propSelectedIndex !== undefined) {
+      setSelectedIndex(propSelectedIndex);
+    }
+  }, [propSelectedIndex]);
 
   const textColor = useThemeColor({}, "text");
   const tintColor = useThemeColor({}, "tint");
   const backgroundColor = useThemeColor({}, "background");
   const theLightBlue = useThemeColor({}, "theLightBlue");
+
+  const currentIndex =
+    propSelectedIndex !== undefined ? propSelectedIndex : selectedIndex;
 
   return (
     <>
@@ -40,7 +50,7 @@ export function Radio({
       </Span>
       <SegmentedControl
         values={Items}
-        selectedIndex={selectedIndex}
+        selectedIndex={currentIndex}
         onChange={(event) => {
           const newIndex = event.nativeEvent.selectedSegmentIndex;
           setSelectedIndex(newIndex);
