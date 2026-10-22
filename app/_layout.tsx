@@ -1,8 +1,3 @@
-import {
-  DarkTheme,
-  DefaultTheme,
-  ThemeProvider,
-} from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -43,47 +38,43 @@ export default function RootLayout() {
   return (
     <SafeAreaProvider>
       <GestureHandlerRootView>
-        <ThemeProvider
-          value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+        <Stack
+          screenOptions={{
+            headerShown: false,
+            contentStyle: {
+              backgroundColor:
+                colorScheme === "dark"
+                  ? Colors["dark"].background
+                  : Colors["light"].background,
+            },
+            animation: "fade",
+            animationMatchesGesture: true,
+            animationTypeForReplace: "pop",
+          }}
         >
-          <Stack
-            screenOptions={{
-              headerShown: false,
-              contentStyle: {
-                backgroundColor:
-                  colorScheme === "dark"
-                    ? Colors["dark"].background
-                    : Colors["light"].background,
-              },
-              animation: "fade",
-              animationMatchesGesture: true,
-              animationTypeForReplace: "pop",
-            }}
-          >
-            <Stack.Screen name="(tabs)" />
-            <Stack.Screen name="(reports)" />
-            <Stack.Screen name="+not-found" />
-          </Stack>
-          <Toaster
-            style={{
-              backgroundColor: Colors[colorScheme].text,
-              borderRadius: 100,
-            }}
-            styles={{
-              title: {
-                fontFamily: "VazirSemiBold",
-                direction: "rtl",
-                color: Colors[colorScheme].tabBackground,
-                textAlign: "left",
-              },
-              toastContainer: {
-                direction: "ltr",
-              },
-            }}
-            position="top-center"
-          />
-          <StatusBar style="light" />
-        </ThemeProvider>
+          <Stack.Screen name="(tabs)" />
+          <Stack.Screen name="(reports)" />
+          <Stack.Screen name="+not-found" />
+        </Stack>
+        <Toaster
+          style={{
+            backgroundColor: Colors[colorScheme].text,
+            borderRadius: 100,
+          }}
+          styles={{
+            title: {
+              fontFamily: "VazirSemiBold",
+              direction: "rtl",
+              color: Colors[colorScheme].tabBackground,
+              textAlign: "left",
+            },
+            toastContainer: {
+              direction: "ltr",
+            },
+          }}
+          position="top-center"
+        />
+        <StatusBar style="light" />
       </GestureHandlerRootView>
     </SafeAreaProvider>
   );
