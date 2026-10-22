@@ -18,7 +18,6 @@ export default function LoansPage() {
   const { toJalali } = useShamsiDate();
 
   const loadLoans = useCallback(async () => {
-    if (loading) return;
     setLoading(true);
     try {
       const loanList = await getLoans(showAll);
@@ -28,7 +27,7 @@ export default function LoansPage() {
     } finally {
       setLoading(false);
     }
-  }, [showAll, loading]);
+  }, [showAll]);
 
   useEffect(() => {
     loadLoans();
