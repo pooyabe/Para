@@ -369,7 +369,11 @@ export default function LoansPage() {
         <View style={styles.modalOverlay}>
           <View style={styles.modalContentWrapper}>
             <View style={styles.modalHeader}>
-              <Span type="title" style={styles.modalTitle}>
+              <Span
+                type="title"
+                style={[styles.modalTitle, styles.modalTitleTruncated]}
+                numberOfLines={1}
+              >
                 جزئیات پرداخت‌ها/دریافت‌ها برای {modalLoan?.source}
               </Span>
               <TouchableOpacity onPress={() => setModalLoan(null)} style={styles.closeButton}>
@@ -630,6 +634,12 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 18,
     fontWeight: "600",
+    flex: 1,
+    paddingRight: 10,
+  },
+  modalTitleTruncated: {
+    flex: 1,
+    paddingRight: 10,
   },
   closeButton: {
     padding: 10,
