@@ -1,18 +1,21 @@
-import { Div, IconSymbol, Mother, Spacer, Span } from "@/components/Elements";
+import { Div, IconSymbol, Mother, Select, Spacer, Span } from "@/components/Elements";
 import { Colors } from "@/constants/Colors";
 import { useShamsiDate } from "@/hooks/BackEnd/useShamsiDate";
-import { deleteLoan, getLoans } from "@/hooks/DB";
+import { deleteLoan, getLoans, getLoanPayments, LoanPayment } from "@/hooks/DB";
 import { Loan } from "@/hooks/DB/actions/getLoans";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { router, useFocusEffect } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
-import { Alert, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
+import { Alert, Modal, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import { toast } from "sonner-native";
 
 export default function LoansPage() {
   const [loans, setLoans] = useState<Loan[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [showAll, setShowAll] = useState<boolean>(false);
+  const [viewMode, setViewMode] = useState<"all" | "active" | "settled">("all");
+  const [modalLoan, setModalLoan] = useState<Loan | null>(null);
+  const [modalPayments, setModalPayments] = useState<LoanPayment[]>([]);
+  const [modalLoading, setModalLoading] = useState<boolean>(false);
 
   const colorScheme = useColorScheme() as "light" | "dark";
   const { toJalali } = useShamsiDate();
@@ -20,14 +23,26 @@ export default function LoansPage() {
   const loadLoans = useCallback(async () => {
     setLoading(true);
     try {
-      const loanList = await getLoans(showAll);
+      let loanList: Loan[];
+      if (viewMode === "settled") {
+        loanList = await getLoans(true);
+        loanList = loanList.filter((l) => l.is_settled === 1);
+      } else if (viewMode === "active") {
+        loanList = await getLoans(false);
+        loanList = loanList.filter(
+          (l) => l.is_settled === 0 || l.is_settled === undefined
+        );
+      } else {
+        loanList = await getLoans(true);
+        loanList = loanList.filter((l) => l.is_settled === 0);
+      }
       setLoans(loanList);
     } catch (error) {
       console.error("Error loading loans:", error);
     } finally {
       setLoading(false);
     }
-  }, [showAll]);
+  }, [viewMode]);
 
   useEffect(() => {
     loadLoans();
@@ -37,7 +52,7 @@ export default function LoansPage() {
   useFocusEffect(
     useCallback(() => {
       loadLoans();
-    }, [loadLoans]),
+    }, [loadLoans])
   );
 
   const handleDeleteLoan = async (id: number) => {
@@ -72,6 +87,20 @@ export default function LoansPage() {
     });
   };
 
+  const handleViewPayments = async (loan: Loan) => {
+    setModalLoan(loan);
+    setModalLoading(true);
+    try {
+      const payments = await getLoanPayments(loan.id);
+      setModalPayments(payments);
+    } catch (error) {
+      console.error("Error loading payments:", error);
+      toast.error("خطا در بارگذاری جزئیات پرداخت");
+    } finally {
+      setModalLoading(false);
+    }
+  };
+
   const formatAmount = (amount: number) => {
     return amount.toLocaleString("fa-IR");
   };
@@ -98,54 +127,28 @@ export default function LoansPage() {
     <Mother style={styles.container} _Hpadding={0}>
       <Div style={styles.Header}>
         <Span type="title" style={styles.headerTitle}>
-          مدیریت وام و طلب
+          مديريت وام و طلب
         </Span>
 
-        <Div style={styles.headerButtons}>
-          {/* Settled Loans List Button */}
-          <TouchableOpacity
-            onPress={() => router.navigate("/loans/settled")}
-            style={styles.iconButton}
-          >
-            <IconSymbol
-              type="MaterialIcons"
-              name="list-alt"
-              size={24}
-              color={Colors[colorScheme].text}
-            />
-          </TouchableOpacity>
-        </Div>
+        <Div style={styles.headerButtons} />
       </Div>
 
-      {/* Show All Toggle */}
+      {/* View Mode Selector */}
       <Div style={styles.toggleContainer}>
-        <TouchableOpacity
-          onPress={() => setShowAll(!showAll)}
-          style={[styles.toggleButton, showAll && styles.toggleButtonActive]}
-        >
-          <IconSymbol
-            type="MaterialIcons"
-            name={showAll ? "expand-less" : "expand-more"}
-            size={18}
-            color={
-              showAll
-                ? Colors[colorScheme].tabBackground
-                : Colors[colorScheme].text
-            }
-          />
-          <Span
-            type="default"
-            style={{
-              fontSize: 12,
-              color: showAll
-                ? Colors[colorScheme].tabBackground
-                : Colors[colorScheme].text,
-              marginRight: 5,
-            }}
-          >
-            {showAll ? "نمایش فقط فعال" : "نمایش همه (شامل تسویه شده)"}
-          </Span>
-        </TouchableOpacity>
+        <Select
+          label="نمایش"
+          placeholder="نمایش"
+          items_array={[
+            { label: "وام‌های فعال", value: "active" },
+            { label: "تمام وام‌ها", value: "all" },
+            { label: "وام‌های تسویه شده", value: "settled" },
+          ]}
+          searchable={false}
+          onValueChange={(value: string) =>
+            setViewMode(value as "all" | "active" | "settled")
+          }
+          initialValue={viewMode}
+        />
       </Div>
 
       <Spacer height={10} />
@@ -316,6 +319,17 @@ export default function LoansPage() {
                   color="#F44336"
                 />
               </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => handleViewPayments(loan)}
+                style={styles.iconButton}
+              >
+                <IconSymbol
+                  type="Ionicons"
+                  name="list-outline"
+                  size={22}
+                  color="#4CAF50"
+                />
+              </TouchableOpacity>
             </Div>
           </TouchableOpacity>
         ))}
@@ -336,24 +350,104 @@ export default function LoansPage() {
             />
             <Spacer height={10} />
             <Span style={styles.emptyText}>
-              {showAll ? "هیچامی یافت نشد" : "هیچ وام فعالی یافت نشد"}
+              {viewMode === "active"
+                ? "هیچ وام فعالی یافت نشد"
+                : "هیچ وام تسویه شده‌ای یافت نشد"}
             </Span>
           </Div>
         )}
       </ScrollView>
 
-      {/* Add Loan Button at bottom */}
-      <TouchableOpacity
-        onPress={() => router.navigate("/loans/add")}
-        style={styles.fab}
+      {/* Payments Modal */}
+      <Modal
+        visible={!!modalLoan}
+        animationType="slide"
+        presentationStyle="pageSheet"
+        transparent={true}
+        onRequestClose={() => setModalLoan(null)}
       >
-        <IconSymbol
-          type="MaterialIcons"
-          name="add"
-          size={28}
-          color={Colors[colorScheme].tabBackground}
-        />
-      </TouchableOpacity>
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContentWrapper}>
+            <View style={styles.modalHeader}>
+              <Span type="title" style={styles.modalTitle}>
+                جزئیات پرداخت‌ها/دریافت‌ها برای {modalLoan?.source}
+              </Span>
+              <TouchableOpacity onPress={() => setModalLoan(null)} style={styles.closeButton}>
+                <Span style={styles.closeIcon}>✕</Span>
+              </TouchableOpacity>
+            </View>
+
+            {modalLoading ? (
+              <View style={styles.modalLoadingContainer}>
+                <Span style={styles.loadingText}>در حال بارگذاری...</Span>
+              </View>
+            ) : (
+              <ScrollView style={styles.modalScrollView}>
+                {modalLoan?.description && (
+                  <>
+                    <Spacer height={10} />
+                    <Div style={styles.descriptionContainer}>
+                      <Span type="default" style={styles.descriptionLabel}>
+                        توضیحات:
+                      </Span>
+                      <Span type="default" style={styles.descriptionText}>
+                        {modalLoan.description}
+                      </Span>
+                    </Div>
+                  </>
+                )}
+
+                <Spacer height={15} />
+                <Div style={styles.divider} />
+                <Spacer height={10} />
+                <Span type="subtitle" style={styles.paymentsTitle}>
+                  جزئیات پرداخت‌ها/دریافت‌ها
+                </Span>
+                <Spacer height={10} />
+
+                {modalPayments.length === 0 ? (
+                  <Span style={styles.emptyPaymentsText}>
+                    هیچ پرداختی/دریافتی ثبت نشده است
+                  </Span>
+                ) : (
+                  modalPayments.map((payment) => (
+                    <View key={payment.id} style={styles.paymentItem}>
+                      <Div style={styles.paymentInfo}>
+                        <Span
+                          type="default"
+                          style={[
+                            styles.paymentType,
+                            payment.type === "receipt"
+                              ? styles.receiptType
+                              : styles.paymentTypeColor,
+                          ]}
+                        >
+                          {payment.type === "receipt" ? "دریافت" : "پرداخت"}
+                        </Span>
+                        <Span type="default" style={styles.paymentDate}>
+                          {toJalali(payment.payment_date)}
+                        </Span>
+                      </Div>
+                      <Span
+                        type="subtitle"
+                        style={[
+                          styles.paymentAmount,
+                          payment.type === "receipt"
+                            ? styles.incomeColor
+                            : styles.spendingColor,
+                        ]}
+                      >
+                        {payment.type === "receipt" ? "+" : "-"}
+                        {formatAmount(payment.amount)}
+                      </Span>
+                    </View>
+                  ))
+                )}
+              </ScrollView>
+            )}
+          </View>
+        </View>
+      </Modal>
     </Mother>
   );
 }
@@ -382,28 +476,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 15,
   },
-  addButton: {
-    padding: 10,
-  },
   iconButton: {
     padding: 10,
   },
   toggleContainer: {
     paddingHorizontal: 20,
     paddingBottom: 10,
-  },
-  toggleButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 15,
-    paddingVertical: 8,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: "#2196F3",
-    backgroundColor: "transparent",
-  },
-  toggleButtonActive: {
-    backgroundColor: "#2196F3",
   },
   scrollView: {
     flex: 1,
@@ -545,20 +623,101 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: 10,
   },
-  fab: {
-    position: "absolute",
-    bottom: 30,
-    right: 30,
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    backgroundColor: "#0a7ea4",
+  // Modal styles
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
     justifyContent: "center",
     alignItems: "center",
-    elevation: 4,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
+  },
+  modalContentWrapper: {
+    backgroundColor: Colors.dark.background,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    width: "100%",
+    maxHeight: "80%",
+    position: "absolute",
+    bottom: 0,
+  },
+  modalHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: "rgba(255, 255, 255, 0.1)",
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: "600",
+  },
+  closeButton: {
+    padding: 10,
+  },
+  closeIcon: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#888",
+  },
+  modalLoadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 20,
+  },
+  modalScrollView: {
+    padding: 20,
+  },
+  divider: {
+    height: 1,
+    backgroundColor: "rgba(255, 255, 255, 0.1)",
+    marginVertical: 5,
+  },
+  paymentsTitle: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#888",
+  },
+  paymentItem: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: "rgba(255, 255, 255, 0.05)",
+  },
+  paymentInfo: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+  },
+  paymentType: {
+    fontSize: 12,
+    fontWeight: "600",
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 10,
+  },
+  receiptType: {
+    color: "#4CAF50",
+    backgroundColor: "rgba(76, 175, 80, 0.15)",
+  },
+  paymentTypeColor: {
+    color: "#F44336",
+    backgroundColor: "rgba(244, 67, 54, 0.15)",
+  },
+  paymentDate: {
+    fontSize: 12,
+    color: "#888",
+  },
+  paymentAmount: {
+    fontSize: 14,
+    fontWeight: "bold",
+  },
+  emptyPaymentsText: {
+    fontSize: 14,
+    color: "#888",
+    textAlign: "center",
+    fontStyle: "italic",
   },
 });
