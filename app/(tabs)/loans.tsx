@@ -48,7 +48,8 @@ export default function LoansPage() {
         );
       } else {
         loanList = await getLoans(true);
-        loanList = loanList.filter((l) => l.is_settled === 0);
+        // Show all loans regardless of settlement status when viewMode is "all"
+        // No filter applied - keep all loans (settled, active, and unsettled)
       }
       setLoans(loanList);
     } catch (error) {
