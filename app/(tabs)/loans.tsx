@@ -1,12 +1,26 @@
-import { Div, IconSymbol, Mother, Select, Spacer, Span } from "@/components/Elements";
+import {
+  Div,
+  IconSymbol,
+  Mother,
+  Select,
+  Spacer,
+  Span,
+} from "@/components/Elements";
 import { Colors } from "@/constants/Colors";
 import { useShamsiDate } from "@/hooks/BackEnd/useShamsiDate";
-import { deleteLoan, getLoans, getLoanPayments, LoanPayment } from "@/hooks/DB";
+import { deleteLoan, getLoanPayments, getLoans, LoanPayment } from "@/hooks/DB";
 import { Loan } from "@/hooks/DB/actions/getLoans";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { router, useFocusEffect } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
-import { Alert, Modal, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
+import {
+  Alert,
+  Modal,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { toast } from "sonner-native";
 
 export default function LoansPage() {
@@ -30,7 +44,7 @@ export default function LoansPage() {
       } else if (viewMode === "active") {
         loanList = await getLoans(false);
         loanList = loanList.filter(
-          (l) => l.is_settled === 0 || l.is_settled === undefined
+          (l) => l.is_settled === 0 || l.is_settled === undefined,
         );
       } else {
         loanList = await getLoans(true);
@@ -52,11 +66,11 @@ export default function LoansPage() {
   useFocusEffect(
     useCallback(() => {
       loadLoans();
-    }, [loadLoans])
+    }, [loadLoans]),
   );
 
   const handleDeleteLoan = async (id: number) => {
-    Alert.alert("حذف وام", "آیا می‌خواهید این وام را حذف کنید؟", [
+    Alert.alert("حذف", "آیا می‌خواهید این مورد را حذف کنید؟", [
       {
         text: "لغو",
         onPress: () => {},
@@ -69,7 +83,7 @@ export default function LoansPage() {
             const success = await deleteLoan(id);
             if (success) {
               setLoans((prev) => prev.filter((l) => l.id !== id));
-              toast.success("وام با موفقیت حذف شد");
+              toast.success("مورد با موفقیت حذف شد");
             }
           } catch (error) {
             console.error("Error deleting loan:", error);
@@ -130,6 +144,8 @@ export default function LoansPage() {
           مديريت وام و طلب
         </Span>
 
+        <Spacer height={80} />
+
         <Div style={styles.headerButtons} />
       </Div>
 
@@ -139,9 +155,9 @@ export default function LoansPage() {
           label="نمایش"
           placeholder="نمایش"
           items_array={[
-            { label: "وام‌های فعال", value: "active" },
-            { label: "تمام وام‌ها", value: "all" },
-            { label: "وام‌های تسویه شده", value: "settled" },
+            { label: "تسویه نشده", value: "active" },
+            { label: "تمام موارد", value: "all" },
+            { label: "موارد تسویه شده", value: "settled" },
           ]}
           searchable={false}
           onValueChange={(value: string) =>
@@ -351,8 +367,8 @@ export default function LoansPage() {
             <Spacer height={10} />
             <Span style={styles.emptyText}>
               {viewMode === "active"
-                ? "هیچ وام فعالی یافت نشد"
-                : "هیچ وام تسویه شده‌ای یافت نشد"}
+                ? "بده بستونی نداری!"
+                : "فعلا تسویه‌ای نداشتی!"}
             </Span>
           </Div>
         )}
@@ -374,9 +390,12 @@ export default function LoansPage() {
                 style={[styles.modalTitle, styles.modalTitleTruncated]}
                 numberOfLines={1}
               >
-{modalLoan?.source}
+                {modalLoan?.source}
               </Span>
-              <TouchableOpacity onPress={() => setModalLoan(null)} style={styles.closeButton}>
+              <TouchableOpacity
+                onPress={() => setModalLoan(null)}
+                style={styles.closeButton}
+              >
                 <Span style={styles.closeIcon}>✕</Span>
               </TouchableOpacity>
             </View>
@@ -386,7 +405,10 @@ export default function LoansPage() {
                 <Span style={styles.loadingText}>در حال بارگذاری...</Span>
               </View>
             ) : (
-              <ScrollView style={styles.modalScrollView} contentContainerStyle={{paddingBottom: 50}}>
+              <ScrollView
+                style={styles.modalScrollView}
+                contentContainerStyle={{ paddingBottom: 50 }}
+              >
                 <Spacer height={10} />
                 {modalPayments.length === 0 ? (
                   <Span style={styles.emptyPaymentsText} type="subtitle">
@@ -423,10 +445,9 @@ export default function LoansPage() {
                         {payment.type === "receipt" ? "+" : "-"}
                         {formatAmount(payment.amount)}
                       </Span>
-
                     </View>
                   ))
-                  )}
+                )}
               </ScrollView>
             )}
           </View>
@@ -703,7 +724,7 @@ const styles = StyleSheet.create({
   paymentAmount: {
     fontSize: 14,
     fontWeight: "bold",
-    direction: "ltr"
+    direction: "ltr",
   },
   emptyPaymentsText: {
     textAlign: "center",
