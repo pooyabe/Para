@@ -374,7 +374,7 @@ export default function LoansPage() {
                 style={[styles.modalTitle, styles.modalTitleTruncated]}
                 numberOfLines={1}
               >
-                جزئیات پرداخت‌ها/دریافت‌ها برای {modalLoan?.source}
+{modalLoan?.source}
               </Span>
               <TouchableOpacity onPress={() => setModalLoan(null)} style={styles.closeButton}>
                 <Span style={styles.closeIcon}>✕</Span>
