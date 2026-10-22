@@ -115,19 +115,6 @@ export default function LoansPage() {
               color={Colors[colorScheme].text}
             />
           </TouchableOpacity>
-
-          {/* Add New Loan Button */}
-          <TouchableOpacity
-            onPress={() => router.navigate("/loans/add")}
-            style={styles.addButton}
-          >
-            <IconSymbol
-              type="MaterialIcons"
-              name="add"
-              size={24}
-              color={Colors[colorScheme].text}
-            />
-          </TouchableOpacity>
         </Div>
       </Div>
 
