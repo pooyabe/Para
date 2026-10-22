@@ -363,7 +363,7 @@ export default function LoansPage() {
         visible={!!modalLoan}
         animationType="slide"
         presentationStyle="pageSheet"
-        transparent={true}
+        backdropColor="rgba(0,0,0,0.05)"
         onRequestClose={() => setModalLoan(null)}
       >
         <View style={styles.modalOverlay}>
@@ -382,32 +382,11 @@ export default function LoansPage() {
                 <Span style={styles.loadingText}>در حال بارگذاری...</Span>
               </View>
             ) : (
-              <ScrollView style={styles.modalScrollView}>
-                {modalLoan?.description && (
-                  <>
-                    <Spacer height={10} />
-                    <Div style={styles.descriptionContainer}>
-                      <Span type="default" style={styles.descriptionLabel}>
-                        توضیحات:
-                      </Span>
-                      <Span type="default" style={styles.descriptionText}>
-                        {modalLoan.description}
-                      </Span>
-                    </Div>
-                  </>
-                )}
-
-                <Spacer height={15} />
-                <Div style={styles.divider} />
+              <ScrollView style={styles.modalScrollView} contentContainerStyle={{paddingBottom: 50}}>
                 <Spacer height={10} />
-                <Span type="subtitle" style={styles.paymentsTitle}>
-                  جزئیات پرداخت‌ها/دریافت‌ها
-                </Span>
-                <Spacer height={10} />
-
                 {modalPayments.length === 0 ? (
-                  <Span style={styles.emptyPaymentsText}>
-                    هیچ پرداختی/دریافتی ثبت نشده است
+                  <Span style={styles.emptyPaymentsText} type="subtitle">
+                    هیچ پرداختی ثبت نشده!
                   </Span>
                 ) : (
                   modalPayments.map((payment) => (
@@ -440,9 +419,10 @@ export default function LoansPage() {
                         {payment.type === "receipt" ? "+" : "-"}
                         {formatAmount(payment.amount)}
                       </Span>
+
                     </View>
                   ))
-                )}
+                  )}
               </ScrollView>
             )}
           </View>
@@ -682,7 +662,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingVertical: 8,
+    paddingVertical: 15,
     borderBottomWidth: 1,
     borderBottomColor: "rgba(255, 255, 255, 0.05)",
   },
@@ -713,11 +693,9 @@ const styles = StyleSheet.create({
   paymentAmount: {
     fontSize: 14,
     fontWeight: "bold",
+    direction: "ltr"
   },
   emptyPaymentsText: {
-    fontSize: 14,
-    color: "#888",
     textAlign: "center",
-    fontStyle: "italic",
   },
 });
