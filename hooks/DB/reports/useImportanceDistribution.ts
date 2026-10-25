@@ -1,4 +1,8 @@
-import { getDateRange, RangeType } from "@/hooks/BackEnd/useDateRange";
+import {
+  CustomRange,
+  getDateRange,
+  RangeType,
+} from "@/hooks/BackEnd/useDateRange";
 import { useShamsiDate } from "@/hooks/BackEnd/useShamsiDate";
 import { getDbConnection } from "../helpers";
 
@@ -18,11 +22,12 @@ export type ImportanceData = {
 
 export async function getImportanceDistribution(
   rangeKey: RangeType,
+  customRange?: CustomRange,
 ): Promise<ImportanceData> {
   const db = await getDbConnection();
   const { toGregorian } = useShamsiDate();
 
-  const { startDate, endDate } = await getDateRange(rangeKey);
+  const { startDate, endDate } = await getDateRange(rangeKey, customRange);
 
   const G_StartDate = toGregorian(startDate);
   const G_EndDate = toGregorian(endDate);

@@ -1,55 +1,43 @@
-import { getDateRange, RangeType } from "@/hooks/BackEnd/useDateRange";
-import { useShamsiDate } from "@/hooks/BackEnd/useShamsiDate";
+import {
+  CustomRange,
+  getDateRange,
+  RangeType,
+} from "@/hooks/BackEnd/useDateRange";
 import moment from "jalali-moment";
 import { getDbConnection } from "../helpers";
 
 export async function getMonthlyReport(
   dataSoure: string,
-  rangeKey: RangeType
+  rangeKey: RangeType,
+  customRange?: CustomRange
 ): Promise<{ value: number; label: string }[]> {
   // Connecting to data base
   const db = await getDbConnection();
 
-  // Use Shamsi date hook for converts
-  const { toGregorian, toJalali } = useShamsiDate();
-
   // Get the range date and set start date and end date
-  const { startDate, endDate } = await getDateRange(rangeKey);
+  const { startDate, endDate } = await getDateRange(rangeKey, customRange);
 
-  // Get date range in Database format
-  const start = moment(startDate, "YYYY-MM-DD");
-  const end = moment(endDate, "YYYY-MM-DD");
-
-  const current = start.clone().startOf("month");
-
-  // Declare months arrays
-  const months: string[] = [];
-
-  while (current.isSameOrBefore(end, "month")) {
-    months.push(current.format("YYYY-MM-DD"));
-    current.add(1, "month");
-  }
-  // An Extra step for this month
-  months.push(current.format("YYYY-MM-DD"));
-  current.add(1, "month");
+  // ← کار با تاریخ شمسی واقعی (نه تبدیل رشته میلادی)
+  const start = moment.from(startDate, "fa", "jYYYY/jMM/jDD");
+  const end = moment.from(endDate, "fa", "jYYYY/jMM/jDD");
 
   // Decalre the Promised vars
-  const returnOutput = [];
+  const returnOutput: { value: number; label: string }[] = [];
 
   /**
    *
-   * Check if the range is this month or not
+   * The selected period is inside one month → show it day by day
+   * (هر روز یک ستون با برچسب DD/MM)
    *
    */
-  const isSingleMonth = rangeKey === "month";
+  const isSingleMonth = startDate.slice(0, 7) === endDate.slice(0, 7);
 
   if (isSingleMonth) {
-    const daysCount = end.diff(start, "days") + 1;
+    const day = start.clone();
 
-    for (let i = 0; i < daysCount; i++) {
-      const day = start.clone().add(i, "days");
-
-      const G_Day = toGregorian(day.format("YYYY-MM-DD"));
+    while (day.isSameOrBefore(end, "day")) {
+      // Gregorian date of this day, for the query
+      const G_Day = day.format("YYYY-MM-DD");
 
       const sql = `SELECT SUM(amount) as total FROM ${dataSoure} WHERE transaction_date = ?`;
 
@@ -58,34 +46,32 @@ export async function getMonthlyReport(
       if (typeof theResult?.total === "number" && theResult.total > 1000) {
         returnOutput.push({
           value: theResult.total,
-          label: day.format("DD/MM"),
+          label: day.format("jDD/jMM"),
         });
       }
+
+      day.add(1, "day");
     }
   } else {
     /**
      *
-     * The range is not single month
+     * The selected period is in multiple months → one column per month
+     * (هر ماه یک ستون با برچسب YYYY/MM)
      *
      */
+    const current = start.clone().startOf("jMonth");
 
-    // Loop through all months
-    // cmi : Current Month Index
-    for (var cmi = 0; cmi < months.length; cmi++) {
-      const monthStart = moment(months[cmi] + "-01", "YYYY-MM-DD");
-      const monthEnd = monthStart.clone().endOf("month");
+    while (current.isSameOrBefore(end, "day")) {
+      const monthEnd = current.clone().endOf("jMonth");
+
+      // Keep the queried days inside the selected period
+      const from = current.isBefore(start, "day") ? start : current;
+      const to = monthEnd.isAfter(end, "day") ? end : monthEnd;
 
       // Converting dates
-      const JMS = monthStart.format("YYYY-MM-DD");
-      const GMS = toGregorian(JMS);
-      const JME = monthEnd.format("YYYY-MM-DD");
-      const GME = toGregorian(JME);
+      const GMS = from.format("YYYY-MM-DD");
+      const GME = to.format("YYYY-MM-DD");
 
-      /**
-       *
-       *
-       *
-       */
       const sql = `SELECT SUM(amount) as total FROM ${dataSoure} WHERE transaction_date BETWEEN ? AND ?`;
 
       const theResult = await db.getFirstAsync<{ total: number }>(sql, [
@@ -96,9 +82,11 @@ export async function getMonthlyReport(
       if (typeof theResult?.total === "number" && theResult.total > 1000) {
         returnOutput.push({
           value: theResult.total,
-          label: toJalali(GMS).substring(0, 7),
+          label: current.format("jYYYY/jMM"),
         });
       }
+
+      current.add(1, "jMonth");
     }
   }
 

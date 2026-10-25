@@ -1,4 +1,5 @@
 import {
+  Date,
   Div,
   GButton,
   IconSymbol,
@@ -8,13 +9,18 @@ import {
 } from "@/components/Elements";
 import { router } from "expo-router";
 import { ScrollView, StyleSheet, TouchableOpacity } from "react-native";
+import { toast } from "sonner-native";
 
 import { ImportanceDisplay } from "@/components/pageParts/reportsPage/ImportanceDisplay";
 import { OveralLineChart } from "@/components/pageParts/reportsPage/OveralLineChart";
 import { PieChartOne } from "@/components/pageParts/reportsPage/PieChartOne";
 import { useEffect, useState } from "react";
 
-import { type RangeType } from "@/hooks/BackEnd/useDateRange";
+import {
+  getDefaultCustomRange,
+  type CustomRange,
+  type RangeType,
+} from "@/hooks/BackEnd/useDateRange";
 import {
   getImportanceDistribution,
   type ImportanceData,
@@ -35,6 +41,12 @@ export default function ReportPage() {
 
   // This states set which date period button selected
   const [selectedRange, setSelectedRange] = useState<RangeType>("month");
+
+  // This state holds the custom period (from / to) selected by the user
+  const [customRange, setCustomRange] = useState<CustomRange | null>(null);
+
+  // This state shows / hides the custom period date pickers
+  const [showCustomDates, setShowCustomDates] = useState<boolean>(false);
 
   // This states hold the Overal top linechart data
   const [overalSpendingReport, setOveralSpendingReport] = useState<any[]>([]);
@@ -58,6 +70,7 @@ export default function ReportPage() {
     { key: "quarter", label: "سه ماهه" },
     { key: "sixmonth", label: "شش ماهه" },
     { key: "year", label: "یک ساله" },
+    { key: "custom", label: "بازه دلخواه" },
   ];
 
   /**
@@ -78,7 +91,48 @@ export default function ReportPage() {
   const handleSelect = async (rangeKey: RangeType): Promise<void> => {
     setSelectedRange(rangeKey);
 
+    // ← بازه دلخواه: نمایش تاریخ های از / تا و گرفتن گزارش همان بازه
+    if (rangeKey === "custom") {
+      const theCustomRange = customRange ?? getDefaultCustomRange();
+
+      setCustomRange(theCustomRange);
+      setShowCustomDates(true);
+
+      fetchData("custom", theCustomRange);
+
+      return;
+    }
+
+    setShowCustomDates(false);
+
     fetchData(rangeKey);
+  };
+
+  /**
+   *
+   * تغییر تاریخ های بازه دلخواه (از / تا)
+   *
+   */
+  const handleCustomDateChange = (
+    which: "from" | "to",
+    date: string,
+  ): void => {
+    const theCustomRange = customRange ?? getDefaultCustomRange();
+
+    const updatedRange: CustomRange =
+      which === "from"
+        ? { ...theCustomRange, startDate: date }
+        : { ...theCustomRange, endDate: date };
+
+    setCustomRange(updatedRange);
+
+    // ← تاریخ شروع نباید بعد از تاریخ پایان باشد
+    if (updatedRange.startDate > updatedRange.endDate) {
+      toast.warning("تاریخ شروع باید قبل از تاریخ پایان باشد!");
+      return;
+    }
+
+    fetchData("custom", updatedRange);
   };
 
   /**
@@ -89,20 +143,27 @@ export default function ReportPage() {
    *
    */
 
-  const fetchData = async (rangeKey: RangeType) => {
+  const fetchData = async (
+    rangeKey: RangeType,
+    theCustomRange?: CustomRange,
+  ) => {
     // Show loading
     setShowLoading(true);
 
     // Get Overal Spending data from DB
-    const osr = await getMonthlyReport("spendings", rangeKey);
+    const osr = await getMonthlyReport("spendings", rangeKey, theCustomRange);
     setOveralSpendingReport(osr);
 
     // Get percentage spending report
-    const psr = await getSpendingDistribution(rangeKey, SpendingPieColors);
+    const psr = await getSpendingDistribution(
+      rangeKey,
+      SpendingPieColors,
+      theCustomRange,
+    );
     setPercentageSpendingReport(psr);
 
     // Get importance distribution data
-    const impData = await getImportanceDistribution(rangeKey);
+    const impData = await getImportanceDistribution(rangeKey, theCustomRange);
     setImportanceData(impData);
 
     // Hide loading
@@ -164,6 +225,37 @@ export default function ReportPage() {
             ))}
           </ScrollView>
         </Div>
+        {showCustomDates && (
+          <Div style={styles.customDatesContainer}>
+            <Div style={styles.customDateColumn}>
+              <Span type="defaultMedium" style={styles.customDateLabel}>
+                از
+              </Span>
+              <Date
+                SelectedDate={customRange?.startDate}
+                onDateChange={(date: string) => {
+                  handleCustomDateChange("from", date);
+                }}
+                style={{}}
+                todayMax
+              />
+            </Div>
+            <Div style={styles.customDateColumn}>
+              <Span type="defaultMedium" style={styles.customDateLabel}>
+                تا
+              </Span>
+              <Date
+                SelectedDate={customRange?.endDate}
+                onDateChange={(date: string) => {
+                  handleCustomDateChange("to", date);
+                }}
+                style={{}}
+                minDate={customRange?.startDate}
+                todayMax
+              />
+            </Div>
+          </Div>
+        )}
         <Spacer height={20} />
         <ScrollView
           style={styles.bottomSection}
@@ -223,6 +315,27 @@ const styles = StyleSheet.create({
   dateButtonGroup: {
     paddingVertical: 10,
     paddingHorizontal: 10,
+  },
+
+  // Custom period date pickers (از / تا)
+  customDatesContainer: {
+    direction: "rtl",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    columnGap: 10,
+    paddingHorizontal: 10,
+  },
+  customDateColumn: {
+    flex: 1,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    rowGap: 5,
+  },
+  customDateLabel: {
+    fontSize: 14,
   },
 
   // The Bottom Section of data

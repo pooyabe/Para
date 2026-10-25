@@ -1,4 +1,8 @@
-import { getDateRange, RangeType } from "@/hooks/BackEnd/useDateRange";
+import {
+  CustomRange,
+  getDateRange,
+  RangeType,
+} from "@/hooks/BackEnd/useDateRange";
 import { useShamsiDate } from "@/hooks/BackEnd/useShamsiDate";
 import { getDbConnection } from "../helpers";
 
@@ -13,6 +17,7 @@ export type PieItem = {
 export async function getSpendingDistribution(
   rangeKey: RangeType,
   colorRange: string[],
+  customRange?: CustomRange,
 ): Promise<PieItem[]> {
   const db = await getDbConnection();
 
@@ -32,7 +37,7 @@ export async function getSpendingDistribution(
 
   const { toGregorian } = useShamsiDate();
 
-  const { startDate, endDate } = await getDateRange(rangeKey);
+  const { startDate, endDate } = await getDateRange(rangeKey, customRange);
 
   const G_StartDate = toGregorian(startDate);
   const G_EndDate = toGregorian(endDate);
