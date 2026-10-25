@@ -113,10 +113,7 @@ export default function ReportPage() {
    * تغییر تاریخ های بازه دلخواه (از / تا)
    *
    */
-  const handleCustomDateChange = (
-    which: "from" | "to",
-    date: string,
-  ): void => {
+  const handleCustomDateChange = (which: "from" | "to", date: string): void => {
     const theCustomRange = customRange ?? getDefaultCustomRange();
 
     const updatedRange: CustomRange =
@@ -194,6 +191,41 @@ export default function ReportPage() {
           <Span type="title" style={styles.headerTitle}>
             گزارش وضعیت
           </Span>
+
+          {/* Transactions list button */}
+          <TouchableOpacity
+            onPress={() => router.navigate("/(reports)/transactionsList")}
+            style={{
+              borderWidth: 2,
+              borderRadius: 100,
+              overflow: "hidden",
+              display: "flex",
+              flexDirection: "row",
+              columnGap: 5,
+              padding: 1,
+              paddingRight: 7,
+              paddingLeft: 7,
+              justifyContent: "space-around",
+              alignItems: "center",
+              borderColor: Colors[colorScheme].theOrange,
+            }}
+          >
+            <IconSymbol
+              type="MaterialIcons"
+              name="list-alt"
+              size={15}
+              color={Colors[colorScheme].text}
+            />
+            <Span
+              type="default"
+              style={{
+                fontSize: 12,
+                color: Colors[colorScheme].text,
+              }}
+            >
+              دیدن تراکنش‌ها
+            </Span>
+          </TouchableOpacity>
 
           {/* Top Home Icon */}
           <TouchableOpacity

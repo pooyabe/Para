@@ -80,40 +80,6 @@ export function TabsHeader() {
           اوضاعم چطوره؟
         </Span>
       </TouchableOpacity>
-
-      <TouchableOpacity
-        onPress={() => router.navigate("/(reports)/transactionsList")}
-        style={{
-          borderWidth: 2,
-          borderRadius: 100,
-          overflow: "hidden",
-          display: "flex",
-          flexDirection: "row",
-          columnGap: 5,
-          padding: 1,
-          paddingRight: 7,
-          paddingLeft: 7,
-          justifyContent: "space-around",
-          alignItems: "center",
-          borderColor: Colors[colorScheme].theOrange,
-        }}
-      >
-        <IconSymbol
-          type="MaterialIcons"
-          name="list-alt"
-          size={15}
-          color={Colors[colorScheme].text}
-        />
-        <Span
-          type="default"
-          style={{
-            fontSize: 12,
-            color: Colors[colorScheme].text,
-          }}
-        >
-          تراکنش‌ها
-        </Span>
-      </TouchableOpacity>
     </Div>
   );
 }
