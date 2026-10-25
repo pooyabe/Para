@@ -194,7 +194,7 @@ export default function ReportPage() {
 
           {/* Transactions list button */}
           <TouchableOpacity
-            onPress={() => router.navigate("/(reports)/transactionsList")}
+            onPress={() => router.navigate("/reports/transactionsList")}
             style={{
               borderWidth: 2,
               borderRadius: 100,
@@ -230,7 +230,7 @@ export default function ReportPage() {
           {/* Top Home Icon */}
           <TouchableOpacity
             onPress={() => {
-              router.replace("/(tabs)/spending");
+              router.replace("/spending");
             }}
           >
             <IconSymbol type="Ionicons" name="home" size={20} color="white" />

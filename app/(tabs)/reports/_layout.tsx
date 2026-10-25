@@ -9,6 +9,7 @@ export default function RootLayout() {
 
   return (
     <Stack
+      initialRouteName="report"
       screenOptions={{
         headerShown: false,
         contentStyle: {

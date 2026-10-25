@@ -1,13 +1,32 @@
 import { Tabs } from "expo-router";
-import React from "react";
+import React, { type ReactNode } from "react";
+import { Dimensions, StyleSheet } from "react-native";
 
-import { IconSymbol } from "@/components/Elements";
+import { Div, IconSymbol } from "@/components/Elements";
 
 import { TabsHeader } from "@/components/pageParts/tabsLayOutHeader";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
-import { Dimensions } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+/**
+ * Shared wrapper for every tab icon.
+ * Gives the selected tab a soft pill behind its icon so the active tab is
+ * obvious even before reading the label.
+ */
+function TabIcon({
+  focused,
+  children,
+}: {
+  focused: boolean;
+  children: ReactNode;
+}) {
+  return (
+    <Div style={[styles.iconPill, focused && styles.iconPillActive]}>
+      {children}
+    </Div>
+  );
+}
 
 export default function TabLayout() {
   const colorScheme = useColorScheme() as "light" | "dark";
@@ -15,29 +34,50 @@ export default function TabLayout() {
 
   const insets = useSafeAreaInsets();
 
+  const colors = Colors[colorScheme];
+
+  // --- Tab bar sizing ------------------------------------------------------
+  // Proportional to the screen but clamped, so the bar stays comfortable on
+  // small phones and does not grow huge on tablets.
+  const tabBarHeight = Math.min(Math.max(ScreenHeight * 0.078, 60), 70);
+
+  // The system navigation area (gesture bar or 3 button navigation) is added
+  // to the bar height, so the tabs never end up behind the system buttons.
+  const bottomInset = Math.max(insets.bottom, 8);
+
+  // Icons / labels scale with the device, inside readable bounds.
+  const iconSize = Math.min(Math.max(ScreenHeight * 0.027, 19), 23);
+  const labelSize = Math.min(Math.max(ScreenHeight * 0.0135, 10), 12);
+
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme].tint,
+        tabBarActiveTintColor: colors.theGreen,
+        tabBarInactiveTintColor: colors.tabIcon,
         tabBarStyle: {
-          backgroundColor: Colors[colorScheme].tabBackground,
-          borderTopColor: Colors[colorScheme].tabIcon,
-          height: ScreenHeight * 0.085 + insets.bottom,
-          paddingBottom: insets.bottom,
+          backgroundColor: colors.tabBackground,
+          borderTopWidth: StyleSheet.hairlineWidth,
+          borderTopColor: "rgba(155, 161, 166, 0.35)",
+          height: tabBarHeight + bottomInset,
           paddingTop: 6,
+          paddingBottom: bottomInset,
+          elevation: 12,
+          shadowColor: "#000",
+          shadowOffset: { width: 0, height: -3 },
+          shadowOpacity: 0.18,
+          shadowRadius: 8,
         },
-        tabBarInactiveTintColor: Colors[colorScheme].tabIconDefault,
         tabBarLabelStyle: {
-          fontSize: ScreenHeight * 0.014,
+          fontSize: labelSize,
+          lineHeight: labelSize + 5,
           fontFamily: "VazirMedium",
-          marginTop: 0,
+          marginTop: 2,
+          marginBottom: 0,
+          textAlign: "center",
         },
         tabBarIconStyle: {
-          marginBottom: 0,
           marginTop: 0,
-          height: ScreenHeight * 0.035,
-          width: ScreenHeight * 0.035,
-          justifyContent: "center",
+          marginBottom: 0,
         },
         tabBarItemStyle: {
           paddingVertical: 0,
@@ -48,22 +88,64 @@ export default function TabLayout() {
 
         // ---  Custom Header
         headerShown: true,
-        headerTintColor: Colors[colorScheme].tint,
+        headerTintColor: colors.tint,
         headerTransparent: true,
         header: () => <TabsHeader />,
       }}
+      // Spending is the third of five tabs, so it sits in the middle of the bar
+      // and opens first when the app starts.
       initialRouteName="spending"
     >
+      {/* Left end */}
+      <Tabs.Screen
+        name="settings"
+        options={{
+          title: "تنظیمات",
+          tabBarIcon: ({ color, focused }) => (
+            <TabIcon focused={focused}>
+              <IconSymbol
+                type="Ionicons"
+                name={focused ? "settings" : "settings-outline"}
+                size={iconSize}
+                color={color}
+              />
+            </TabIcon>
+          ),
+        }}
+      />
+      {/* Left of spending */}
+      <Tabs.Screen
+        name="reports"
+        options={{
+          title: "گزارش",
+          // The reports stack brings its own header.
+          headerShown: false,
+          tabBarIcon: ({ color, focused }) => (
+            <TabIcon focused={focused}>
+              <IconSymbol
+                type="Ionicons"
+                name={focused ? "stats-chart" : "stats-chart-outline"}
+                size={iconSize}
+                color={color}
+              />
+            </TabIcon>
+          ),
+        }}
+      />
+      {/* Middle / default */}
       <Tabs.Screen
         name="spending"
         options={{
           title: "هزینه",
-          tabBarIcon: ({ color }) => (
-            <IconSymbol
-              size={ScreenHeight * 0.03}
-              name="data-saver-off"
-              color={color}
-            />
+          tabBarIcon: ({ color, focused }) => (
+            <TabIcon focused={focused}>
+              <IconSymbol
+                type="Ionicons"
+                name={focused ? "cart" : "cart-outline"}
+                size={iconSize}
+                color={color}
+              />
+            </TabIcon>
           ),
         }}
       />
@@ -71,12 +153,15 @@ export default function TabLayout() {
         name="income"
         options={{
           title: "درآمد",
-          tabBarIcon: ({ color }) => (
-            <IconSymbol
-              size={ScreenHeight * 0.035}
-              name="attach-money"
-              color={color}
-            />
+          tabBarIcon: ({ color, focused }) => (
+            <TabIcon focused={focused}>
+              <IconSymbol
+                type="Ionicons"
+                name={focused ? "cash" : "cash-outline"}
+                size={iconSize}
+                color={color}
+              />
+            </TabIcon>
           ),
         }}
       />
@@ -85,16 +170,31 @@ export default function TabLayout() {
         options={{
           title: "بده‌بستون",
           headerShown: false,
-          tabBarIcon: ({ color }) => (
-            <IconSymbol
-              type="MaterialIcons"
-              size={ScreenHeight * 0.035}
-              name="account-balance-wallet"
-              color={color}
-            />
+          tabBarIcon: ({ color, focused }) => (
+            <TabIcon focused={focused}>
+              <IconSymbol
+                type="MaterialIcons"
+                name="account-balance-wallet"
+                size={iconSize}
+                color={color}
+              />
+            </TabIcon>
           ),
         }}
       />
     </Tabs>
   );
 }
+
+const styles = StyleSheet.create({
+  iconPill: {
+    width: 40,
+    height: 26,
+    borderRadius: 13,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  iconPillActive: {
+    backgroundColor: "rgba(32, 251, 142, 0.16)",
+  },
+});
