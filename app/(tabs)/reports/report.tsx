@@ -223,17 +223,8 @@ export default function ReportPage() {
                 color: Colors[colorScheme].text,
               }}
             >
-              دیدن تراکنش‌ها
+              تراکنش‌ها
             </Span>
-          </TouchableOpacity>
-
-          {/* Top Home Icon */}
-          <TouchableOpacity
-            onPress={() => {
-              router.replace("/spending");
-            }}
-          >
-            <IconSymbol type="Ionicons" name="home" size={20} color="white" />
           </TouchableOpacity>
         </Div>
         <Spacer height={30} />
