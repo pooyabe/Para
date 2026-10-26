@@ -1,5 +1,6 @@
 import * as DocumentPicker from "expo-document-picker";
-import { Directory, File, Paths } from "expo-file-system";
+import { Directory, Paths } from "expo-file-system";
+import { readAsStringAsync, writeAsStringAsync } from "expo-file-system/legacy";
 import { useCallback, useState } from "react";
 import { Platform } from "react-native";
 import { toast } from "sonner-native";
@@ -312,18 +313,24 @@ export function useDataBackup() {
 
       const fileName = backupFileName();
 
-      let file: File;
+      let savedName = fileName;
 
       if (Platform.OS === "android") {
         const directory = await Directory.pickDirectoryAsync();
-        file = directory.createFile(fileName, "text/csv");
+        const file = directory.createFile(fileName, "text/csv");
+
+        file.write(csv);
+
+        savedName = file.name;
       } else {
-        file = new File(Paths.document, fileName);
+        // No folder picker on iOS: write next to the app's own data.
+        await writeAsStringAsync(
+          Paths.join(Paths.document.uri, fileName),
+          csv
+        );
       }
 
-      file.write(csv);
-
-      toast.success(`پشتیبان در فایل «${file.name}» ذخیره شد.`);
+      toast.success(`پشتیبان در فایل «${savedName}» ذخیره شد.`);
     } catch (error) {
       if (isPickerCancel(error)) return;
 
@@ -356,7 +363,11 @@ export function useDataBackup() {
       const asset = picked.assets?.[0];
       if (!asset) return;
 
-      const csv = await new File(asset.uri).text();
+      // The picker copies the file into the app's own cache, so it always
+      // lands on a readable file:// path. `readAsStringAsync` resolves the
+      // permission through the file-system module, which works for every
+      // uri the picker can return.
+      const csv = await readAsStringAsync(asset.uri);
       const summary = await restoreBackupText(csv);
 
       bumpDataRevision();
