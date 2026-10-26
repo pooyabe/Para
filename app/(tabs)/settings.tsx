@@ -66,16 +66,17 @@ export default function SettingsPage() {
               ظاهر برنامه
             </Span>
           </Div>
-
-          <Radio
-            Items={THEME_PREFERENCES.map(
-              (preference) => THEME_LABELS[preference],
-            )}
-            selectedIndex={selectedIndex}
-            onChangeValueWithIndex={(value, index) => {
-              setThemePreference(THEME_PREFERENCES[index]);
-            }}
-          />
+          <Div style={{ direction: "ltr" }}>
+            <Radio
+              Items={THEME_PREFERENCES.map(
+                (preference) => THEME_LABELS[preference],
+              )}
+              selectedIndex={selectedIndex}
+              onChangeValueWithIndex={(value, index) => {
+                setThemePreference(THEME_PREFERENCES[index]);
+              }}
+            />
+          </Div>
 
           <Spacer height={15} />
 
