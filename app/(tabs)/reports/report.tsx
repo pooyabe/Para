@@ -14,7 +14,7 @@ import { toast } from "sonner-native";
 import { ImportanceDisplay } from "@/components/pageParts/reportsPage/ImportanceDisplay";
 import { OveralLineChart } from "@/components/pageParts/reportsPage/OveralLineChart";
 import { PieChartOne } from "@/components/pageParts/reportsPage/PieChartOne";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import {
   getDefaultCustomRange,
@@ -29,6 +29,7 @@ import { getMonthlyReport } from "@/hooks/DB/reports/useMonthlyReport";
 import { getSpendingDistribution } from "@/hooks/DB/reports/useSpendingPercentage";
 
 import { Colors } from "@/constants/Colors";
+import { useDataRevision } from "@/hooks/BackEnd/useDataRevision";
 import { useColorScheme } from "@/hooks/useColorScheme";
 
 export default function ReportPage() {
@@ -83,11 +84,23 @@ export default function ReportPage() {
   const colorScheme = useColorScheme() as "light" | "dark";
   const colors = Colors[colorScheme];
 
-  let SpendingPieColors: string[] = [];
-  for (var i: number = 10; i > 0; i--) {
-    const tune = i != 10 ? `${i}f` : `ff`;
-    SpendingPieColors.push(Colors[colorScheme].theLightBlue + tune);
-  }
+  const SpendingPieColors = useMemo(() => {
+    const pieColors: string[] = [];
+
+    for (let index = 10; index > 0; index -= 1) {
+      const tune = index !== 10 ? `${index}f` : `ff`;
+      pieColors.push(Colors[colorScheme].theLightBlue + tune);
+    }
+
+    return pieColors;
+  }, [colorScheme]);
+
+  // Restore / wipe in the settings page replaces the data this screen shows.
+  const dataRevision = useDataRevision();
+
+  // The latest selected range, so a data refresh keeps the current period.
+  const latestSelection = useRef({ range: selectedRange, custom: customRange });
+  latestSelection.current = { range: selectedRange, custom: customRange };
 
   const handleSelect = async (rangeKey: RangeType): Promise<void> => {
     setSelectedRange(rangeKey);
@@ -141,32 +154,35 @@ export default function ReportPage() {
    *
    */
 
-  const fetchData = async (
-    rangeKey: RangeType,
-    theCustomRange?: CustomRange,
-  ) => {
-    // Show loading
-    setShowLoading(true);
+  const fetchData = useCallback(
+    async (rangeKey: RangeType, theCustomRange?: CustomRange) => {
+      // Show loading
+      setShowLoading(true);
 
-    // Get Overal Spending data from DB
-    const osr = await getMonthlyReport("spendings", rangeKey, theCustomRange);
-    setOveralSpendingReport(osr);
+      // Get Overal Spending data from DB
+      const osr = await getMonthlyReport("spendings", rangeKey, theCustomRange);
+      setOveralSpendingReport(osr);
 
-    // Get percentage spending report
-    const psr = await getSpendingDistribution(
-      rangeKey,
-      SpendingPieColors,
-      theCustomRange,
-    );
-    setPercentageSpendingReport(psr);
+      // Get percentage spending report
+      const psr = await getSpendingDistribution(
+        rangeKey,
+        SpendingPieColors,
+        theCustomRange,
+      );
+      setPercentageSpendingReport(psr);
 
-    // Get importance distribution data
-    const impData = await getImportanceDistribution(rangeKey, theCustomRange);
-    setImportanceData(impData);
+      // Get importance distribution data
+      const impData = await getImportanceDistribution(
+        rangeKey,
+        theCustomRange,
+      );
+      setImportanceData(impData);
 
-    // Hide loading
-    setShowLoading(false);
-  };
+      // Hide loading
+      setShowLoading(false);
+    },
+    [SpendingPieColors]
+  );
 
   /**
    *
@@ -175,7 +191,23 @@ export default function ReportPage() {
    */
   useEffect(() => {
     fetchData("month");
-  }, []);
+  }, [fetchData]);
+
+  /**
+   *
+   * داده‌ها از صفحه تنظیمات بازگردانی یا پاک شدند: همان بازه فعلی دوباره خونده بشه
+   *
+   */
+  useEffect(() => {
+    if (dataRevision === 0) return;
+
+    const { range, custom } = latestSelection.current;
+
+    fetchData(
+      range,
+      range === "custom" ? custom ?? getDefaultCustomRange() : undefined
+    );
+  }, [dataRevision, fetchData]);
 
   if (showLoading) {
     return (

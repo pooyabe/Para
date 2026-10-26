@@ -3,17 +3,19 @@ import {
   IconSymbol,
   Mother,
   Radio,
+  SButton,
   Spacer,
   Span,
 } from "@/components/Elements";
 import { Colors } from "@/constants/Colors";
+import { useDataBackup } from "@/hooks/BackEnd/useDataBackup";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import {
   THEME_PREFERENCES,
   useTheme,
   type ThemePreference,
 } from "@/hooks/useTheme";
-import { StyleSheet } from "react-native";
+import { Alert, ScrollView, StyleSheet } from "react-native";
 
 const THEME_LABELS: Record<ThemePreference, string> = {
   light: "روشن",
@@ -33,63 +35,204 @@ export default function SettingsPage() {
 
   const { themePreference, setThemePreference } = useTheme();
 
+  const {
+    exportData,
+    importData,
+    wipeData,
+    isExporting,
+    isImporting,
+    isWiping,
+    isBusy,
+  } = useDataBackup();
+
   const selectedIndex = Math.max(THEME_PREFERENCES.indexOf(themePreference), 0);
+
+  const confirmImport = () => {
+    Alert.alert(
+      "بازگردانی داده‌ها",
+      "همه تراکنش‌ها، دسته‌بندی‌ها و وام‌های فعلی با محتوای فایل پشتیبان جایگزین می‌شن. ادامه می‌دی؟",
+      [
+        { text: "لغو", style: "cancel" },
+        { text: "بازگردانی", style: "destructive", onPress: importData },
+      ]
+    );
+  };
+
+  const confirmWipe = () => {
+    Alert.alert(
+      "پاک کردن همه داده‌ها",
+      "همه تراکنش‌ها، دسته‌بندی‌ها و وام‌ها پاک می‌شن. این کار برگشت‌پذیر نیست؛ بهتره اول یک فایل پشتیبان بگیری.",
+      [
+        { text: "لغو", style: "cancel" },
+        { text: "پاک کن", style: "destructive", onPress: wipeData },
+      ]
+    );
+  };
 
   return (
     <Mother>
-      <Div style={styles.container}>
-        <Spacer height={40} />
+      <ScrollView
+        style={styles.scroll}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
+        <Div style={styles.container}>
+          <Spacer height={40} />
 
-        <Span type="title" style={styles.pageTitle}>
-          تنظیمات
-        </Span>
+          <Span type="title" style={styles.pageTitle}>
+            تنظیمات
+          </Span>
 
-        <Spacer height={30} />
+          <Spacer height={30} />
 
-        <Div
-          style={[
-            styles.card,
-            {
-              backgroundColor: colors.card,
-              borderColor: colors.divider,
-            },
-          ]}
-        >
-          <Div style={styles.cardHeader}>
-            <IconSymbol
-              type="Ionicons"
-              name="color-palette-outline"
-              size={22}
-              color={colors.tint}
-            />
-            <Span type="defaultSemiBold" style={styles.cardTitle}>
-              ظاهر برنامه
+          {/* Appearance */}
+          <Div
+            style={[
+              styles.card,
+              {
+                backgroundColor: colors.card,
+                borderColor: colors.divider,
+              },
+            ]}
+          >
+            <Div style={styles.cardHeader}>
+              <IconSymbol
+                type="Ionicons"
+                name="color-palette-outline"
+                size={22}
+                color={colors.tint}
+              />
+              <Span type="defaultSemiBold" style={styles.cardTitle}>
+                ظاهر برنامه
+              </Span>
+            </Div>
+            <Div style={{ direction: "ltr" }}>
+              <Radio
+                Items={THEME_PREFERENCES.map(
+                  (preference) => THEME_LABELS[preference]
+                )}
+                selectedIndex={selectedIndex}
+                onChangeValueWithIndex={(value, index) => {
+                  setThemePreference(THEME_PREFERENCES[index]);
+                }}
+              />
+            </Div>
+
+            <Spacer height={15} />
+
+            <Span type="subtitle" style={[styles.hint, { color: colors.muted }]}>
+              {THEME_HINTS[themePreference]}
             </Span>
           </Div>
-          <Div style={{ direction: "ltr" }}>
-            <Radio
-              Items={THEME_PREFERENCES.map(
-                (preference) => THEME_LABELS[preference],
-              )}
-              selectedIndex={selectedIndex}
-              onChangeValueWithIndex={(value, index) => {
-                setThemePreference(THEME_PREFERENCES[index]);
-              }}
+
+          <Spacer height={20} />
+
+          {/* Data: export, import, wipe */}
+          <Div
+            style={[
+              styles.card,
+              {
+                backgroundColor: colors.card,
+                borderColor: colors.divider,
+              },
+            ]}
+          >
+            <Div style={styles.cardHeader}>
+              <IconSymbol
+                type="Ionicons"
+                name="file-tray-full-outline"
+                size={22}
+                color={colors.tint}
+              />
+              <Span type="defaultSemiBold" style={styles.cardTitle}>
+                داده‌ها و پشتیبان
+              </Span>
+            </Div>
+
+            <Spacer height={10} />
+
+            <Span
+              type="subtitle"
+              style={[styles.description, { color: colors.muted }]}
+            >
+              همه تراکنش‌ها، دسته‌بندی‌ها، وام‌ها و پرداخت‌هاشون در یک فایل CSV
+              ذخیره می‌شن. برای خروجی، پوشه‌ای که فایل باید اونجا ساخته بشه رو
+              انتخاب کن.
+            </Span>
+
+            <Spacer height={20} />
+
+            <SButton
+              text={isExporting ? "در حال ساخت فایل…" : "خروجی گرفتن (CSV)"}
+              disabled={isBusy}
+              onPress={exportData}
+              style={[
+                styles.actionButton,
+                {
+                  borderColor: colors.tint,
+                  backgroundColor: colors.infoBackground,
+                  opacity: isBusy ? 0.5 : 1,
+                },
+              ]}
             />
+
+            <Spacer height={10} />
+
+            <SButton
+              text={isImporting ? "در حال بازگردانی…" : "بازگردانی از فایل"}
+              disabled={isBusy}
+              onPress={confirmImport}
+              style={[
+                styles.actionButton,
+                {
+                  borderColor: colors.theOrange,
+                  backgroundColor: colors.warningBackground,
+                  opacity: isBusy ? 0.5 : 1,
+                },
+              ]}
+            />
+
+            <Spacer height={10} />
+
+            <SButton
+              text={isWiping ? "در حال پاک کردن…" : "پاک کردن همه داده‌ها"}
+              disabled={isBusy}
+              onPress={confirmWipe}
+              style={[
+                styles.actionButton,
+                {
+                  borderColor: colors.theRed,
+                  backgroundColor: colors.dangerBackground,
+                  opacity: isBusy ? 0.5 : 1,
+                },
+              ]}
+            />
+
+            <Spacer height={15} />
+
+            <Span
+              type="subtitle"
+              style={[styles.hint, { color: colors.muted }]}
+            >
+              بازگردانی، داده‌های فعلی رو با فایل پشتیبان جایگزین می‌کنه. تم
+              برنامه تغییری نمی‌کنه.
+            </Span>
           </Div>
 
-          <Spacer height={15} />
-
-          <Span type="subtitle" style={[styles.hint, { color: colors.muted }]}>
-            {THEME_HINTS[themePreference]}
-          </Span>
+          <Spacer height={40} />
         </Div>
-      </Div>
+      </ScrollView>
     </Mother>
   );
 }
 
 const styles = StyleSheet.create({
+  scroll: {
+    flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
+  },
   container: {
     flex: 1,
     direction: "rtl",
@@ -113,7 +256,15 @@ const styles = StyleSheet.create({
   cardTitle: {
     fontSize: 18,
   },
+  description: {
+    textAlign: "right",
+    lineHeight: 20,
+  },
+  actionButton: {
+    borderWidth: 2,
+  },
   hint: {
     textAlign: "center",
+    lineHeight: 18,
   },
 });
