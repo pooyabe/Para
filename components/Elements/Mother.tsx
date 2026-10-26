@@ -1,7 +1,7 @@
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { ReactNode } from "react";
 import { Dimensions, StyleSheet, type ViewProps } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 export type MotherProps = ViewProps & {
   lightColor?: string;
@@ -20,11 +20,11 @@ export function Mother({
 }: MotherProps) {
   const backgroundColor = useThemeColor(
     { light: lightColor, dark: darkColor },
-    "background"
+    "background",
   );
 
   return (
-    <SafeAreaView
+    <SafeAreaProvider
       style={[
         { backgroundColor, paddingHorizontal: _Hpadding },
         styles.container,
@@ -33,7 +33,7 @@ export function Mother({
       {...otherProps}
     >
       {children}
-    </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
 
