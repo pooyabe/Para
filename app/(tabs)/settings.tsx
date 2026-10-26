@@ -54,7 +54,7 @@ export default function SettingsPage() {
       [
         { text: "لغو", style: "cancel" },
         { text: "بازگردانی", style: "destructive", onPress: importData },
-      ]
+      ],
     );
   };
 
@@ -65,7 +65,7 @@ export default function SettingsPage() {
       [
         { text: "لغو", style: "cancel" },
         { text: "پاک کن", style: "destructive", onPress: wipeData },
-      ]
+      ],
     );
   };
 
@@ -109,7 +109,7 @@ export default function SettingsPage() {
             <Div style={{ direction: "ltr" }}>
               <Radio
                 Items={THEME_PREFERENCES.map(
-                  (preference) => THEME_LABELS[preference]
+                  (preference) => THEME_LABELS[preference],
                 )}
                 selectedIndex={selectedIndex}
                 onChangeValueWithIndex={(value, index) => {
@@ -120,7 +120,10 @@ export default function SettingsPage() {
 
             <Spacer height={15} />
 
-            <Span type="subtitle" style={[styles.hint, { color: colors.muted }]}>
+            <Span
+              type="subtitle"
+              style={[styles.hint, { color: colors.muted }]}
+            >
               {THEME_HINTS[themePreference]}
             </Span>
           </Div>
@@ -134,6 +137,9 @@ export default function SettingsPage() {
               {
                 backgroundColor: colors.card,
                 borderColor: colors.divider,
+
+                // Hide it till fixing the restore error
+                display: "none",
               },
             ]}
           >
