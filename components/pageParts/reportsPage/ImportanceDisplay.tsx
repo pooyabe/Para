@@ -1,5 +1,7 @@
 import { Div, Span } from "@/components/Elements";
+import { Colors } from "@/constants/Colors";
 import { ImportanceData } from "@/hooks/DB/reports/useImportanceDistribution";
+import { useColorScheme } from "@/hooks/useColorScheme";
 import { StyleSheet } from "react-native";
 
 interface ImportanceDisplayProps {
@@ -11,6 +13,8 @@ function formatNumber(num: number): string {
 }
 
 export function ImportanceDisplay({ data }: ImportanceDisplayProps) {
+  const colors = Colors[useColorScheme()];
+
   if (data.total === 0) {
     return null;
   }
@@ -20,20 +24,36 @@ export function ImportanceDisplay({ data }: ImportanceDisplayProps) {
 
   return (
     <Div style={styles.container}>
-      <Div style={[styles.itemContainer, { borderColor: "#ffc107" }]}>
+      <Div
+        style={[
+          styles.itemContainer,
+          {
+            backgroundColor: colors.warningBackground,
+            borderColor: colors.theOrange,
+          },
+        ]}
+      >
         <Span type="subtitle" style={styles.itemLabel}>
           🚫 هزینه‌های الکی
         </Span>
-        <Span style={styles.percentage}>{alkaaeiPercent}درصد</Span>
-        <Span style={styles.amount}>{formatNumber(data.alkaaei)} تومن</Span>
-        <Span style={styles.message}>
+        <Span style={[styles.percentage, { color: colors.theOrange }]}>
+          {alkaaeiPercent}درصد
+        </Span>
+        <Span style={[styles.amount, { color: colors.muted }]}>
+          {formatNumber(data.alkaaei)} تومن
+        </Span>
+        <Span style={[styles.message, { color: colors.muted }]}>
           یعنی مقدار {formatNumber(data.alkaaei)} تومن خرج کردی که کاملاً
           بی‌فایده بوده و میتونستی اصلاً انجامش ندی!
         </Span>
         {data.alkaaeiTopItem && (
-          <Div style={styles.topItemContainer}>
-            <Span style={styles.topItemLabel}>بیشترین هزینه الکی:</Span>
-            <Span style={styles.topItemValue}>
+          <Div
+            style={[styles.topItemContainer, { borderTopColor: colors.divider }]}
+          >
+            <Span style={[styles.topItemLabel, { color: colors.muted }]}>
+              بیشترین هزینه الکی:
+            </Span>
+            <Span style={[styles.topItemValue, { color: colors.theLightBlue }]}>
               {data.alkaaeiTopItem.title} (
               {formatNumber(data.alkaaeiTopItem.amount)} تومن)
             </Span>
@@ -44,22 +64,35 @@ export function ImportanceDisplay({ data }: ImportanceDisplayProps) {
       <Div
         style={[
           styles.itemContainer,
-          { borderLeftWidth: 0, borderRightWidth: 4, borderColor: "#118dff" },
+          {
+            backgroundColor: colors.infoBackground,
+            borderLeftWidth: 0,
+            borderRightWidth: 4,
+            borderColor: colors.theLightBlue,
+          },
         ]}
       >
         <Span type="subtitle" style={styles.itemLabel}>
           ⚠️ هزینه‌های قابل حذف
         </Span>
-        <Span style={styles.percentage}>{borderlinePercent}درصد</Span>
-        <Span style={styles.amount}>{formatNumber(data.borderline)} تومن</Span>
-        <Span style={styles.message}>
+        <Span style={[styles.percentage, { color: colors.theLightBlue }]}>
+          {borderlinePercent}درصد
+        </Span>
+        <Span style={[styles.amount, { color: colors.muted }]}>
+          {formatNumber(data.borderline)} تومن
+        </Span>
+        <Span style={[styles.message, { color: colors.muted }]}>
           مقدار {formatNumber(data.borderline)} تومن هم خرج کردی که میتونستی
           نکنی. بهرحال خودت میدونی.
         </Span>
         {data.borderlineTopItem && (
-          <Div style={styles.topItemContainer}>
-            <Span style={styles.topItemLabel}>بیشترین هزینه قابل حذف:</Span>
-            <Span style={styles.topItemValue}>
+          <Div
+            style={[styles.topItemContainer, { borderTopColor: colors.divider }]}
+          >
+            <Span style={[styles.topItemLabel, { color: colors.muted }]}>
+              بیشترین هزینه قابل حذف:
+            </Span>
+            <Span style={[styles.topItemValue, { color: colors.theLightBlue }]}>
               {data.borderlineTopItem.title} (
               {formatNumber(data.borderlineTopItem.amount)} تومن)
             </Span>
@@ -67,8 +100,16 @@ export function ImportanceDisplay({ data }: ImportanceDisplayProps) {
         )}
       </Div>
 
-      <Div style={styles.summaryContainer}>
-        <Span style={styles.summaryText}>
+      <Div
+        style={[
+          styles.summaryContainer,
+          {
+            backgroundColor: colors.warningBackground,
+            borderLeftColor: colors.theOrange,
+          },
+        ]}
+      >
+        <Span style={[styles.summaryText, { color: colors.muted }]}>
           در مجموع، {formatNumber(data.alkaaei + data.borderline)} تومن (
           {alkaaeiPercent + borderlinePercent}درصد) از هزینه‌هات میتونست کاهش
           پیدا کنه.
@@ -91,9 +132,7 @@ const styles = StyleSheet.create({
   itemContainer: {
     borderRadius: 12,
     padding: 16,
-    backgroundColor: "rgba(17, 141, 255, 0.1)",
     borderLeftWidth: 4,
-    borderLeftColor: "#118dff",
   },
   itemLabel: {
     marginBottom: 10,
@@ -102,18 +141,15 @@ const styles = StyleSheet.create({
   percentage: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "#118dff",
     marginBottom: 8,
   },
   amount: {
     fontSize: 14,
-    color: "#666",
     marginBottom: 10,
     textAlign: "right",
   },
   message: {
     fontSize: 13,
-    color: "#555",
     lineHeight: 20,
     textAlign: "right",
     marginBottom: 10,
@@ -122,32 +158,26 @@ const styles = StyleSheet.create({
     marginTop: 12,
     paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: "rgba(17, 141, 255, 0.3)",
   },
   topItemLabel: {
     fontSize: 12,
-    color: "#666",
     marginBottom: 6,
     fontWeight: "600",
     textAlign: "right",
   },
   topItemValue: {
     fontSize: 13,
-    color: "#118dff",
     fontWeight: "500",
     textAlign: "right",
   },
   summaryContainer: {
     marginTop: 10,
     padding: 12,
-    backgroundColor: "rgba(255, 193, 7, 0.1)",
     borderRadius: 8,
     borderLeftWidth: 3,
-    borderLeftColor: "#ffc107",
   },
   summaryText: {
     fontSize: 12,
-    color: "#555",
     textAlign: "right",
   },
 });

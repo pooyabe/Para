@@ -1,4 +1,5 @@
 import { useThemeColor } from "@/hooks/useThemeColor";
+import { useColorScheme } from "@/hooks/useColorScheme";
 import SegmentedControl, {
   SegmentedControlProps,
 } from "@react-native-segmented-control/segmented-control";
@@ -27,7 +28,9 @@ export function Radio({
     }
   }, [propSelectedIndex]);
 
+  const colorScheme = useColorScheme();
   const textColor = useThemeColor({}, "text");
+  const mutedColor = useThemeColor({}, "muted");
   const tintColor = useThemeColor({}, "tint");
   const backgroundColor = useThemeColor({}, "background");
   const theLightBlue = useThemeColor({}, "theLightBlue");
@@ -44,6 +47,7 @@ export function Radio({
           marginLeft: 50,
           paddingRight: 5,
           paddingLeft: 5,
+          color: mutedColor,
         }}
       >
         {label}
@@ -59,7 +63,7 @@ export function Radio({
         onValueChange={(value) => {
           // این تابع فقط برای رفع اخطار لازمه چون SegmentedControl بهش نیاز داره
         }}
-        appearance="dark"
+        appearance={colorScheme === "dark" ? "dark" : "light"}
         backgroundColor={backgroundColor}
         style={[
           {
@@ -74,6 +78,12 @@ export function Radio({
         ]}
         fontStyle={{
           fontFamily: "VazirRegular",
+          fontSize: 14,
+          fontWeight: "normal",
+          color: textColor,
+        }}
+        activeFontStyle={{
+          fontFamily: "VazirMedium",
           fontSize: 14,
           fontWeight: "normal",
           color: textColor,

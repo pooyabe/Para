@@ -8,11 +8,15 @@ import {
   Spacer,
   Span,
 } from "@/components/Elements";
+import { Colors } from "@/constants/Colors";
 import { useLoanForm } from "@/hooks/BackEnd/Pages/useLoanForm";
+import { useColorScheme } from "@/hooks/useColorScheme";
 import { router } from "expo-router";
 import { StyleSheet } from "react-native";
 
 export default function AddLoanPage() {
+  const colors = Colors[useColorScheme()];
+
   const {
     loan_type,
     setLoanType,
@@ -63,7 +67,7 @@ export default function AddLoanPage() {
           value={loan_amount?.toString() ?? ""}
         />
         <Spacer height={5} />
-        <Span type="subtitle" style={{ color: "#118dff" }}>
+        <Span type="subtitle" style={{ color: colors.theLightBlue }}>
           {thePriceString}
         </Span>
 

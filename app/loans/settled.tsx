@@ -25,6 +25,7 @@ export default function SettledLoansPage() {
   const [expandedLoan, setExpandedLoan] = useState<number | null>(null);
 
   const colorScheme = useColorScheme() as "light" | "dark";
+  const colors = Colors[colorScheme];
   const { toJalali } = useShamsiDate();
 
   const loadSettledLoans = async () => {
@@ -79,7 +80,7 @@ export default function SettledLoansPage() {
               key={loan.id}
               onPress={() => toggleExpand(loan.id)}
               activeOpacity={0.8}
-              style={styles.loanCard}
+              style={[styles.loanCard, { backgroundColor: colors.card }]}
             >
               <Div style={styles.loanHeader}>
                 <Div style={styles.loanTypeBadge}>
@@ -87,9 +88,16 @@ export default function SettledLoansPage() {
                     type="default"
                     style={[
                       styles.typeBadgeText,
-                      loan.type === "receivable"
-                        ? styles.receivableBadge
-                        : styles.payableBadge,
+                      {
+                        color:
+                          loan.type === "receivable"
+                            ? colors.theLightBlue
+                            : colors.theRed,
+                        backgroundColor:
+                          loan.type === "receivable"
+                            ? colors.infoBackground
+                            : colors.dangerBackground,
+                      },
                     ]}
                   >
                     {loan.type === "receivable" ? "بدهکار" : "بستانکار"}
@@ -104,7 +112,7 @@ export default function SettledLoansPage() {
                   type="Ionicons"
                   name={isExpanded ? "chevron-up-outline" : "chevron-down-outline"}
                   size={22}
-                  color={Colors[colorScheme].tabIconDefault}
+                  color={colors.muted}
                 />
               </Div>
 
@@ -112,7 +120,7 @@ export default function SettledLoansPage() {
 
               <Div style={styles.amountRow}>
                 <Div style={styles.amountColumn}>
-                  <Span type="default" style={styles.amountLabel}>
+                  <Span type="default" style={[styles.amountLabel, { color: colors.muted }]}>
                     مبلغ کل
                   </Span>
                   <Span type="subtitle" style={styles.amountValue}>
@@ -120,31 +128,31 @@ export default function SettledLoansPage() {
                   </Span>
                 </Div>
                 <Div style={styles.amountColumn}>
-                  <Span type="default" style={styles.amountLabel}>
+                  <Span type="default" style={[styles.amountLabel, { color: colors.muted }]}>
                     کل پرداختی/دریافتی
                   </Span>
                   <Span
                     type="subtitle"
                     style={[
                       styles.amountValue,
-                      loan.type === "receivable"
-                        ? styles.incomeColor
-                        : styles.spendingColor,
+                      {
+                        color:
+                          loan.type === "receivable"
+                            ? colors.income
+                            : colors.theRed,
+                      },
                     ]}
                   >
                     {formatAmount(totalPaid)}
                   </Span>
                 </Div>
                 <Div style={styles.amountColumn}>
-                  <Span type="default" style={styles.amountLabel}>
+                  <Span type="default" style={[styles.amountLabel, { color: colors.muted }]}>
                     وضعیت
                   </Span>
                   <Span
                     type="subtitle"
-                    style={[
-                      styles.amountValue,
-                      styles.settledColor,
-                    ]}
+                    style={[styles.amountValue, { color: colors.theGreen }]}
                   >
                     تسویه شده
                   </Span>
@@ -155,7 +163,7 @@ export default function SettledLoansPage() {
 
               <Div style={styles.datesRow}>
                 <Div style={styles.dateColumn}>
-                  <Span type="default" style={styles.dateLabel}>
+                  <Span type="default" style={[styles.dateLabel, { color: colors.muted }]}>
                     تاریخ شروع
                   </Span>
                   <Span type="subtitle" style={styles.dateValue}>
@@ -163,7 +171,7 @@ export default function SettledLoansPage() {
                   </Span>
                 </Div>
                 <Div style={styles.dateColumn}>
-                  <Span type="default" style={styles.dateLabel}>
+                  <Span type="default" style={[styles.dateLabel, { color: colors.muted }]}>
                     تاریخ تسویه
                   </Span>
                   <Span type="subtitle" style={styles.dateValue}>
@@ -175,8 +183,8 @@ export default function SettledLoansPage() {
               {loan.description && (
                 <>
                   <Spacer height={8} />
-                  <Div style={styles.descriptionContainer}>
-                    <Span type="default" style={styles.descriptionLabel}>
+                  <Div style={[styles.descriptionContainer, { backgroundColor: colors.cardAlt }]}>
+                    <Span type="default" style={[styles.descriptionLabel, { color: colors.muted }]}>
                       توضیحات:
                     </Span>
                     <Span type="default" style={styles.descriptionText}>
@@ -190,27 +198,37 @@ export default function SettledLoansPage() {
               {isExpanded && loan.payments.length > 0 && (
                 <>
                   <Spacer height={15} />
-                  <Div style={styles.divider} />
+                  <Div style={[styles.divider, { backgroundColor: colors.divider }]} />
                   <Spacer height={10} />
                   <Span type="subtitle" style={styles.paymentsTitle}>
                     جزئیات پرداخت‌ها/دریافت‌ها
                   </Span>
                   <Spacer height={10} />
                   {loan.payments.map((payment, index) => (
-                    <Div key={payment.id} style={styles.paymentItem}>
+                    <Div
+                      key={payment.id}
+                      style={[styles.paymentItem, { borderBottomColor: colors.divider }]}
+                    >
                       <Div style={styles.paymentInfo}>
                         <Span
                           type="default"
                           style={[
                             styles.paymentType,
-                            payment.type === "receipt"
-                              ? styles.receiptType
-                              : styles.paymentTypeColor,
+                            {
+                              color:
+                                payment.type === "receipt"
+                                  ? colors.income
+                                  : colors.theRed,
+                              backgroundColor:
+                                payment.type === "receipt"
+                                  ? colors.successBackground
+                                  : colors.dangerBackground,
+                            },
                           ]}
                         >
                           {payment.type === "receipt" ? "دریافت" : "پرداخت"}
                         </Span>
-                        <Span type="default" style={styles.paymentDate}>
+                        <Span type="default" style={[styles.paymentDate, { color: colors.muted }]}>
                           {toJalali(payment.payment_date)}
                         </Span>
                       </Div>
@@ -218,9 +236,12 @@ export default function SettledLoansPage() {
                         type="subtitle"
                         style={[
                           styles.paymentAmount,
-                          payment.type === "receipt"
-                            ? styles.incomeColor
-                            : styles.spendingColor,
+                          {
+                            color:
+                              payment.type === "receipt"
+                                ? colors.income
+                                : colors.theRed,
+                          },
                         ]}
                       >
                         {payment.type === "receipt" ? "+" : "-"}
@@ -249,7 +270,7 @@ export default function SettledLoansPage() {
               color={Colors[colorScheme].tabIconDefault}
             />
             <Spacer height={10} />
-            <Span style={styles.emptyText}>
+            <Span style={[styles.emptyText, { color: colors.muted }]}>
               هیچ وام تسویه شده‌ای یافت نشد
             </Span>
           </Div>
@@ -286,7 +307,6 @@ const styles = StyleSheet.create({
     paddingBottom: 30,
   },
   loanCard: {
-    backgroundColor: "rgba(255, 255, 255, 0.1)",
     borderRadius: 15,
     padding: 20,
     marginVertical: 8,
@@ -305,14 +325,6 @@ const styles = StyleSheet.create({
   typeBadgeText: {
     fontSize: 12,
     fontWeight: "bold",
-  },
-  receivableBadge: {
-    color: "#2196F3",
-    backgroundColor: "rgba(33, 150, 243, 0.15)",
-  },
-  payableBadge: {
-    color: "#F44336",
-    backgroundColor: "rgba(244, 67, 54, 0.15)",
   },
   loanSource: {
     flex: 1,
@@ -333,21 +345,11 @@ const styles = StyleSheet.create({
   },
   amountLabel: {
     fontSize: 11,
-    color: "#888",
     marginBottom: 2,
   },
   amountValue: {
     fontSize: 14,
     fontWeight: "bold",
-  },
-  incomeColor: {
-    color: "#4CAF50",
-  },
-  spendingColor: {
-    color: "#F44336",
-  },
-  settledColor: {
-    color: "#20fb8e",
   },
   datesRow: {
     flexDirection: "row",
@@ -360,7 +362,6 @@ const styles = StyleSheet.create({
   },
   dateLabel: {
     fontSize: 11,
-    color: "#888",
     marginBottom: 2,
   },
   dateValue: {
@@ -368,13 +369,11 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
   descriptionContainer: {
-    backgroundColor: "rgba(255, 255, 255, 0.05)",
     borderRadius: 8,
     padding: 10,
   },
   descriptionLabel: {
     fontSize: 12,
-    color: "#888",
     marginBottom: 2,
   },
   descriptionText: {
@@ -382,13 +381,11 @@ const styles = StyleSheet.create({
   },
   divider: {
     height: 1,
-    backgroundColor: "rgba(255, 255, 255, 0.1)",
     marginVertical: 5,
   },
   paymentsTitle: {
     fontSize: 14,
     fontWeight: "600",
-    color: "#888",
   },
   paymentItem: {
     flexDirection: "row",
@@ -396,7 +393,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: 8,
     borderBottomWidth: 1,
-    borderBottomColor: "rgba(255, 255, 255, 0.05)",
   },
   paymentInfo: {
     flexDirection: "row",
@@ -410,17 +406,8 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
     borderRadius: 10,
   },
-  receiptType: {
-    color: "#4CAF50",
-    backgroundColor: "rgba(76, 175, 80, 0.15)",
-  },
-  paymentTypeColor: {
-    color: "#F44336",
-    backgroundColor: "rgba(244, 67, 54, 0.15)",
-  },
   paymentDate: {
     fontSize: 12,
-    color: "#888",
   },
   paymentAmount: {
     fontSize: 14,
@@ -441,7 +428,6 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     fontSize: 16,
-    color: "#888",
     textAlign: "center",
     marginTop: 10,
   },

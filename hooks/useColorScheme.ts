@@ -1,5 +1,9 @@
-// export { useColorScheme } from 'react-native';
+import { useTheme } from "@/hooks/useTheme";
 
-export function useColorScheme() {
-  return "dark";
+/**
+ * Returns the active color scheme of the app.
+ * It respects the saved theme preference (light / dark / system).
+ */
+export function useColorScheme(): "light" | "dark" {
+  return useTheme().colorScheme;
 }

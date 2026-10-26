@@ -11,9 +11,13 @@ import {
 } from "@/components/Elements";
 import { useSpendingForm } from "@/hooks/BackEnd/Pages/useSpendingForm";
 
+import { Colors } from "@/constants/Colors";
+import { useColorScheme } from "@/hooks/useColorScheme";
 import { StyleSheet } from "react-native";
 
 export default function HomeScreen() {
+  const colors = Colors[useColorScheme()];
+
   // Load BackEnd
   const {
     reasons,
@@ -43,7 +47,7 @@ export default function HomeScreen() {
           value={spending_amount?.toString() ?? ""}
         />
         <Spacer height={5} />
-        <Span type="subtitle" style={{ color: "#118dff" }}>
+        <Span type="subtitle" style={{ color: colors.theLightBlue }}>
           {thePriceString}
         </Span>
 

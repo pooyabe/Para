@@ -1,3 +1,4 @@
+import { useColorScheme } from "@/hooks/useColorScheme";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { useEffect, useState } from "react";
 import { StyleSheet, View, type ViewProps } from "react-native";
@@ -23,8 +24,13 @@ export function Select({
   initialValue = null,
   ...rest
 }: SelectProps) {
+  const colorScheme = useColorScheme();
   const textColor = useThemeColor({}, "text");
+  const mutedColor = useThemeColor({}, "muted");
   const backgroundColor = useThemeColor({}, "background");
+  const surfaceColor = useThemeColor({}, "surface");
+  const borderColor = useThemeColor({}, "border");
+  const cardColor = useThemeColor({}, "card");
   const tintColor = useThemeColor({}, "tint");
 
   const [open, setOpen] = useState(false);
@@ -37,8 +43,12 @@ export function Select({
   }, [items_array]);
 
   return (
-    <View style={[styles.SelectInputGroup, style]}>
-      {label && <Span style={styles.SelectoverLabel}>{label}</Span>}
+    <View style={[styles.SelectInputGroup, { borderColor }, style]}>
+      {label && (
+        <Span style={[styles.SelectoverLabel, { backgroundColor, color: textColor }]}>
+          {label}
+        </Span>
+      )}
       <DropDownPicker
         open={open}
         value={value}
@@ -52,7 +62,7 @@ export function Select({
         setItems={setItems}
         language="FA"
         rtl={true}
-        theme="DARK"
+        theme={colorScheme === "dark" ? "DARK" : "LIGHT"}
         listMode="MODAL"
         modalAnimationType="slide"
         placeholder={placeholder}
@@ -62,21 +72,32 @@ export function Select({
         showTickIcon={true}
         closeOnBackPressed={true}
         itemSeparator={false}
-        searchPlaceholderTextColor={textColor}
+        searchPlaceholderTextColor={mutedColor}
         searchTextInputStyle={{
           borderColor: tintColor,
+          color: textColor,
+          backgroundColor: cardColor,
           fontFamily: "VazirRegular",
           borderRadius: 100,
           borderWidth: 2,
         }}
+        modalContentContainerStyle={{
+          backgroundColor: backgroundColor,
+        }}
+        modalTitleStyle={{
+          color: textColor,
+          fontFamily: "VazirMedium",
+        }}
         placeholderStyle={{
           direction: "rtl",
+          color: mutedColor,
           fontFamily: "VazirMedium",
           paddingRight: 40,
           paddingBottom: 10,
         }}
         dropDownContainerStyle={{
           direction: "rtl",
+          backgroundColor: surfaceColor,
           borderRadius: 15,
           borderWidth: 0,
           padding: 5,
@@ -101,7 +122,7 @@ export function Select({
           fontSize: 16,
         }}
         selectedItemContainerStyle={{
-          backgroundColor: backgroundColor,
+          backgroundColor: cardColor,
           direction: "rtl",
         }}
         tickIconContainerStyle={{
@@ -133,7 +154,6 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
     width: "100%",
     borderRadius: 100,
-    borderColor: useThemeColor({}, "border"),
     zIndex: 1,
     height: 60,
     display: "flex",
@@ -142,7 +162,6 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
   },
   SelectoverLabel: {
-    backgroundColor: "rgb(24, 31, 47)",
     zIndex: 2,
     alignSelf: "flex-end",
     marginRight: 50,

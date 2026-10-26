@@ -21,8 +21,15 @@ function TabIcon({
   focused: boolean;
   children: ReactNode;
 }) {
+  const colors = Colors[useColorScheme()];
+
   return (
-    <Div style={[styles.iconPill, focused && styles.iconPillActive]}>
+    <Div
+      style={[
+        styles.iconPill,
+        focused && { backgroundColor: colors.tabIconActiveBackground },
+      ]}
+    >
       {children}
     </Div>
   );
@@ -57,7 +64,7 @@ export default function TabLayout() {
         tabBarStyle: {
           backgroundColor: colors.tabBackground,
           borderTopWidth: StyleSheet.hairlineWidth,
-          borderTopColor: "rgba(155, 161, 166, 0.35)",
+          borderTopColor: colors.tabBorder,
           height: tabBarHeight + bottomInset,
           paddingTop: 6,
           paddingBottom: bottomInset,
@@ -193,8 +200,5 @@ const styles = StyleSheet.create({
     borderRadius: 13,
     alignItems: "center",
     justifyContent: "center",
-  },
-  iconPillActive: {
-    backgroundColor: "rgba(32, 251, 142, 0.16)",
   },
 });

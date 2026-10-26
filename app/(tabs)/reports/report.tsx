@@ -81,6 +81,7 @@ export default function ReportPage() {
 
   // spending pie chart
   const colorScheme = useColorScheme() as "light" | "dark";
+  const colors = Colors[colorScheme];
 
   let SpendingPieColors: string[] = [];
   for (var i: number = 10; i > 0; i--) {
@@ -178,7 +179,9 @@ export default function ReportPage() {
 
   if (showLoading) {
     return (
-      <Div style={styles.LoadingScreen}>
+      <Div
+        style={[styles.LoadingScreen, { backgroundColor: colors.background }]}
+      >
         <Span type="title" style={styles.LoadingScreenText}>
           لطفا صبر کنید...
         </Span>
@@ -370,7 +373,6 @@ const styles = StyleSheet.create({
   LoadingScreen: {
     width: "100%",
     height: "100%",
-    backgroundColor: "#181f2f",
     position: "absolute",
     zIndex: 1000,
     display: "flex",

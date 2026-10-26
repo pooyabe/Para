@@ -8,6 +8,7 @@ import {
   Spacer,
   Span,
 } from "@/components/Elements";
+import { Colors } from "@/constants/Colors";
 import { useShamsiDate } from "@/hooks/BackEnd/useShamsiDate";
 import {
   getIncomeDestinations,
@@ -37,7 +38,7 @@ export default function EditTransactionModal({
   onSave,
 }: EditTransactionModalProps) {
   const { toGregorian, toJalali, nowJalali } = useShamsiDate();
-  const colorScheme = useColorScheme() as "light" | "dark";
+  const colors = Colors[useColorScheme()];
   const [loadingOptions, setLoadingOptions] = useState(false);
 
   // Form states - following the same pattern as useSpendingForm/useIncomeForm
@@ -219,7 +220,7 @@ export default function EditTransactionModal({
       onRequestClose={onClose}
     >
       <Mother style={styles.modalContainer} _Hpadding={0}>
-        <View style={styles.header}>
+        <View style={[styles.header, { borderBottomColor: colors.divider }]}>
           <Span type="title" style={styles.headerTitle}>
             ویرایش {isIncome ? "دریافتی" : "هزینه"}
           </Span>
@@ -243,7 +244,10 @@ export default function EditTransactionModal({
                 value={amount}
               />
               <Spacer height={5} />
-              <Span type="subtitle" style={styles.amountDisplay}>
+              <Span
+                type="subtitle"
+                style={{ color: colors.theLightBlue }}
+              >
                 {displayAmount}
               </Span>
             </View>
@@ -342,7 +346,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 20,
     borderBottomWidth: 1,
-    borderBottomColor: "#eee",
   },
   headerTitle: {
     fontSize: 20,
@@ -370,9 +373,6 @@ const styles = StyleSheet.create({
   fieldGroup: {
     marginBottom: 20,
     width: "100%",
-  },
-  amountDisplay: {
-    color: "#118dff",
   },
   saveButton: {
     marginTop: 20,

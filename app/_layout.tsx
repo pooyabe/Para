@@ -6,6 +6,7 @@ import "react-native-reanimated";
 import { Colors } from "@/constants/Colors";
 import { initializeDatabase } from "@/hooks/DB";
 import { useColorScheme } from "@/hooks/useColorScheme";
+import { ThemeProvider } from "@/hooks/useTheme";
 import { useEffect } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -20,7 +21,6 @@ export default function RootLayout() {
      */
     initializeDatabase();
   }, []);
-  const colorScheme = useColorScheme() as "light" | "dark";
 
   const [loaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
@@ -36,45 +36,58 @@ export default function RootLayout() {
   }
 
   return (
-    <SafeAreaProvider>
-      <GestureHandlerRootView>
-        <Stack
-          screenOptions={{
-            headerShown: false,
-            contentStyle: {
-              backgroundColor:
-                colorScheme === "dark"
-                  ? Colors["dark"].background
-                  : Colors["light"].background,
-            },
-            animation: "fade",
-            animationMatchesGesture: true,
-            animationTypeForReplace: "pop",
-          }}
-        >
-          <Stack.Screen name="(tabs)" />
-          <Stack.Screen name="+not-found" />
-        </Stack>
-        <Toaster
-          style={{
-            backgroundColor: Colors[colorScheme].text,
-            borderRadius: 100,
-          }}
-          styles={{
-            title: {
-              fontFamily: "VazirSemiBold",
-              direction: "rtl",
-              color: Colors[colorScheme].tabBackground,
-              textAlign: "left",
-            },
-            toastContainer: {
-              direction: "ltr",
-            },
-          }}
-          position="top-center"
-        />
-        <StatusBar style="light" />
-      </GestureHandlerRootView>
-    </SafeAreaProvider>
+    <ThemeProvider>
+      <SafeAreaProvider>
+        <GestureHandlerRootView>
+          <RootNavigator />
+        </GestureHandlerRootView>
+      </SafeAreaProvider>
+    </ThemeProvider>
+  );
+}
+
+/**
+ * The app shell, split from the root layout so it can use the theme context.
+ */
+function RootNavigator() {
+  const colorScheme = useColorScheme();
+  const colors = Colors[colorScheme];
+
+  return (
+    <>
+      <Stack
+        screenOptions={{
+          headerShown: false,
+          contentStyle: {
+            backgroundColor: colors.background,
+          },
+          animation: "fade",
+          animationMatchesGesture: true,
+          animationTypeForReplace: "pop",
+        }}
+      >
+        <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="+not-found" />
+      </Stack>
+      <Toaster
+        style={{
+          backgroundColor: colors.text,
+          borderRadius: 100,
+        }}
+        styles={{
+          title: {
+            fontFamily: "VazirSemiBold",
+            direction: "rtl",
+            color: colors.background,
+            textAlign: "left",
+          },
+          toastContainer: {
+            direction: "ltr",
+          },
+        }}
+        position="top-center"
+      />
+      <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
+    </>
   );
 }

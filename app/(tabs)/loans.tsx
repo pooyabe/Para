@@ -32,6 +32,7 @@ export default function LoansPage() {
   const [modalLoading, setModalLoading] = useState<boolean>(false);
 
   const colorScheme = useColorScheme() as "light" | "dark";
+  const colors = Colors[colorScheme];
   const { toJalali } = useShamsiDate();
 
   const loadLoans = useCallback(async () => {
@@ -178,7 +179,7 @@ export default function LoansPage() {
           <TouchableOpacity
             key={loan.id}
             activeOpacity={0.8}
-            style={styles.loanCard}
+            style={[styles.loanCard, { backgroundColor: colors.card }]}
           >
             <Div style={styles.loanHeader}>
               <Div style={styles.loanTypeBadge}>
@@ -186,9 +187,16 @@ export default function LoansPage() {
                   type="default"
                   style={[
                     styles.typeBadgeText,
-                    loan.type === "receivable"
-                      ? styles.receivableBadge
-                      : styles.payableBadge,
+                    {
+                      color:
+                        loan.type === "receivable"
+                          ? colors.theLightBlue
+                          : colors.theRed,
+                      backgroundColor:
+                        loan.type === "receivable"
+                          ? colors.infoBackground
+                          : colors.dangerBackground,
+                    },
                   ]}
                 >
                   {loan.type === "receivable" ? "طلبکار" : "بدهکار"}
@@ -205,7 +213,7 @@ export default function LoansPage() {
 
             <Div style={styles.amountRow}>
               <Div style={styles.amountColumn}>
-                <Span type="default" style={styles.amountLabel}>
+                <Span type="default" style={[styles.amountLabel, { color: colors.muted }]}>
                   مبلغ کل
                 </Span>
                 <Span type="subtitle" style={styles.amountValue}>
@@ -213,23 +221,26 @@ export default function LoansPage() {
                 </Span>
               </Div>
               <Div style={styles.amountColumn}>
-                <Span type="default" style={styles.amountLabel}>
+                <Span type="default" style={[styles.amountLabel, { color: colors.muted }]}>
                   پرداخت شده
                 </Span>
                 <Span
                   type="subtitle"
                   style={[
                     styles.amountValue,
-                    loan.type === "receivable"
-                      ? styles.incomeColor
-                      : styles.spendingColor,
+                    {
+                      color:
+                        loan.type === "receivable"
+                          ? colors.income
+                          : colors.theRed,
+                    },
                   ]}
                 >
                   {formatAmount(loan.paid_amount)}
                 </Span>
               </Div>
               <Div style={styles.amountColumn}>
-                <Span type="default" style={styles.amountLabel}>
+                <Span type="default" style={[styles.amountLabel, { color: colors.muted }]}>
                   مانده
                 </Span>
                 <Span
@@ -237,10 +248,13 @@ export default function LoansPage() {
                   style={[
                     styles.amountValue,
                     getRemaining(loan) === 0
-                      ? styles.settledColor
-                      : loan.type === "receivable"
-                        ? styles.incomeColor
-                        : styles.spendingColor,
+                      ? { color: colors.theGreen }
+                      : {
+                          color:
+                            loan.type === "receivable"
+                              ? colors.income
+                              : colors.theRed,
+                        },
                   ]}
                 >
                   {formatAmount(getRemaining(loan))}
@@ -251,7 +265,7 @@ export default function LoansPage() {
             <Spacer height={10} />
 
             {/* Progress Bar */}
-            <Div style={styles.progressContainer}>
+            <Div style={[styles.progressContainer, { backgroundColor: colors.card }]}>
               <Div
                 style={[
                   styles.progressBar,
@@ -259,10 +273,10 @@ export default function LoansPage() {
                     width: `${Math.min(getProgress(loan), 100)}%`,
                     backgroundColor:
                       getRemaining(loan) === 0
-                        ? Colors[colorScheme].theGreen
+                        ? colors.theGreen
                         : loan.type === "receivable"
-                          ? "#2196F3"
-                          : "#F44336",
+                          ? colors.theLightBlue
+                          : colors.theRed,
                   },
                 ]}
               />
@@ -272,7 +286,7 @@ export default function LoansPage() {
 
             <Div style={styles.datesRow}>
               <Div style={styles.dateColumn}>
-                <Span type="default" style={styles.dateLabel}>
+                <Span type="default" style={[styles.dateLabel, { color: colors.muted }]}>
                   تاریخ شروع
                 </Span>
                 <Span type="subtitle" style={styles.dateValue}>
@@ -280,7 +294,7 @@ export default function LoansPage() {
                 </Span>
               </Div>
               <Div style={styles.dateColumn}>
-                <Span type="default" style={styles.dateLabel}>
+                <Span type="default" style={[styles.dateLabel, { color: colors.muted }]}>
                   تاریخ سررسید/تسویه
                 </Span>
                 <Span
@@ -288,7 +302,7 @@ export default function LoansPage() {
                   style={[
                     styles.dateValue,
                     isOverdue(loan) && !loan.is_settled
-                      ? styles.overdueDate
+                      ? { color: colors.theRed }
                       : {},
                   ]}
                 >
@@ -300,8 +314,8 @@ export default function LoansPage() {
             {loan.description && (
               <>
                 <Spacer height={8} />
-                <Div style={styles.descriptionContainer}>
-                  <Span type="default" style={styles.descriptionLabel}>
+                <Div style={[styles.descriptionContainer, { backgroundColor: colors.cardAlt }]}>
+                  <Span type="default" style={[styles.descriptionLabel, { color: colors.muted }]}>
                     توضیحات:
                   </Span>
                   <Span type="default" style={styles.descriptionText}>
@@ -322,7 +336,7 @@ export default function LoansPage() {
                   type="Ionicons"
                   name="create-outline"
                   size={22}
-                  color="#2196F3"
+                  color={colors.theLightBlue}
                 />
               </TouchableOpacity>
               <TouchableOpacity
@@ -333,7 +347,7 @@ export default function LoansPage() {
                   type="Ionicons"
                   name="trash-outline"
                   size={22}
-                  color="#F44336"
+                  color={colors.theRed}
                 />
               </TouchableOpacity>
               <TouchableOpacity
@@ -344,7 +358,7 @@ export default function LoansPage() {
                   type="Ionicons"
                   name="list-outline"
                   size={22}
-                  color="#4CAF50"
+                  color={colors.income}
                 />
               </TouchableOpacity>
             </Div>
@@ -363,10 +377,10 @@ export default function LoansPage() {
               type="MaterialIcons"
               name="account-balance-wallet"
               size={48}
-              color={Colors[colorScheme].tabIconDefault}
+              color={colors.tabIconDefault}
             />
             <Spacer height={10} />
-            <Span style={styles.emptyText}>
+            <Span style={[styles.emptyText, { color: colors.muted }]}>
               {viewMode === "active"
                 ? "بده بستونی نداری!"
                 : "فعلا تسویه‌ای نداشتی!"}
@@ -383,9 +397,14 @@ export default function LoansPage() {
         backdropColor="rgba(0,0,0,0.05)"
         onRequestClose={() => setModalLoan(null)}
       >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContentWrapper}>
-            <View style={styles.modalHeader}>
+        <View style={[styles.modalOverlay, { backgroundColor: colors.overlay }]}>
+          <View
+            style={[
+              styles.modalContentWrapper,
+              { backgroundColor: colors.background },
+            ]}
+          >
+            <View style={[styles.modalHeader, { borderBottomColor: colors.divider }]}>
               <Span
                 type="title"
                 style={[styles.modalTitle, styles.modalTitleTruncated]}
@@ -397,7 +416,7 @@ export default function LoansPage() {
                 onPress={() => setModalLoan(null)}
                 style={styles.closeButton}
               >
-                <Span style={styles.closeIcon}>✕</Span>
+                <Span style={[styles.closeIcon, { color: colors.muted }]}>✕</Span>
               </TouchableOpacity>
             </View>
 
@@ -417,20 +436,30 @@ export default function LoansPage() {
                   </Span>
                 ) : (
                   modalPayments.map((payment) => (
-                    <View key={payment.id} style={styles.paymentItem}>
+                    <View
+                      key={payment.id}
+                      style={[styles.paymentItem, { borderBottomColor: colors.divider }]}
+                    >
                       <Div style={styles.paymentInfo}>
                         <Span
                           type="default"
                           style={[
                             styles.paymentType,
-                            payment.type === "receipt"
-                              ? styles.receiptType
-                              : styles.paymentTypeColor,
+                            {
+                              color:
+                                payment.type === "receipt"
+                                  ? colors.income
+                                  : colors.theRed,
+                              backgroundColor:
+                                payment.type === "receipt"
+                                  ? colors.successBackground
+                                  : colors.dangerBackground,
+                            },
                           ]}
                         >
                           {payment.type === "receipt" ? "دریافت" : "پرداخت"}
                         </Span>
-                        <Span type="default" style={styles.paymentDate}>
+                        <Span type="default" style={[styles.paymentDate, { color: colors.muted }]}>
                           {toJalali(payment.payment_date)}
                         </Span>
                       </Div>
@@ -438,9 +467,12 @@ export default function LoansPage() {
                         type="subtitle"
                         style={[
                           styles.paymentAmount,
-                          payment.type === "receipt"
-                            ? styles.incomeColor
-                            : styles.spendingColor,
+                          {
+                            color:
+                              payment.type === "receipt"
+                                ? colors.income
+                                : colors.theRed,
+                          },
                         ]}
                       >
                         {payment.type === "receipt" ? "+" : "-"}
@@ -497,7 +529,6 @@ const styles = StyleSheet.create({
     paddingBottom: 100,
   },
   loanCard: {
-    backgroundColor: "rgba(255, 255, 255, 0.1)",
     borderRadius: 15,
     padding: 20,
     marginVertical: 8,
@@ -516,14 +547,6 @@ const styles = StyleSheet.create({
   typeBadgeText: {
     fontSize: 12,
     fontWeight: "bold",
-  },
-  receivableBadge: {
-    color: "#2196F3",
-    backgroundColor: "rgba(33, 150, 243, 0.15)",
-  },
-  payableBadge: {
-    color: "#F44336",
-    backgroundColor: "rgba(244, 67, 54, 0.15)",
   },
   loanSource: {
     flex: 1,
@@ -544,25 +567,14 @@ const styles = StyleSheet.create({
   },
   amountLabel: {
     fontSize: 11,
-    color: "#888",
     marginBottom: 2,
   },
   amountValue: {
     fontSize: 14,
     fontWeight: "bold",
   },
-  incomeColor: {
-    color: "#4CAF50",
-  },
-  spendingColor: {
-    color: "#F44336",
-  },
-  settledColor: {
-    color: "#20fb8e",
-  },
   progressContainer: {
     height: 6,
-    backgroundColor: "rgba(255, 255, 255, 0.1)",
     borderRadius: 3,
     overflow: "hidden",
   },
@@ -581,24 +593,18 @@ const styles = StyleSheet.create({
   },
   dateLabel: {
     fontSize: 11,
-    color: "#888",
     marginBottom: 2,
   },
   dateValue: {
     fontSize: 13,
     fontWeight: "500",
   },
-  overdueDate: {
-    color: "#F44336",
-  },
   descriptionContainer: {
-    backgroundColor: "rgba(255, 255, 255, 0.05)",
     borderRadius: 8,
     padding: 10,
   },
   descriptionLabel: {
     fontSize: 12,
-    color: "#888",
     marginBottom: 2,
   },
   descriptionText: {
@@ -625,19 +631,16 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     fontSize: 16,
-    color: "#888",
     textAlign: "center",
     marginTop: 10,
   },
   // Modal styles
   modalOverlay: {
     flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
     justifyContent: "center",
     alignItems: "center",
   },
   modalContentWrapper: {
-    backgroundColor: Colors.dark.background,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     width: "100%",
@@ -651,7 +654,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 20,
     borderBottomWidth: 1,
-    borderBottomColor: "rgba(255, 255, 255, 0.1)",
   },
   modalTitle: {
     fontSize: 18,
@@ -669,7 +671,6 @@ const styles = StyleSheet.create({
   closeIcon: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "#888",
   },
   modalLoadingContainer: {
     flex: 1,
@@ -682,13 +683,11 @@ const styles = StyleSheet.create({
   },
   divider: {
     height: 1,
-    backgroundColor: "rgba(255, 255, 255, 0.1)",
     marginVertical: 5,
   },
   paymentsTitle: {
     fontSize: 14,
     fontWeight: "600",
-    color: "#888",
   },
   paymentItem: {
     flexDirection: "row",
@@ -696,7 +695,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: 15,
     borderBottomWidth: 1,
-    borderBottomColor: "rgba(255, 255, 255, 0.05)",
   },
   paymentInfo: {
     flexDirection: "row",
@@ -710,17 +708,8 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
     borderRadius: 10,
   },
-  receiptType: {
-    color: "#4CAF50",
-    backgroundColor: "rgba(76, 175, 80, 0.15)",
-  },
-  paymentTypeColor: {
-    color: "#F44336",
-    backgroundColor: "rgba(244, 67, 54, 0.15)",
-  },
   paymentDate: {
     fontSize: 12,
-    color: "#888",
   },
   paymentAmount: {
     fontSize: 14,

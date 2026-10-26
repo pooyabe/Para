@@ -22,6 +22,7 @@ export function Date({ SelectedDate, todayMax = false, futureYears = 100, ...oth
   const [modalVisible, setModalVisible] = useState(false);
 
   const colorScheme = useColorScheme() as "light" | "dark";
+  const colors = Colors[colorScheme];
 
   const { nowJalali, toGregorian } = useShamsiDate();
 
@@ -56,7 +57,7 @@ export function Date({ SelectedDate, todayMax = false, futureYears = 100, ...oth
             flex: 1,
             justifyContent: "center",
             alignItems: "center",
-            backgroundColor: "rgba(24, 31, 47, 0.95)",
+            backgroundColor: colors.modalBackground,
           }}
         >
           <Span
@@ -86,6 +87,7 @@ export function Date({ SelectedDate, todayMax = false, futureYears = 100, ...oth
               justifyContent: "center",
               alignItems: "center",
               borderWidth: 1,
+              borderColor: colors.border,
               borderRadius: 100,
             }}
             yearMonthTextStyle={{
@@ -118,7 +120,7 @@ export function Date({ SelectedDate, todayMax = false, futureYears = 100, ...oth
             }}
             eachYearTextStyle={{
               fontSize: 16,
-              color: "white",
+              color: colors.background,
             }}
             eachMonthStyle={{
               width: `30%`,
@@ -130,7 +132,7 @@ export function Date({ SelectedDate, todayMax = false, futureYears = 100, ...oth
               borderRadius: 10,
               elevation: 3,
             }}
-            eachMonthTextStyle={{ fontSize: 16, color: "white" }}
+            eachMonthTextStyle={{ fontSize: 16, color: colors.background }}
             weekdaysContainerStyle={{ height: "10%" }}
             weekdayStyle={{
               flex: 1,
@@ -157,9 +159,9 @@ export function Date({ SelectedDate, todayMax = false, futureYears = 100, ...oth
             }}
             selectedDayColor={Colors[colorScheme].theLightBlue}
             dayTextStyle={{ fontSize: 18 }}
-            selectedDayTextColor="white"
-            dayTextColor={Colors[colorScheme].text}
-            disabledTextColor="#4bcffa66"
+            selectedDayTextColor={colors.background}
+            dayTextColor={colors.text}
+            disabledTextColor={colors.muted}
             onDateChange={(date: Date) => {
               if (typeof other.onDateChange === "function") {
                 other.onDateChange(date);

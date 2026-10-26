@@ -20,7 +20,7 @@ type OverChartProps = BarChartPropsType & {
 export function OveralLineChart({
   barData = [{ value: 0, label: "01-01" }],
   title = "عنوان",
-  color = "#118cfe",
+  color,
 }: OverChartProps) {
   /**
    *
@@ -32,6 +32,10 @@ export function OveralLineChart({
   const theGreenColor = useThemeColor({}, "theGreen");
   const theOrangeColor = useThemeColor({}, "theOrange");
   const theTintColor = useThemeColor({}, "tint");
+  const theMutedColor = useThemeColor({}, "muted");
+
+  // Fall back to the app accent color when no bar color is provided.
+  const barColor = color ?? theLightBlue;
 
   /** Zoom in-out the linear chart by changing the spacing constant */
   const [chartZoomConstant, setChartZoomConstant] = useState<number>(
@@ -114,7 +118,7 @@ export function OveralLineChart({
         barWidth={barWidth}
         spacing={chartZoomConstant}
         roundedTop
-        frontColor={color}
+        frontColor={barColor}
         width={screenWidth * 0.93}
         hideOrigin
         // Press
@@ -125,9 +129,9 @@ export function OveralLineChart({
         }}
         //X Axis
         xAxisThickness={1}
-        xAxisColor="gray"
+        xAxisColor={theMutedColor}
         xAxisLabelTextStyle={{
-          color: "gray",
+          color: theMutedColor,
           fontFamily: "VazirRegular",
           direction: "rtl",
           fontSize: 10,
@@ -149,7 +153,7 @@ export function OveralLineChart({
         noOfSections={5}
         rulesType="dashed"
         rulesThickness={1}
-        rulesColor="#eca72c2f"
+        rulesColor={`${theOrangeColor}2f`}
       />
       <Span
         style={{

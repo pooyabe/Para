@@ -8,8 +8,10 @@ import {
   Spacer,
   Span,
 } from "@/components/Elements";
+import { Colors } from "@/constants/Colors";
 import { useLoanForm } from "@/hooks/BackEnd/Pages/useLoanForm";
 import { useShamsiDate } from "@/hooks/BackEnd/useShamsiDate";
+import { useColorScheme } from "@/hooks/useColorScheme";
 import { updateLoan } from "@/hooks/DB";
 import { Loan } from "@/hooks/DB/actions/getLoans";
 import { router, useLocalSearchParams } from "expo-router";
@@ -18,6 +20,7 @@ import { StyleSheet } from "react-native";
 import { toast } from "sonner-native";
 
 export default function EditLoanPage() {
+  const colors = Colors[useColorScheme()];
   const { loan } = useLocalSearchParams<{ loan: string }>();
   const { toJalali } = useShamsiDate();
   const {
@@ -137,7 +140,7 @@ export default function EditLoanPage() {
           value={loan_amount?.toString() ?? ""}
         />
         <Spacer height={5} />
-        <Span type="subtitle" style={{ color: "#118dff" }}>
+        <Span type="subtitle" style={{ color: colors.theLightBlue }}>
           {thePriceString}
         </Span>
 

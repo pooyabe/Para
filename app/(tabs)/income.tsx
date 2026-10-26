@@ -8,10 +8,14 @@ import {
   Spacer,
   Span,
 } from "@/components/Elements";
+import { Colors } from "@/constants/Colors";
 import { useIncomeForm } from "@/hooks/BackEnd/Pages/useIncomeForm";
+import { useColorScheme } from "@/hooks/useColorScheme";
 import { StyleSheet } from "react-native";
 
 export default function IncomePage() {
+  const colors = Colors[useColorScheme()];
+
   const {
     thePriceString,
     reasons,
@@ -40,7 +44,7 @@ export default function IncomePage() {
           value={income_amount?.toString() ?? ""}
         />
         <Spacer height={5} />
-        <Span type="subtitle" style={{ color: "#118cfe" }}>
+        <Span type="subtitle" style={{ color: colors.theLightBlue }}>
           {thePriceString}
         </Span>
 

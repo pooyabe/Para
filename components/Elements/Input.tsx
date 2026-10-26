@@ -25,10 +25,19 @@ export function Input({
   // Theme color retrive
   const textColor = useThemeColor({}, "text");
   const placeholderColor = useThemeColor({}, "placeHolderColor");
+  const borderColor = useThemeColor({}, "border");
+  const backgroundColor = useThemeColor({}, "background");
 
   return (
-    <View style={styles.inputGroup}>
-      <Span style={styles.overLabel}>{label}</Span>
+    <View style={[styles.inputGroup, { borderColor }]}>
+      <Span
+        style={[
+          styles.overLabel,
+          { backgroundColor, color: textColor },
+        ]}
+      >
+        {label}
+      </Span>
       <TextInput
         placeholder={placeholder}
         placeholderTextColor={placeholderColor}
@@ -53,15 +62,11 @@ export function Input({
  *
  */
 
-// Theme styles
-const borderColor = useThemeColor({}, "border");
-
 const styles = StyleSheet.create({
   inputGroup: {
     borderWidth: 1.5,
     width: "100%",
     borderRadius: 100,
-    borderColor,
     zIndex: 1,
     height: 60,
     display: "flex",
@@ -94,7 +99,6 @@ const styles = StyleSheet.create({
    *
    */
   overLabel: {
-    backgroundColor: "rgb(24, 31, 47)",
     zIndex: 2,
     alignSelf: "flex-end",
     marginRight: 50,

@@ -7,6 +7,7 @@ import { spendingTableSQL } from "./schemas/spending";
 import { spendingItemsTableSQL } from "./schemas/spending_items";
 import { loansTableSQL } from "./schemas/loans";
 import { loanPaymentsTableSQL } from "./schemas/loan_payments";
+import { settingsTableSQL } from "./schemas/settings";
 
 export const initializeDatabase = async () => {
   try {
@@ -24,6 +25,7 @@ export const initializeDatabase = async () => {
       ${spendingTableSQL}
       ${loansTableSQL}
       ${loanPaymentsTableSQL}
+      ${settingsTableSQL}
     `);
 
     // Migration: Add loan_id column to existing tables if not present

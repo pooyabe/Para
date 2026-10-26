@@ -8,6 +8,8 @@ import {
   View,
 } from "react-native";
 
+import { Colors } from "@/constants/Colors";
+import { useColorScheme } from "@/hooks/useColorScheme";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { useState } from "react";
 
@@ -36,6 +38,7 @@ export function PieChartOne({
    * Get the Colors
    *
    */
+  const colors = Colors[useColorScheme()];
   const theBGColor = useThemeColor({}, "background");
   const theTintColor = useThemeColor({}, "tint");
 
@@ -67,16 +70,26 @@ export function PieChartOne({
   };
 
   return (
-    <Div style={[styles.chartWithBG, styles.singleChart, { direction: "rtl" }]}>
+    <Div
+      style={[
+        styles.chartWithBG,
+        styles.singleChart,
+        {
+          direction: "rtl",
+          backgroundColor: colors.infoBackground,
+          borderColor: colors.theLightBlue,
+        },
+      ]}
+    >
       <Span type="title" style={styles.chartTitle}>
         {title}
       </Span>
       <PieChart
-        strokeColor="#232d3c"
+        strokeColor={colors.surface}
         strokeWidth={2}
         donut
         data={data}
-        innerCircleColor="#232d3c"
+        innerCircleColor={colors.surface}
         innerCircleBorderWidth={0}
         innerRadius={80}
         innerCircleBorderColor={theTintColor}
@@ -117,7 +130,7 @@ export function PieChartOne({
                 style={[
                   styles.dataLegendIndicator,
                   {
-                    backgroundColor: item.color || "white",
+                    backgroundColor: item.color || colors.background,
                     fontSize: 12,
                   },
                 ]}
@@ -141,8 +154,10 @@ export function PieChartOne({
           animationType="fade"
           onRequestClose={() => setModalVisible(false)}
         >
-          <View style={styles.modalOverlay}>
-            <Div style={styles.modalContent}>
+          <View
+            style={[styles.modalOverlay, { backgroundColor: colors.overlay }]}
+          >
+            <Div style={[styles.modalContent, { backgroundColor: colors.surface }]}>
               <Span type="title" style={styles.modalTitle}>
                 {selectedItem.text}
                 {selectedItem.amount
@@ -150,16 +165,19 @@ export function PieChartOne({
                   : ""}
               </Span>
 
-              <Span style={styles.modalSubtitle}>
+              <Span style={[styles.modalSubtitle, { color: colors.muted }]}>
                 درصد: {selectedItem.value}%
               </Span>
 
               {selectedItem.items && selectedItem.items.length > 0 ? (
                 <ScrollView style={styles.modalItems}>
                   {selectedItem.items.map((sub, idx) => (
-                    <Div style={styles.modalItem} key={idx}>
+                    <Div
+                      style={[styles.modalItem, { borderBottomColor: colors.divider }]}
+                      key={idx}
+                    >
                       <Span style={styles.modalItemTitle}>{sub.title}</Span>
-                      <Span style={styles.modalItemAmount}>
+                      <Span style={[styles.modalItemAmount, { color: colors.muted }]}>
                         {formatNumber(sub.amount)} تومان ({sub.percent}%)
                       </Span>
                     </Div>
@@ -173,7 +191,7 @@ export function PieChartOne({
 
               <TouchableOpacity
                 onPress={() => setModalVisible(false)}
-                style={styles.modalCloseButton}
+                style={[styles.modalCloseButton, { backgroundColor: colors.theLightBlue }]}
                 activeOpacity={0.8}
               >
                 <Span type="default">باشه</Span>
@@ -200,13 +218,11 @@ const styles = StyleSheet.create({
   },
 
   chartWithBG: {
-    backgroundColor: "#c9fbff11",
     borderRadius: 12,
     borderRightWidth: 4,
     width: screenWidth * 0.95,
     marginTop: 20,
     alignSelf: "center",
-    borderColor: "#118dff",
   },
 
   /**
@@ -256,13 +272,11 @@ const styles = StyleSheet.create({
   // Modal styles
   modalOverlay: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.6)",
     justifyContent: "center",
     alignItems: "center",
     paddingHorizontal: 20,
   },
   modalContent: {
-    backgroundColor: "#0f1724",
     borderRadius: 12,
     padding: 18,
     width: "100%",
@@ -274,7 +288,6 @@ const styles = StyleSheet.create({
   },
   modalSubtitle: {
     fontSize: 13,
-    color: "#9aa4b2",
     marginBottom: 12,
   },
   modalItems: {
@@ -285,14 +298,12 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingVertical: 8,
     borderBottomWidth: 1,
-    borderBottomColor: "#1e2938",
   },
   modalItemTitle: {
     fontSize: 13,
   },
   modalItemAmount: {
     fontSize: 13,
-    color: "#9aa4b2",
   },
   modalSingle: {
     marginBottom: 12,
@@ -302,6 +313,5 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 14,
     borderRadius: 8,
-    backgroundColor: "#118dff",
   },
 });

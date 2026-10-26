@@ -40,6 +40,7 @@ export default function TransactionsList() {
   );
 
   const colorScheme = useColorScheme() as "light" | "dark";
+  const colors = Colors[colorScheme];
   const { toGregorian } = useShamsiDate();
 
   const loadTransactions = async (
@@ -125,7 +126,7 @@ export default function TransactionsList() {
             type="Ionicons"
             name="arrow-back"
             size={20}
-            color="white"
+            color={colors.text}
           />
         </TouchableOpacity>
       </Div>
@@ -159,18 +160,22 @@ export default function TransactionsList() {
         ))}
         {loading && (
           <Div style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color={Colors[colorScheme].tint} />
+            <ActivityIndicator size="large" color={colors.tint} />
             <Span style={styles.loadingText}>در حال بارگذاری...</Span>
           </Div>
         )}
         {!hasMore && transactions.length > 0 && (
           <Div style={styles.endContainer}>
-            <Span style={styles.endText}>تمام تراکنش‌ها نمایش داده شد</Span>
+            <Span style={[styles.endText, { color: colors.muted }]}>
+              تمام تراکنش‌ها نمایش داده شد
+            </Span>
           </Div>
         )}
         {transactions.length === 0 && !loading && (
           <Div style={styles.emptyContainer}>
-            <Span style={styles.emptyText}>هیچ تراکنشی یافت نشد</Span>
+            <Span style={[styles.emptyText, { color: colors.muted }]}>
+              هیچ تراکنشی یافت نشد
+            </Span>
           </Div>
         )}
       </ScrollView>
@@ -218,7 +223,6 @@ const styles = StyleSheet.create({
   },
   endText: {
     fontSize: 16,
-    color: "#888",
   },
   emptyContainer: {
     alignItems: "center",
@@ -228,6 +232,5 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     fontSize: 18,
-    color: "#888",
   },
 });

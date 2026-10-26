@@ -1,9 +1,11 @@
 import { Div, IconSymbol, Span } from "@/components/Elements";
+import { Colors } from "@/constants/Colors";
 import { useShamsiDate } from "@/hooks/BackEnd/useShamsiDate";
 import { Transaction } from "@/hooks/DB/reports/useTransactions";
 import numberToText from "@/hooks/numberToText";
 import { Alert, StyleSheet, TouchableOpacity } from "react-native";
 import { useState } from "react";
+import { useColorScheme } from "@/hooks/useColorScheme";
 import EditTransactionModal from "./EditTransactionModal";
 
 interface TransactionItemProps {
@@ -17,6 +19,7 @@ export default function TransactionItem({
   onDelete,
   onRefresh,
 }: TransactionItemProps) {
+  const colors = Colors[useColorScheme()];
   const { toJalali } = useShamsiDate();
 
   const formattedDate = toJalali(transaction.transaction_date);
@@ -55,12 +58,12 @@ export default function TransactionItem({
 
   return (
     <TouchableOpacity activeOpacity={0.8}>
-      <Div style={styles.container}>
+      <Div style={[styles.container, { backgroundColor: colors.card }]}>
         <Div style={styles.leftSection}>
           <Span
             style={[
               styles.amount,
-              isIncome ? styles.incomeAmount : styles.spendingAmount,
+              { color: isIncome ? colors.income : colors.theRed },
             ]}
           >
             {isIncome ? "+" : "-"}
@@ -68,12 +71,16 @@ export default function TransactionItem({
           </Span>
           <Span style={styles.reason}>{transaction.reason}</Span>
           {transaction.destination && (
-            <Span style={styles.destination}>{transaction.destination}</Span>
+            <Span style={[styles.destination, { color: colors.muted }]}>
+              {transaction.destination}
+            </Span>
           )}
         </Div>
         <Div style={styles.rightSection}>
           <Div style={styles.rightTopRow}>
-            <Span style={styles.date}>{formattedDate}</Span>
+            <Span style={[styles.date, { color: colors.muted }]}>
+              {formattedDate}
+            </Span>
             <Span style={styles.type}>{isIncome ? "دریافتی" : "هزینه"}</Span>
           </Div>
           <Div style={styles.actionButtons}>
@@ -82,7 +89,7 @@ export default function TransactionItem({
                 type="Ionicons"
                 name="create-outline"
                 size={20}
-                color="#2196F3"
+                color={colors.theLightBlue}
               />
             </TouchableOpacity>
             {onDelete && (
@@ -91,7 +98,7 @@ export default function TransactionItem({
                   type="Ionicons"
                   name="trash-outline"
                   size={20}
-                  color="#F44336"
+                  color={colors.theRed}
                 />
               </TouchableOpacity>
             )}
@@ -116,7 +123,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 15,
     marginVertical: 5,
-    backgroundColor: "rgba(255, 255, 255, 0.1)",
     borderRadius: 10,
   },
   leftSection: {
@@ -143,24 +149,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
   },
-  incomeAmount: {
-    color: "#4CAF50", // green
-  },
-  spendingAmount: {
-    color: "#F44336", // red
-  },
   reason: {
     fontSize: 14,
     marginTop: 5,
   },
   destination: {
     fontSize: 12,
-    color: "#888",
     marginTop: 2,
   },
   date: {
     fontSize: 12,
-    color: "#888",
   },
   type: {
     fontSize: 12,

@@ -33,3 +33,7 @@ export * from "./actions/getLoanPayments";
 export * from "./actions/getLoanOptions";
 export * from "./actions/getSettledLoans";
 export { getLoanById } from "./actions/getLoans";
+
+// App settings actions (theme, preferences, ...)
+export * from "./actions/getSetting";
+export * from "./actions/setSetting";
