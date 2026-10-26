@@ -1,5 +1,5 @@
 import { getDbConnection } from "../helpers";
-import { addLoanPayment, getLoanById } from "..";
+import { addLoanPayment, getLoanById } from "./loanQueries";
 
 /**
  * دریافت ID از جدول خاص؛ در صورت نبود، درج و برگشت ID
