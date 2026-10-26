@@ -114,6 +114,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   hint: {
-    textAlign: "right",
+    textAlign: "center",
   },
 });
