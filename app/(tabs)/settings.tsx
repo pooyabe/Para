@@ -137,9 +137,6 @@ export default function SettingsPage() {
               {
                 backgroundColor: colors.card,
                 borderColor: colors.divider,
-
-                // Hide it till fixing the restore error
-                display: "none",
               },
             ]}
           >
