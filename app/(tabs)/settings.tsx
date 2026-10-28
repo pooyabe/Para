@@ -15,7 +15,14 @@ import {
   useTheme,
   type ThemePreference,
 } from "@/hooks/useTheme";
-import { Alert, ScrollView, StyleSheet } from "react-native";
+import Constants from "expo-constants";
+import { useState } from "react";
+import {
+  Alert,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
 
 const THEME_LABELS: Record<ThemePreference, string> = {
   light: "روشن",
@@ -44,6 +51,8 @@ export default function SettingsPage() {
     isWiping,
     isBusy,
   } = useDataBackup();
+
+  const [isBackupActionsExpanded, setIsBackupActionsExpanded] = useState(false);
 
   const selectedIndex = Math.max(THEME_PREFERENCES.indexOf(themePreference), 0);
 
@@ -77,7 +86,7 @@ export default function SettingsPage() {
         showsVerticalScrollIndicator={false}
       >
         <Div style={styles.container}>
-          <Spacer height={40} />
+          <Spacer height={20} />
 
           <Span type="title" style={styles.pageTitle}>
             تنظیمات
@@ -140,89 +149,115 @@ export default function SettingsPage() {
               },
             ]}
           >
-            <Div style={styles.cardHeader}>
+            <TouchableOpacity
+              accessibilityRole="button"
+              accessibilityState={{ expanded: isBackupActionsExpanded }}
+              onPress={() =>
+                setIsBackupActionsExpanded((expanded) => !expanded)
+              }
+              style={styles.accordionHeader}
+            >
               <IconSymbol
                 type="Ionicons"
-                name="file-tray-full-outline"
+                name={
+                  isBackupActionsExpanded
+                    ? "chevron-up-outline"
+                    : "chevron-down-outline"
+                }
                 size={22}
                 color={colors.tint}
               />
               <Span type="defaultSemiBold" style={styles.cardTitle}>
                 داده‌ها و پشتیبان
               </Span>
-            </Div>
+              <IconSymbol
+                type="Ionicons"
+                name="file-tray-full-outline"
+                size={22}
+                color={colors.tint}
+              />
+            </TouchableOpacity>
 
-            <Spacer height={10} />
+            <Spacer height={12} />
 
             <Span
               type="subtitle"
               style={[styles.description, { color: colors.muted }]}
             >
-              همه تراکنش‌ها، دسته‌بندی‌ها، وام‌ها و پرداخت‌هاشون در یک فایل CSV
-              ذخیره می‌شن. برای خروجی، پوشه‌ای که فایل باید اونجا ساخته بشه رو
-              انتخاب کن.
+              برای اینکه اطلاعاتت محفوظ بمونه، می‌تونی از داده‌هات فایل پشتیبان
+              بگیری و هر وقت خواستی دوباره برگردونیش. برای دیدن گزینه‌های
+              خروجی، بازیابی یا پاک‌کردن اطلاعات، روی آیکون بالا بزن.
             </Span>
 
-            <Spacer height={20} />
+            {isBackupActionsExpanded && (
+              <>
+                <Spacer height={20} />
+                <SButton
+                  text={isExporting ? "در حال ساخت فایل…" : "خروجی گرفتن (CSV)"}
+                  disabled={isBusy}
+                  onPress={exportData}
+                  style={[
+                    styles.actionButton,
+                    {
+                      borderColor: colors.tint,
+                      backgroundColor: colors.infoBackground,
+                      opacity: isBusy ? 0.5 : 1,
+                    },
+                  ]}
+                />
 
-            <SButton
-              text={isExporting ? "در حال ساخت فایل…" : "خروجی گرفتن (CSV)"}
-              disabled={isBusy}
-              onPress={exportData}
-              style={[
-                styles.actionButton,
-                {
-                  borderColor: colors.tint,
-                  backgroundColor: colors.infoBackground,
-                  opacity: isBusy ? 0.5 : 1,
-                },
-              ]}
-            />
+                <Spacer height={10} />
 
-            <Spacer height={10} />
+                <SButton
+                  text={isImporting ? "در حال بازگردانی…" : "بازگردانی از فایل"}
+                  disabled={isBusy}
+                  onPress={confirmImport}
+                  style={[
+                    styles.actionButton,
+                    {
+                      borderColor: colors.theOrange,
+                      backgroundColor: colors.warningBackground,
+                      opacity: isBusy ? 0.5 : 1,
+                    },
+                  ]}
+                />
 
-            <SButton
-              text={isImporting ? "در حال بازگردانی…" : "بازگردانی از فایل"}
-              disabled={isBusy}
-              onPress={confirmImport}
-              style={[
-                styles.actionButton,
-                {
-                  borderColor: colors.theOrange,
-                  backgroundColor: colors.warningBackground,
-                  opacity: isBusy ? 0.5 : 1,
-                },
-              ]}
-            />
+                <Spacer height={10} />
 
-            <Spacer height={10} />
-
-            <SButton
-              text={isWiping ? "در حال پاک کردن…" : "پاک کردن همه داده‌ها"}
-              disabled={isBusy}
-              onPress={confirmWipe}
-              style={[
-                styles.actionButton,
-                {
-                  borderColor: colors.theRed,
-                  backgroundColor: colors.dangerBackground,
-                  opacity: isBusy ? 0.5 : 1,
-                },
-              ]}
-            />
-
-            <Spacer height={15} />
-
-            <Span
-              type="subtitle"
-              style={[styles.hint, { color: colors.muted }]}
-            >
-              بازگردانی، داده‌های فعلی رو با فایل پشتیبان جایگزین می‌کنه. تم
-              برنامه تغییری نمی‌کنه.
-            </Span>
+                <SButton
+                  text={isWiping ? "در حال پاک کردن…" : "پاک کردن همه داده‌ها"}
+                  disabled={isBusy}
+                  onPress={confirmWipe}
+                  style={[
+                    styles.actionButton,
+                    {
+                      borderColor: colors.theRed,
+                      backgroundColor: colors.dangerBackground,
+                      opacity: isBusy ? 0.5 : 1,
+                    },
+                  ]}
+                />
+                <Spacer height={15} />
+                <Span
+                  type="subtitle"
+                  style={[styles.hint, { color: colors.muted }]}
+                >
+                  بازگردانی، داده‌های فعلی رو با فایل پشتیبان جایگزین می‌کنه.
+                  تم برنامه تغییری نمی‌کنه.
+                </Span>
+              </>
+            )}
           </Div>
 
-          <Spacer height={40} />
+          <Spacer height={30} />
+          <Span
+            type="subtitle"
+            style={[styles.version, { color: colors.muted }]}
+          >
+            نسخه {process.env.EXPO_OS}_{Constants.expoConfig?.version}_
+            {Constants.expoConfig?.android?.versionCode}
+          </Span>
+          <Spacer height={20} />
         </Div>
       </ScrollView>
     </Mother>
@@ -242,7 +277,8 @@ const styles = StyleSheet.create({
   },
   pageTitle: {
     fontSize: 24,
-    alignSelf: "flex-end",
+    alignSelf: "stretch",
+    textAlign: "right",
   },
   card: {
     width: "100%",
@@ -256,12 +292,24 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     columnGap: 10,
   },
+  accordionHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    columnGap: 10,
+    minHeight: 32,
+  },
   cardTitle: {
     fontSize: 18,
   },
   description: {
+    direction: "rtl",
     textAlign: "right",
-    lineHeight: 20,
+    lineHeight: 22,
+  },
+  version: {
+    alignSelf: "center",
+    textAlign: "center",
   },
   actionButton: {
     borderWidth: 2,
