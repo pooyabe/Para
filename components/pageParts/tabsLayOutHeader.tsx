@@ -1,10 +1,11 @@
-import { Dimensions, Image, TouchableOpacity } from "react-native";
+import { Image, TouchableOpacity } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Div, Span } from "../Elements";
 
 import { router } from "expo-router";
 
 export function TabsHeader() {
-  const ScreenHeight = Dimensions.get("screen").height;
+  const insets = useSafeAreaInsets();
 
   return (
     <Div
@@ -12,7 +13,7 @@ export function TabsHeader() {
         flexDirection: "row",
         alignItems: "center",
         margin: 0,
-        paddingTop: ScreenHeight * 0.06,
+        paddingTop: insets.top + 12,
         paddingHorizontal: 35,
         direction: "rtl",
         height: "auto",
