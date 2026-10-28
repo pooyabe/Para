@@ -213,7 +213,10 @@ export default function LoansPage() {
 
             <Div style={styles.amountRow}>
               <Div style={styles.amountColumn}>
-                <Span type="default" style={[styles.amountLabel, { color: colors.muted }]}>
+                <Span
+                  type="default"
+                  style={[styles.amountLabel, { color: colors.muted }]}
+                >
                   مبلغ کل
                 </Span>
                 <Span type="subtitle" style={styles.amountValue}>
@@ -221,7 +224,10 @@ export default function LoansPage() {
                 </Span>
               </Div>
               <Div style={styles.amountColumn}>
-                <Span type="default" style={[styles.amountLabel, { color: colors.muted }]}>
+                <Span
+                  type="default"
+                  style={[styles.amountLabel, { color: colors.muted }]}
+                >
                   پرداخت شده
                 </Span>
                 <Span
@@ -240,7 +246,10 @@ export default function LoansPage() {
                 </Span>
               </Div>
               <Div style={styles.amountColumn}>
-                <Span type="default" style={[styles.amountLabel, { color: colors.muted }]}>
+                <Span
+                  type="default"
+                  style={[styles.amountLabel, { color: colors.muted }]}
+                >
                   مانده
                 </Span>
                 <Span
@@ -265,7 +274,12 @@ export default function LoansPage() {
             <Spacer height={10} />
 
             {/* Progress Bar */}
-            <Div style={[styles.progressContainer, { backgroundColor: colors.card }]}>
+            <Div
+              style={[
+                styles.progressContainer,
+                { backgroundColor: colors.card },
+              ]}
+            >
               <Div
                 style={[
                   styles.progressBar,
@@ -286,7 +300,10 @@ export default function LoansPage() {
 
             <Div style={styles.datesRow}>
               <Div style={styles.dateColumn}>
-                <Span type="default" style={[styles.dateLabel, { color: colors.muted }]}>
+                <Span
+                  type="default"
+                  style={[styles.dateLabel, { color: colors.muted }]}
+                >
                   تاریخ شروع
                 </Span>
                 <Span type="subtitle" style={styles.dateValue}>
@@ -294,7 +311,10 @@ export default function LoansPage() {
                 </Span>
               </Div>
               <Div style={styles.dateColumn}>
-                <Span type="default" style={[styles.dateLabel, { color: colors.muted }]}>
+                <Span
+                  type="default"
+                  style={[styles.dateLabel, { color: colors.muted }]}
+                >
                   تاریخ سررسید/تسویه
                 </Span>
                 <Span
@@ -314,8 +334,16 @@ export default function LoansPage() {
             {loan.description && (
               <>
                 <Spacer height={8} />
-                <Div style={[styles.descriptionContainer, { backgroundColor: colors.cardAlt }]}>
-                  <Span type="default" style={[styles.descriptionLabel, { color: colors.muted }]}>
+                <Div
+                  style={[
+                    styles.descriptionContainer,
+                    { backgroundColor: colors.cardAlt },
+                  ]}
+                >
+                  <Span
+                    type="default"
+                    style={[styles.descriptionLabel, { color: colors.muted }]}
+                  >
                     توضیحات:
                   </Span>
                   <Span type="default" style={styles.descriptionText}>
@@ -389,6 +417,15 @@ export default function LoansPage() {
         )}
       </ScrollView>
 
+      <TouchableOpacity
+        accessibilityRole="button"
+        accessibilityLabel="افزودن وام جدید"
+        onPress={() => router.navigate("/loans/add")}
+        style={[styles.addLoanButton, { backgroundColor: colors.theGreen }]}
+      >
+        <IconSymbol type="Ionicons" name="add" size={30} color="#FFFFFF" />
+      </TouchableOpacity>
+
       {/* Payments Modal */}
       <Modal
         visible={!!modalLoan}
@@ -397,14 +434,21 @@ export default function LoansPage() {
         backdropColor="rgba(0,0,0,0.05)"
         onRequestClose={() => setModalLoan(null)}
       >
-        <View style={[styles.modalOverlay, { backgroundColor: colors.overlay }]}>
+        <View
+          style={[styles.modalOverlay, { backgroundColor: colors.overlay }]}
+        >
           <View
             style={[
               styles.modalContentWrapper,
               { backgroundColor: colors.background },
             ]}
           >
-            <View style={[styles.modalHeader, { borderBottomColor: colors.divider }]}>
+            <View
+              style={[
+                styles.modalHeader,
+                { borderBottomColor: colors.divider },
+              ]}
+            >
               <Span
                 type="title"
                 style={[styles.modalTitle, styles.modalTitleTruncated]}
@@ -416,7 +460,9 @@ export default function LoansPage() {
                 onPress={() => setModalLoan(null)}
                 style={styles.closeButton}
               >
-                <Span style={[styles.closeIcon, { color: colors.muted }]}>✕</Span>
+                <Span style={[styles.closeIcon, { color: colors.muted }]}>
+                  ✕
+                </Span>
               </TouchableOpacity>
             </View>
 
@@ -438,7 +484,10 @@ export default function LoansPage() {
                   modalPayments.map((payment) => (
                     <View
                       key={payment.id}
-                      style={[styles.paymentItem, { borderBottomColor: colors.divider }]}
+                      style={[
+                        styles.paymentItem,
+                        { borderBottomColor: colors.divider },
+                      ]}
                     >
                       <Div style={styles.paymentInfo}>
                         <Span
@@ -459,7 +508,10 @@ export default function LoansPage() {
                         >
                           {payment.type === "receipt" ? "دریافت" : "پرداخت"}
                         </Span>
-                        <Span type="default" style={[styles.paymentDate, { color: colors.muted }]}>
+                        <Span
+                          type="default"
+                          style={[styles.paymentDate, { color: colors.muted }]}
+                        >
                           {toJalali(payment.payment_date)}
                         </Span>
                       </Div>
@@ -718,5 +770,23 @@ const styles = StyleSheet.create({
   },
   emptyPaymentsText: {
     textAlign: "center",
+  },
+
+  // Add Loan Button
+  addLoanButton: {
+    position: "absolute",
+    right: 24,
+    bottom: 24,
+    width: 58,
+    height: 58,
+    borderRadius: 29,
+    alignItems: "center",
+    justifyContent: "center",
+    elevation: 8,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.25,
+    shadowRadius: 5,
+    zIndex: 10,
   },
 });
