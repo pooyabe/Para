@@ -39,7 +39,7 @@ export function OveralLineChart({
 
   /** Zoom in-out the linear chart by changing the spacing constant */
   const [chartZoomConstant, setChartZoomConstant] = useState<number>(
-    (screenWidth * 0.5) / (barData.length + 1)
+    (screenWidth * 0.5) / (barData.length + 1),
   );
   const [barWidth, setBarWidth] = useState<number>(12);
   const changeChartZoom = (theLeveler: number): void => {
@@ -191,6 +191,7 @@ const styles = StyleSheet.create({
     direction: "ltr",
     paddingTop: 20,
     paddingBottom: 20,
+    paddingHorizontal: 10,
   },
   chartTitle: {
     fontSize: 16,
