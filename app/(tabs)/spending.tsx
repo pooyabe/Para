@@ -36,10 +36,10 @@ export default function HomeScreen() {
   return (
     <Mother>
       <Div style={styles.container}>
-        <Spacer />
         <Span type="title" style={styles.pageTitle}>
           پول پرید؟
         </Span>
+        <Spacer height={20} />
         <Input
           label="چقد شد؟"
           type="number"
