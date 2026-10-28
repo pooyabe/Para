@@ -108,6 +108,7 @@ export default function TabLayout() {
         name="settings"
         options={{
           title: "تنظیمات",
+          headerShown: false,
           tabBarIcon: ({ color, focused }) => (
             <TabIcon focused={focused}>
               <IconSymbol
