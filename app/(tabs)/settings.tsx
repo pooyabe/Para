@@ -17,12 +17,7 @@ import {
 } from "@/hooks/useTheme";
 import Constants from "expo-constants";
 import { useState } from "react";
-import {
-  Alert,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-} from "react-native";
+import { Alert, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
 
 const THEME_LABELS: Record<ThemePreference, string> = {
   light: "روشن",
@@ -185,8 +180,8 @@ export default function SettingsPage() {
               style={[styles.description, { color: colors.muted }]}
             >
               برای اینکه اطلاعاتت محفوظ بمونه، می‌تونی از داده‌هات فایل پشتیبان
-              بگیری و هر وقت خواستی دوباره برگردونیش. برای دیدن گزینه‌های
-              خروجی، بازیابی یا پاک‌کردن اطلاعات، روی آیکون بالا بزن.
+              بگیری و هر وقت خواستی دوباره برگردونیش. برای دیدن گزینه‌های خروجی،
+              بازیابی یا پاک‌کردن اطلاعات، روی عنوان بالا بزن.
             </Span>
 
             {isBackupActionsExpanded && (
@@ -242,8 +237,8 @@ export default function SettingsPage() {
                   type="subtitle"
                   style={[styles.hint, { color: colors.muted }]}
                 >
-                  بازگردانی، داده‌های فعلی رو با فایل پشتیبان جایگزین می‌کنه.
-                  تم برنامه تغییری نمی‌کنه.
+                  بازگردانی، داده‌های فعلی رو با فایل پشتیبان جایگزین می‌کنه. تم
+                  برنامه تغییری نمی‌کنه.
                 </Span>
               </>
             )}
@@ -304,7 +299,7 @@ const styles = StyleSheet.create({
   },
   description: {
     direction: "rtl",
-    textAlign: "right",
+    textAlign: "justify",
     lineHeight: 22,
   },
   version: {
