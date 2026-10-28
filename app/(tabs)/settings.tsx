@@ -109,6 +109,8 @@ export default function SettingsPage() {
               <Span type="defaultSemiBold" style={styles.cardTitle}>
                 ظاهر برنامه
               </Span>
+
+              <Span type="defaultSemiBold"></Span>
             </Div>
             <Div style={{ direction: "ltr" }}>
               <Radio
@@ -154,11 +156,7 @@ export default function SettingsPage() {
             >
               <IconSymbol
                 type="Ionicons"
-                name={
-                  isBackupActionsExpanded
-                    ? "chevron-up-outline"
-                    : "chevron-down-outline"
-                }
+                name="file-tray-full-outline"
                 size={22}
                 color={colors.tint}
               />
@@ -167,7 +165,11 @@ export default function SettingsPage() {
               </Span>
               <IconSymbol
                 type="Ionicons"
-                name="file-tray-full-outline"
+                name={
+                  isBackupActionsExpanded
+                    ? "chevron-up-outline"
+                    : "chevron-down-outline"
+                }
                 size={22}
                 color={colors.tint}
               />
@@ -284,7 +286,7 @@ const styles = StyleSheet.create({
   cardHeader: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "flex-end",
+    justifyContent: "space-between",
     columnGap: 10,
   },
   accordionHeader: {
