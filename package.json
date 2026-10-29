@@ -4,7 +4,7 @@
   "version": "1.3.24",
   "scripts": {
     "start": "expo start",
-    "postinstall": "node scripts/patch-dropdown-picker.js",
+    "postinstall": "node scripts/patch-dependencies.js",
     "reset-project": "node ./scripts/reset-project.js",
     "android": "expo start --android",
     "ios": "expo start --ios",
