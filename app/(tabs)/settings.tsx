@@ -3,12 +3,10 @@ import {
   IconSymbol,
   Mother,
   Radio,
-  SButton,
   Spacer,
   Span,
 } from "@/components/Elements";
 import { Colors } from "@/constants/Colors";
-import { useDataBackup } from "@/hooks/BackEnd/useDataBackup";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import {
   THEME_PREFERENCES,
@@ -17,8 +15,7 @@ import {
 } from "@/hooks/useTheme";
 import Constants from "expo-constants";
 import { router } from "expo-router";
-import { useState } from "react";
-import { Alert, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
+import { ScrollView, StyleSheet, TouchableOpacity } from "react-native";
 
 const THEME_LABELS: Record<ThemePreference, string> = {
   light: "روشن",
@@ -38,41 +35,7 @@ export default function SettingsPage() {
 
   const { themePreference, setThemePreference } = useTheme();
 
-  const {
-    exportData,
-    importData,
-    wipeData,
-    isExporting,
-    isImporting,
-    isWiping,
-    isBusy,
-  } = useDataBackup();
-
-  const [isBackupActionsExpanded, setIsBackupActionsExpanded] = useState(false);
-
   const selectedIndex = Math.max(THEME_PREFERENCES.indexOf(themePreference), 0);
-
-  const confirmImport = () => {
-    Alert.alert(
-      "بازگردانی داده‌ها",
-      "همه تراکنش‌ها، دسته‌بندی‌ها و وام‌های فعلی با محتوای فایل پشتیبان جایگزین می‌شن. ادامه می‌دی؟",
-      [
-        { text: "لغو", style: "cancel" },
-        { text: "بازگردانی", style: "destructive", onPress: importData },
-      ],
-    );
-  };
-
-  const confirmWipe = () => {
-    Alert.alert(
-      "پاک کردن همه داده‌ها",
-      "همه تراکنش‌ها، دسته‌بندی‌ها و وام‌ها پاک می‌شن. این کار برگشت‌پذیر نیست؛ بهتره اول یک فایل پشتیبان بگیری.",
-      [
-        { text: "لغو", style: "cancel" },
-        { text: "پاک کن", style: "destructive", onPress: wipeData },
-      ],
-    );
-  };
 
   return (
     <Mother>
@@ -138,114 +101,31 @@ export default function SettingsPage() {
           <Spacer height={20} />
 
           {/* Data: export, import, wipe */}
-          <Div
+          <TouchableOpacity
+            accessibilityRole="button"
+            onPress={() => router.navigate("/data")}
             style={[
               styles.card,
-              {
-                backgroundColor: colors.card,
-                borderColor: colors.divider,
-              },
+              styles.navigationCard,
+              { backgroundColor: colors.card, borderColor: colors.divider },
             ]}
           >
-            <TouchableOpacity
-              accessibilityRole="button"
-              accessibilityState={{ expanded: isBackupActionsExpanded }}
-              onPress={() =>
-                setIsBackupActionsExpanded((expanded) => !expanded)
-              }
-              style={styles.accordionHeader}
-            >
-              <IconSymbol
-                type="Ionicons"
-                name="file-tray-full-outline"
-                size={22}
-                color={colors.tint}
-              />
-              <Span type="defaultSemiBold" style={styles.cardTitle}>
-                داده‌ها و پشتیبان
-              </Span>
-              <IconSymbol
-                type="Ionicons"
-                name={
-                  isBackupActionsExpanded
-                    ? "chevron-up-outline"
-                    : "chevron-down-outline"
-                }
-                size={22}
-                color={colors.tint}
-              />
-            </TouchableOpacity>
-
-            <Spacer height={12} />
-
-            <Span
-              type="subtitle"
-              style={[styles.description, { color: colors.muted }]}
-            >
-              برای اینکه اطلاعاتت محفوظ بمونه، می‌تونی از داده‌هات فایل پشتیبان
-              بگیری و هر وقت خواستی دوباره برگردونیش. برای دیدن گزینه‌های خروجی،
-              بازیابی یا پاک‌کردن اطلاعات، روی عنوان بالا بزن.
+            <IconSymbol
+              type="Ionicons"
+              name="file-tray-full-outline"
+              size={22}
+              color={colors.tint}
+            />
+            <Span type="defaultSemiBold" style={styles.cardTitle}>
+              داده‌ها و پشتیبان
             </Span>
-
-            {isBackupActionsExpanded && (
-              <>
-                <Spacer height={20} />
-                <SButton
-                  text={isExporting ? "در حال ساخت فایل…" : "خروجی گرفتن (CSV)"}
-                  disabled={isBusy}
-                  onPress={exportData}
-                  style={[
-                    styles.actionButton,
-                    {
-                      borderColor: colors.tint,
-                      backgroundColor: colors.infoBackground,
-                      opacity: isBusy ? 0.5 : 1,
-                    },
-                  ]}
-                />
-
-                <Spacer height={10} />
-
-                <SButton
-                  text={isImporting ? "در حال بازگردانی…" : "بازگردانی از فایل"}
-                  disabled={isBusy}
-                  onPress={confirmImport}
-                  style={[
-                    styles.actionButton,
-                    {
-                      borderColor: colors.theOrange,
-                      backgroundColor: colors.warningBackground,
-                      opacity: isBusy ? 0.5 : 1,
-                    },
-                  ]}
-                />
-
-                <Spacer height={10} />
-
-                <SButton
-                  text={isWiping ? "در حال پاک کردن…" : "پاک کردن همه داده‌ها"}
-                  disabled={isBusy}
-                  onPress={confirmWipe}
-                  style={[
-                    styles.actionButton,
-                    {
-                      borderColor: colors.theRed,
-                      backgroundColor: colors.dangerBackground,
-                      opacity: isBusy ? 0.5 : 1,
-                    },
-                  ]}
-                />
-                <Spacer height={15} />
-                <Span
-                  type="subtitle"
-                  style={[styles.hint, { color: colors.muted }]}
-                >
-                  بازگردانی، داده‌های فعلی رو با فایل پشتیبان جایگزین می‌کنه. تم
-                  برنامه تغییری نمی‌کنه.
-                </Span>
-              </>
-            )}
-          </Div>
+            <IconSymbol
+              type="Ionicons"
+              name="chevron-back-outline"
+              size={20}
+              color={colors.muted}
+            />
+          </TouchableOpacity>
 
           <Spacer height={20} />
 
@@ -352,27 +232,12 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     columnGap: 10,
   },
-  accordionHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    columnGap: 10,
-    minHeight: 32,
-  },
   cardTitle: {
     fontSize: 18,
-  },
-  description: {
-    direction: "rtl",
-    textAlign: "justify",
-    lineHeight: 22,
   },
   version: {
     alignSelf: "center",
     textAlign: "center",
-  },
-  actionButton: {
-    borderWidth: 2,
   },
   hint: {
     textAlign: "center",
