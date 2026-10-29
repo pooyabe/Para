@@ -26,6 +26,8 @@ import {
   type ImportanceData,
 } from "@/hooks/DB/reports/useImportanceDistribution";
 import { getMonthlyReport } from "@/hooks/DB/reports/useMonthlyReport";
+import { getIncomeDistribution } from "@/hooks/DB/reports/useIncomeDistribution";
+import { getLoanReport, type LoanReportData } from "@/hooks/DB/reports/useLoanReport";
 import { getSpendingDistribution } from "@/hooks/DB/reports/useSpendingPercentage";
 
 import { Colors } from "@/constants/Colors";
@@ -50,7 +52,24 @@ export default function ReportPage() {
   const [showCustomDates, setShowCustomDates] = useState<boolean>(false);
 
   // This states hold the Overal top linechart data
-  const [overalSpendingReport, setOveralSpendingReport] = useState<any[]>([]);
+  const [overalSpendingReport, setOveralSpendingReport] = useState<
+    { value: number; label: string }[]
+  >([]);
+  const [overalIncomeReport, setOveralIncomeReport] = useState<
+    { value: number; label: string }[]
+  >([]);
+  const [incomeDistribution, setIncomeDistribution] = useState<
+    { value: number; text: string; color: string; amount: number }[]
+  >([]);
+  const [loanReport, setLoanReport] = useState<LoanReportData>({
+    receivableTotal: 0,
+    receivableOutstanding: 0,
+    payableTotal: 0,
+    payableOutstanding: 0,
+    receivedInRange: 0,
+    paidInRange: 0,
+    loanCountInRange: 0,
+  });
 
   // This state holds the spending items percentages
   const [percentageSpendingReport, setPercentageSpendingReport] = useState<
@@ -162,6 +181,21 @@ export default function ReportPage() {
       // Get Overal Spending data from DB
       const osr = await getMonthlyReport("spendings", rangeKey, theCustomRange);
       setOveralSpendingReport(osr);
+      const incomeReport = await getMonthlyReport(
+        "incomes",
+        rangeKey,
+        theCustomRange,
+        0,
+      );
+      setOveralIncomeReport(incomeReport);
+      const incomeCategories = await getIncomeDistribution(
+        rangeKey,
+        SpendingPieColors,
+        theCustomRange,
+      );
+      setIncomeDistribution(incomeCategories);
+      const loanData = await getLoanReport(rangeKey, theCustomRange);
+      setLoanReport(loanData);
 
       // Get percentage spending report
       const psr = await getSpendingDistribution(
@@ -335,6 +369,85 @@ export default function ReportPage() {
 
           <PieChartOne data={percentageSpendingReport} title="بیشتر چی خریدی" />
 
+          <OveralLineChart
+            barData={overalIncomeReport}
+            title="درآمدها"
+            color={Colors[colorScheme].income}
+          />
+
+          <PieChartOne data={incomeDistribution} title="درآمد از کجا بوده؟" />
+
+          <Div
+            style={[
+              styles.loanSummary,
+              { backgroundColor: colors.card, borderColor: colors.divider },
+            ]}
+          >
+            <Span type="title" style={styles.loanSummaryTitle}>
+              گزارش وام و طلب
+            </Span>
+            <Span style={[styles.loanSummaryHint, { color: colors.muted }]}>
+              کل مبالغ و مانده‌ها برای همه وام‌هاست؛ دریافتی و پرداختی‌ها مربوط به بازه انتخاب‌شده است.
+            </Span>
+            <Div style={styles.loanSummaryRow}>
+              <Div style={styles.loanSummaryItem}>
+                <Span style={[styles.loanSummaryLabel, { color: colors.muted }]}>
+                  کل طلب ثبت‌شده
+                </Span>
+                <Span type="defaultSemiBold" style={{ color: colors.income }}>
+                  {loanReport.receivableTotal.toLocaleString("fa-IR")}
+                </Span>
+              </Div>
+              <Div style={styles.loanSummaryItem}>
+                <Span style={[styles.loanSummaryLabel, { color: colors.muted }]}>
+                  کل بدهی ثبت‌شده
+                </Span>
+                <Span type="defaultSemiBold" style={{ color: colors.theRed }}>
+                  {loanReport.payableTotal.toLocaleString("fa-IR")}
+                </Span>
+              </Div>
+            </Div>
+            <Div style={styles.loanSummaryRow}>
+              <Div style={styles.loanSummaryItem}>
+                <Span style={[styles.loanSummaryLabel, { color: colors.muted }]}>
+                  طلب باقی‌مانده
+                </Span>
+                <Span type="defaultSemiBold" style={{ color: colors.income }}>
+                  {loanReport.receivableOutstanding.toLocaleString("fa-IR")}
+                </Span>
+              </Div>
+              <Div style={styles.loanSummaryItem}>
+                <Span style={[styles.loanSummaryLabel, { color: colors.muted }]}>
+                  بدهی باقی‌مانده
+                </Span>
+                <Span type="defaultSemiBold" style={{ color: colors.theRed }}>
+                  {loanReport.payableOutstanding.toLocaleString("fa-IR")}
+                </Span>
+              </Div>
+            </Div>
+            <Div style={styles.loanSummaryRow}>
+              <Div style={styles.loanSummaryItem}>
+                <Span style={[styles.loanSummaryLabel, { color: colors.muted }]}>
+                  دریافت‌شده در این بازه
+                </Span>
+                <Span type="defaultSemiBold">
+                  {loanReport.receivedInRange.toLocaleString("fa-IR")}
+                </Span>
+              </Div>
+              <Div style={styles.loanSummaryItem}>
+                <Span style={[styles.loanSummaryLabel, { color: colors.muted }]}>
+                  پرداخت‌شده در این بازه
+                </Span>
+                <Span type="defaultSemiBold">
+                  {loanReport.paidInRange.toLocaleString("fa-IR")}
+                </Span>
+              </Div>
+            </Div>
+            <Span style={[styles.loanSummaryHint, { color: colors.muted }]}>
+              وام‌های ثبت‌شده در این بازه: {loanReport.loanCountInRange}
+            </Span>
+          </Div>
+
           <ImportanceDisplay data={importanceData} />
         </ScrollView>
       </Mother>
@@ -399,6 +512,36 @@ const styles = StyleSheet.create({
   // The Bottom Section of data
   bottomSection: {
     flex: 1,
+  },
+
+  loanSummary: {
+    borderWidth: 1,
+    borderRadius: 14,
+    marginHorizontal: 10,
+    marginTop: 20,
+    padding: 16,
+    rowGap: 12,
+  },
+  loanSummaryTitle: {
+    fontSize: 17,
+    textAlign: "right",
+  },
+  loanSummaryHint: {
+    fontSize: 12,
+    lineHeight: 20,
+    textAlign: "right",
+  },
+  loanSummaryRow: {
+    flexDirection: "row",
+    columnGap: 12,
+  },
+  loanSummaryItem: {
+    flex: 1,
+    rowGap: 4,
+  },
+  loanSummaryLabel: {
+    fontSize: 12,
+    textAlign: "right",
   },
 
   // Loading

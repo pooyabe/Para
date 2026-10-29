@@ -9,7 +9,8 @@ import { getDbConnection } from "../helpers";
 export async function getMonthlyReport(
   dataSoure: string,
   rangeKey: RangeType,
-  customRange?: CustomRange
+  customRange?: CustomRange,
+  minimumTotal: number = 1000,
 ): Promise<{ value: number; label: string }[]> {
   // Connecting to data base
   const db = await getDbConnection();
@@ -43,7 +44,7 @@ export async function getMonthlyReport(
 
       const theResult = await db.getFirstAsync<{ total: number }>(sql, [G_Day]);
 
-      if (typeof theResult?.total === "number" && theResult.total > 1000) {
+      if (typeof theResult?.total === "number" && theResult.total > minimumTotal) {
         returnOutput.push({
           value: theResult.total,
           label: day.format("jDD/jMM"),
@@ -79,7 +80,7 @@ export async function getMonthlyReport(
         GME,
       ]);
 
-      if (typeof theResult?.total === "number" && theResult.total > 1000) {
+      if (typeof theResult?.total === "number" && theResult.total > minimumTotal) {
         returnOutput.push({
           value: theResult.total,
           label: current.format("jYYYY/jMM"),
