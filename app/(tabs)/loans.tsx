@@ -169,6 +169,8 @@ export default function LoansPage() {
         </TouchableOpacity>
       </Div>
 
+      <Spacer height={40} />
+
       {/* View Mode Selector */}
       <Div style={styles.toggleContainer}>
         <Select
@@ -451,19 +453,30 @@ export default function LoansPage() {
         animationType="fade"
         onRequestClose={() => setHelpVisible(false)}
       >
-        <View style={[styles.modalOverlay, { backgroundColor: colors.overlay }]}>
+        <View
+          style={[styles.modalOverlay, { backgroundColor: colors.overlay }]}
+        >
           <View style={[styles.helpModal, { backgroundColor: colors.surface }]}>
             <Span type="title" style={styles.helpTitle}>
               راهنمای وام و طلب
             </Span>
-            <Span style={ { color: colors.text, lineHeight: 30, textAlign: "justify" } }>
+            <Span
+              style={{
+                color: colors.text,
+                lineHeight: 30,
+                textAlign: "justify",
+              }}
+            >
               اینجا پول‌هایی رو که قرض دادی یا قرض گرفتی ثبت و پیگیری کن. مبلغ
               کل، پرداخت‌ها و مانده هر مورد رو می‌بینی و می‌تونی تاریخ سررسید و
               توضیحاتش رو مدیریت کنی.
             </Span>
             <TouchableOpacity
               onPress={() => setHelpVisible(false)}
-              style={[styles.helpCloseButton, { backgroundColor: colors.theLightBlue }]}
+              style={[
+                styles.helpCloseButton,
+                { backgroundColor: colors.theLightBlue },
+              ]}
             >
               <Span>فهمیدم</Span>
             </TouchableOpacity>
