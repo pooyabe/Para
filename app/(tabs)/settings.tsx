@@ -90,34 +90,6 @@ export default function SettingsPage() {
 
           <Spacer height={30} />
 
-          <TouchableOpacity
-            accessibilityRole="button"
-            onPress={() => router.navigate("/help")}
-            style={[
-              styles.card,
-              styles.navigationCard,
-              { backgroundColor: colors.card, borderColor: colors.divider },
-            ]}
-          >
-            <IconSymbol
-              type="Ionicons"
-              name="book-outline"
-              size={22}
-              color={colors.tint}
-            />
-            <Span type="defaultSemiBold" style={styles.cardTitle}>
-              راهنما
-            </Span>
-            <IconSymbol
-              type="Ionicons"
-              name="chevron-back-outline"
-              size={20}
-              color={colors.muted}
-            />
-          </TouchableOpacity>
-
-          <Spacer height={20} />
-
           {/* Appearance */}
           <Div
             style={[
@@ -279,6 +251,34 @@ export default function SettingsPage() {
 
           <TouchableOpacity
             accessibilityRole="button"
+            onPress={() => router.navigate("/help")}
+            style={[
+              styles.card,
+              styles.navigationCard,
+              { backgroundColor: colors.card, borderColor: colors.divider },
+            ]}
+          >
+            <IconSymbol
+              type="Ionicons"
+              name="book-outline"
+              size={22}
+              color={colors.tint}
+            />
+            <Span type="defaultSemiBold" style={styles.cardTitle}>
+              راهنما
+            </Span>
+            <IconSymbol
+              type="Ionicons"
+              name="chevron-back-outline"
+              size={20}
+              color={colors.muted}
+            />
+          </TouchableOpacity>
+
+          <Spacer height={20} />
+
+          <TouchableOpacity
+            accessibilityRole="button"
             onPress={() => router.navigate("/privacy")}
             style={[
               styles.card,
@@ -293,7 +293,7 @@ export default function SettingsPage() {
               color={colors.tint}
             />
             <Span type="defaultSemiBold" style={styles.cardTitle}>
-              سیاست حفظ حریم خصوصی
+              حریم خصوصی
             </Span>
             <IconSymbol
               type="Ionicons"
@@ -343,6 +343,7 @@ const styles = StyleSheet.create({
   navigationCard: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "space-between",
     columnGap: 12,
   },
   cardHeader: {
