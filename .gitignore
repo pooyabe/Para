@@ -38,5 +38,6 @@ yarn-error.*
 
 app-example
 
-#Claude
+# AI
 CLAUDE.md
+AGENTS.md
