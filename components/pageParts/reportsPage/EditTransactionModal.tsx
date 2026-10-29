@@ -19,6 +19,7 @@ import {
 } from "@/hooks/DB";
 import { Transaction } from "@/hooks/DB/reports/useTransactions";
 import numberToText from "@/hooks/numberToText";
+import { formatAmountInput, normalizeAmountInput } from "@/hooks/BackEnd/formatAmountInput";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import React, { useEffect, useState } from "react";
 import { Modal, StyleSheet, TouchableOpacity, View } from "react-native";
@@ -135,9 +136,11 @@ export default function EditTransactionModal({
     }
   };
 
-  const printPriceString = (val: any) => {
-    setDisplayAmount(numberToText(Number(val)));
-    setAmount(val);
+  const printPriceString = (val: string) => {
+    const digits = normalizeAmountInput(val);
+    const numericAmount = digits ? Number(digits) : 0;
+    setDisplayAmount(numberToText(numericAmount));
+    setAmount(digits);
   };
 
   const handleDateChange = (date: string) => {
@@ -240,8 +243,8 @@ export default function EditTransactionModal({
               <Input
                 label={isIncome ? "چقد گرفتی؟" : "چقد شد؟"}
                 type="number"
-                onChangeText={(value) => printPriceString(Number(value))}
-                value={amount}
+                onChangeText={printPriceString}
+                value={formatAmountInput(amount)}
               />
               <Spacer height={5} />
               <Span

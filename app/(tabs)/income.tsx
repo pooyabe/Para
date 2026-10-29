@@ -10,6 +10,7 @@ import {
 } from "@/components/Elements";
 import { Colors } from "@/constants/Colors";
 import { useIncomeForm } from "@/hooks/BackEnd/Pages/useIncomeForm";
+import { formatAmountInput, parseAmountInput } from "@/hooks/BackEnd/formatAmountInput";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { StyleSheet } from "react-native";
 
@@ -40,8 +41,8 @@ export default function IncomePage() {
         <Input
           label="چقد گرفتی؟"
           type="number"
-          onChangeText={(value) => printPriceString(Number(value))}
-          value={income_amount?.toString() ?? ""}
+          onChangeText={(value) => printPriceString(parseAmountInput(value))}
+          value={formatAmountInput(income_amount)}
         />
         <Spacer height={5} />
         <Span type="subtitle" style={{ color: colors.theLightBlue }}>

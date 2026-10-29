@@ -10,6 +10,7 @@ import {
   Span,
 } from "@/components/Elements";
 import { useSpendingForm } from "@/hooks/BackEnd/Pages/useSpendingForm";
+import { formatAmountInput, parseAmountInput } from "@/hooks/BackEnd/formatAmountInput";
 
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
@@ -43,8 +44,8 @@ export default function HomeScreen() {
         <Input
           label="چقد شد؟"
           type="number"
-          onChangeText={(value) => printPriceString(Number(value))}
-          value={spending_amount?.toString() ?? ""}
+          onChangeText={(value) => printPriceString(parseAmountInput(value))}
+          value={formatAmountInput(spending_amount)}
         />
         <Spacer height={5} />
         <Span type="subtitle" style={{ color: colors.theLightBlue }}>

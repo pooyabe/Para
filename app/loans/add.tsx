@@ -10,6 +10,7 @@ import {
 } from "@/components/Elements";
 import { Colors } from "@/constants/Colors";
 import { useLoanForm } from "@/hooks/BackEnd/Pages/useLoanForm";
+import { formatAmountInput, parseAmountInput } from "@/hooks/BackEnd/formatAmountInput";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { router } from "expo-router";
 import { StyleSheet } from "react-native";
@@ -63,8 +64,8 @@ export default function AddLoanPage() {
         <Input
           label={isReceivable ? "چقدر قرض دادی؟" : "چقدر گرفتی؟"}
           type="number"
-          onChangeText={(value) => printPriceString(Number(value))}
-          value={loan_amount?.toString() ?? ""}
+          onChangeText={(value) => printPriceString(parseAmountInput(value))}
+          value={formatAmountInput(loan_amount)}
         />
         <Spacer height={5} />
         <Span type="subtitle" style={{ color: colors.theLightBlue }}>

@@ -30,6 +30,7 @@ export default function LoansPage() {
   const [modalLoan, setModalLoan] = useState<Loan | null>(null);
   const [modalPayments, setModalPayments] = useState<LoanPayment[]>([]);
   const [modalLoading, setModalLoading] = useState<boolean>(false);
+  const [helpVisible, setHelpVisible] = useState(false);
 
   const colorScheme = useColorScheme() as "light" | "dark";
   const colors = Colors[colorScheme];
@@ -145,10 +146,19 @@ export default function LoansPage() {
         <Span type="title" style={styles.headerTitle}>
           مديريت وام و طلب
         </Span>
-
-        <Spacer height={80} />
-
-        <Div style={styles.headerButtons} />
+        <TouchableOpacity
+          accessibilityRole="button"
+          accessibilityLabel="راهنمای صفحه وام و طلب"
+          onPress={() => setHelpVisible(true)}
+          style={styles.helpButton}
+        >
+          <IconSymbol
+            type="Ionicons"
+            name="help-circle-outline"
+            size={25}
+            color={colors.tint}
+          />
+        </TouchableOpacity>
       </Div>
 
       {/* View Mode Selector */}
@@ -426,6 +436,33 @@ export default function LoansPage() {
         <IconSymbol type="Ionicons" name="add" size={30} color="#FFFFFF" />
       </TouchableOpacity>
 
+      {/* Loans help */}
+      <Modal
+        visible={helpVisible}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setHelpVisible(false)}
+      >
+        <View style={[styles.modalOverlay, { backgroundColor: colors.overlay }]}>
+          <View style={[styles.helpModal, { backgroundColor: colors.surface }]}>
+            <Span type="title" style={styles.helpTitle}>
+              راهنمای وام و طلب
+            </Span>
+            <Span style={[styles.helpText, { color: colors.text }]}>
+              اینجا پول‌هایی رو که قرض دادی یا قرض گرفتی ثبت و پیگیری کن. مبلغ
+              کل، پرداخت‌ها و مانده هر مورد رو می‌بینی و می‌تونی تاریخ سررسید و
+              توضیحاتش رو مدیریت کنی.
+            </Span>
+            <TouchableOpacity
+              onPress={() => setHelpVisible(false)}
+              style={[styles.helpCloseButton, { backgroundColor: colors.theLightBlue }]}
+            >
+              <Span>فهمیدم</Span>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
       {/* Payments Modal */}
       <Modal
         visible={!!modalLoan}
@@ -557,9 +594,32 @@ const styles = StyleSheet.create({
     paddingTop: 18,
   },
   headerTitle: {
-    height: "100%",
+    flex: 1,
     verticalAlign: "middle",
     fontSize: 18,
+  },
+  helpButton: {
+    padding: 6,
+  },
+  helpModal: {
+    borderRadius: 18,
+    padding: 20,
+    width: "88%",
+    rowGap: 14,
+  },
+  helpTitle: {
+    fontSize: 20,
+    textAlign: "right",
+  },
+  helpText: {
+    lineHeight: 27,
+    textAlign: "right",
+  },
+  helpCloseButton: {
+    alignSelf: "flex-start",
+    paddingHorizontal: 18,
+    paddingVertical: 9,
+    borderRadius: 8,
   },
   headerButtons: {
     flexDirection: "row",
