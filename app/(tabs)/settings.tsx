@@ -16,6 +16,7 @@ import {
   type ThemePreference,
 } from "@/hooks/useTheme";
 import Constants from "expo-constants";
+import { router } from "expo-router";
 import { useState } from "react";
 import { Alert, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
 
@@ -88,6 +89,34 @@ export default function SettingsPage() {
           </Span>
 
           <Spacer height={30} />
+
+          <TouchableOpacity
+            accessibilityRole="button"
+            onPress={() => router.navigate("/help")}
+            style={[
+              styles.card,
+              styles.navigationCard,
+              { backgroundColor: colors.card, borderColor: colors.divider },
+            ]}
+          >
+            <IconSymbol
+              type="Ionicons"
+              name="book-outline"
+              size={22}
+              color={colors.tint}
+            />
+            <Span type="defaultSemiBold" style={styles.cardTitle}>
+              راهنما
+            </Span>
+            <IconSymbol
+              type="Ionicons"
+              name="chevron-back-outline"
+              size={20}
+              color={colors.muted}
+            />
+          </TouchableOpacity>
+
+          <Spacer height={20} />
 
           {/* Appearance */}
           <Div
@@ -246,7 +275,35 @@ export default function SettingsPage() {
             )}
           </Div>
 
-          <Spacer height={30} />
+          <Spacer height={20} />
+
+          <TouchableOpacity
+            accessibilityRole="button"
+            onPress={() => router.navigate("/privacy")}
+            style={[
+              styles.card,
+              styles.navigationCard,
+              { backgroundColor: colors.card, borderColor: colors.divider },
+            ]}
+          >
+            <IconSymbol
+              type="Ionicons"
+              name="shield-checkmark-outline"
+              size={22}
+              color={colors.tint}
+            />
+            <Span type="defaultSemiBold" style={styles.cardTitle}>
+              سیاست حفظ حریم خصوصی
+            </Span>
+            <IconSymbol
+              type="Ionicons"
+              name="chevron-back-outline"
+              size={20}
+              color={colors.muted}
+            />
+          </TouchableOpacity>
+
+          <Spacer height={20} />
           <Span
             type="subtitle"
             style={[styles.version, { color: colors.muted }]}
@@ -282,6 +339,11 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     borderWidth: 1,
     padding: 20,
+  },
+  navigationCard: {
+    flexDirection: "row",
+    alignItems: "center",
+    columnGap: 12,
   },
   cardHeader: {
     flexDirection: "row",
