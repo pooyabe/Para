@@ -98,9 +98,9 @@ const styles = StyleSheet.create({
   },
   title: { fontSize: 23, textAlign: "center" },
   tagline: { marginTop: 8, fontSize: 14 },
-  card: { borderWidth: 1, borderRadius: 20, padding: 18, rowGap: 12 },
+  card: { borderWidth: 1, borderRadius: 20, padding: 18, rowGap: 12, paddingVertical: 30 },
   sectionHeading: { flexDirection: "row", alignItems: "center", columnGap: 9 },
   sectionTitle: { fontSize: 17, flex: 1 },
-  body: { textAlign: "right", lineHeight: 29, fontSize: 15 },
+  body: { textAlign: "justify", lineHeight: 30, fontSize: 15, marginTop: 10 },
   signoff: { textAlign: "center", paddingTop: 4 },
 });
