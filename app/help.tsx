@@ -107,5 +107,5 @@ const styles = StyleSheet.create({
     minHeight: 32,
   },
   sectionTitle: { flex: 1, fontSize: 16 },
-  body: { textAlign: "right", lineHeight: 29, fontSize: 15 },
+  body: { textAlign: "justify", lineHeight: 30, fontSize: 15 },
 });
