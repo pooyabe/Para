@@ -11,7 +11,10 @@ import {
 } from "@/components/Elements";
 import { Colors } from "@/constants/Colors";
 import { useIncomeForm } from "@/hooks/BackEnd/Pages/useIncomeForm";
-import { formatAmountInput, parseAmountInput } from "@/hooks/BackEnd/formatAmountInput";
+import {
+  formatAmountInput,
+  parseAmountInput,
+} from "@/hooks/BackEnd/formatAmountInput";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { StyleSheet } from "react-native";
 
@@ -41,7 +44,12 @@ export default function IncomePage() {
             { backgroundColor: colors.card, borderColor: colors.divider },
           ]}
         >
-          <Div style={[styles.titleIcon, { backgroundColor: colors.infoBackground }]}>
+          <Div
+            style={[
+              styles.titleIcon,
+              { backgroundColor: colors.infoBackground },
+            ]}
+          >
             <IconSymbol
               type="Ionicons"
               name="cash-outline"
@@ -53,7 +61,9 @@ export default function IncomePage() {
             ایول پول اومده :)
           </Span>
         </Div>
-        <Spacer height={20} />
+
+        <Spacer height={50} />
+
         <Input
           label="چقد گرفتی؟"
           type="number"
@@ -106,7 +116,7 @@ export default function IncomePage() {
           todayMax
         />
 
-        <Spacer />
+        <Spacer height={20} />
 
         <SButton text="بریز" onPress={saveIncome} />
       </Div>
@@ -125,11 +135,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     alignSelf: "stretch",
+    justifyContent: "center",
     columnGap: 12,
     paddingVertical: 12,
     paddingHorizontal: 14,
     borderWidth: 1,
     borderRadius: 18,
+    direction: "rtl",
   },
   titleIcon: {
     width: 40,

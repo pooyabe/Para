@@ -11,7 +11,10 @@ import {
   Span,
 } from "@/components/Elements";
 import { useSpendingForm } from "@/hooks/BackEnd/Pages/useSpendingForm";
-import { formatAmountInput, parseAmountInput } from "@/hooks/BackEnd/formatAmountInput";
+import {
+  formatAmountInput,
+  parseAmountInput,
+} from "@/hooks/BackEnd/formatAmountInput";
 
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
@@ -44,7 +47,12 @@ export default function HomeScreen() {
             { backgroundColor: colors.card, borderColor: colors.divider },
           ]}
         >
-          <Div style={[styles.titleIcon, { backgroundColor: colors.infoBackground }]}>
+          <Div
+            style={[
+              styles.titleIcon,
+              { backgroundColor: colors.infoBackground },
+            ]}
+          >
             <IconSymbol
               type="Ionicons"
               name="cart-outline"
@@ -56,7 +64,7 @@ export default function HomeScreen() {
             پول پرید؟
           </Span>
         </Div>
-        <Spacer height={20} />
+        <Spacer height={50} />
         <Input
           label="چقد شد؟"
           type="number"
@@ -86,7 +94,7 @@ export default function HomeScreen() {
           ]}
         />
 
-        <Spacer height={5} />
+        <Spacer height={0} />
 
         <Radio
           Items={["الکی", "بگی نگی", "ضروری"]}
@@ -106,7 +114,7 @@ export default function HomeScreen() {
           todayMax
         />
 
-        <Spacer />
+        <Spacer height={20} />
 
         <SButton text="بردار" onPress={saveSpending} />
       </Div>
@@ -125,11 +133,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     alignSelf: "stretch",
+    justifyContent: "center",
     columnGap: 12,
     paddingVertical: 12,
     paddingHorizontal: 14,
     borderWidth: 1,
     borderRadius: 18,
+    direction: "rtl",
   },
   titleIcon: {
     width: 40,
