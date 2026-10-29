@@ -25,9 +25,12 @@ import {
   getImportanceDistribution,
   type ImportanceData,
 } from "@/hooks/DB/reports/useImportanceDistribution";
-import { getMonthlyReport } from "@/hooks/DB/reports/useMonthlyReport";
 import { getIncomeDistribution } from "@/hooks/DB/reports/useIncomeDistribution";
-import { getLoanReport, type LoanReportData } from "@/hooks/DB/reports/useLoanReport";
+import {
+  getLoanReport,
+  type LoanReportData,
+} from "@/hooks/DB/reports/useLoanReport";
+import { getMonthlyReport } from "@/hooks/DB/reports/useMonthlyReport";
 import { getSpendingDistribution } from "@/hooks/DB/reports/useSpendingPercentage";
 
 import { Colors } from "@/constants/Colors";
@@ -206,16 +209,13 @@ export default function ReportPage() {
       setPercentageSpendingReport(psr);
 
       // Get importance distribution data
-      const impData = await getImportanceDistribution(
-        rangeKey,
-        theCustomRange,
-      );
+      const impData = await getImportanceDistribution(rangeKey, theCustomRange);
       setImportanceData(impData);
 
       // Hide loading
       setShowLoading(false);
     },
-    [SpendingPieColors]
+    [SpendingPieColors],
   );
 
   /**
@@ -239,7 +239,7 @@ export default function ReportPage() {
 
     fetchData(
       range,
-      range === "custom" ? custom ?? getDefaultCustomRange() : undefined
+      range === "custom" ? (custom ?? getDefaultCustomRange()) : undefined,
     );
   }, [dataRevision, fetchData]);
 
@@ -387,11 +387,14 @@ export default function ReportPage() {
               گزارش وام و طلب
             </Span>
             <Span style={[styles.loanSummaryHint, { color: colors.muted }]}>
-              کل مبالغ و مانده‌ها برای همه وام‌هاست؛ دریافتی و پرداختی‌ها مربوط به بازه انتخاب‌شده است.
+              کل مبالغ و مانده‌ها برای همه وام‌هاست؛ دریافتی و پرداختی‌ها مربوط
+              به بازه انتخاب‌شده است.
             </Span>
             <Div style={styles.loanSummaryRow}>
               <Div style={styles.loanSummaryItem}>
-                <Span style={[styles.loanSummaryLabel, { color: colors.muted }]}>
+                <Span
+                  style={[styles.loanSummaryLabel, { color: colors.muted }]}
+                >
                   کل طلب ثبت‌شده
                 </Span>
                 <Span type="defaultSemiBold" style={{ color: colors.income }}>
@@ -399,7 +402,9 @@ export default function ReportPage() {
                 </Span>
               </Div>
               <Div style={styles.loanSummaryItem}>
-                <Span style={[styles.loanSummaryLabel, { color: colors.muted }]}>
+                <Span
+                  style={[styles.loanSummaryLabel, { color: colors.muted }]}
+                >
                   کل بدهی ثبت‌شده
                 </Span>
                 <Span type="defaultSemiBold" style={{ color: colors.theRed }}>
@@ -409,7 +414,9 @@ export default function ReportPage() {
             </Div>
             <Div style={styles.loanSummaryRow}>
               <Div style={styles.loanSummaryItem}>
-                <Span style={[styles.loanSummaryLabel, { color: colors.muted }]}>
+                <Span
+                  style={[styles.loanSummaryLabel, { color: colors.muted }]}
+                >
                   طلب باقی‌مانده
                 </Span>
                 <Span type="defaultSemiBold" style={{ color: colors.income }}>
@@ -417,7 +424,9 @@ export default function ReportPage() {
                 </Span>
               </Div>
               <Div style={styles.loanSummaryItem}>
-                <Span style={[styles.loanSummaryLabel, { color: colors.muted }]}>
+                <Span
+                  style={[styles.loanSummaryLabel, { color: colors.muted }]}
+                >
                   بدهی باقی‌مانده
                 </Span>
                 <Span type="defaultSemiBold" style={{ color: colors.theRed }}>
@@ -427,7 +436,9 @@ export default function ReportPage() {
             </Div>
             <Div style={styles.loanSummaryRow}>
               <Div style={styles.loanSummaryItem}>
-                <Span style={[styles.loanSummaryLabel, { color: colors.muted }]}>
+                <Span
+                  style={[styles.loanSummaryLabel, { color: colors.muted }]}
+                >
                   دریافت‌شده در این بازه
                 </Span>
                 <Span type="defaultSemiBold">
@@ -435,7 +446,9 @@ export default function ReportPage() {
                 </Span>
               </Div>
               <Div style={styles.loanSummaryItem}>
-                <Span style={[styles.loanSummaryLabel, { color: colors.muted }]}>
+                <Span
+                  style={[styles.loanSummaryLabel, { color: colors.muted }]}
+                >
                   پرداخت‌شده در این بازه
                 </Span>
                 <Span type="defaultSemiBold">
@@ -524,12 +537,12 @@ const styles = StyleSheet.create({
   },
   loanSummaryTitle: {
     fontSize: 17,
-    textAlign: "right",
+    textAlign: "center",
   },
   loanSummaryHint: {
     fontSize: 12,
     lineHeight: 20,
-    textAlign: "right",
+    textAlign: "center",
   },
   loanSummaryRow: {
     flexDirection: "row",
@@ -541,7 +554,6 @@ const styles = StyleSheet.create({
   },
   loanSummaryLabel: {
     fontSize: 12,
-    textAlign: "right",
   },
 
   // Loading
