@@ -1,6 +1,7 @@
 import {
   Date,
   Div,
+  IconSymbol,
   Input,
   Mother,
   Radio,
@@ -37,9 +38,24 @@ export default function HomeScreen() {
   return (
     <Mother>
       <Div style={styles.container}>
-        <Span type="title" style={styles.pageTitle}>
-          پول پرید؟
-        </Span>
+        <Div
+          style={[
+            styles.titleBar,
+            { backgroundColor: colors.card, borderColor: colors.divider },
+          ]}
+        >
+          <Div style={[styles.titleIcon, { backgroundColor: colors.infoBackground }]}>
+            <IconSymbol
+              type="Ionicons"
+              name="cart-outline"
+              size={22}
+              color={colors.tint}
+            />
+          </Div>
+          <Span type="title" style={styles.pageTitle}>
+            پول پرید؟
+          </Span>
+        </Div>
         <Spacer height={20} />
         <Input
           label="چقد شد؟"
@@ -105,8 +121,24 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 
+  titleBar: {
+    flexDirection: "row",
+    alignItems: "center",
+    alignSelf: "stretch",
+    columnGap: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 14,
+    borderWidth: 1,
+    borderRadius: 18,
+  },
+  titleIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 13,
+    alignItems: "center",
+    justifyContent: "center",
+  },
   pageTitle: {
-    marginVertical: 20,
-    fontSize: 24,
+    fontSize: 22,
   },
 });

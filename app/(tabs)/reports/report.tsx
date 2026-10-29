@@ -257,9 +257,17 @@ export default function ReportPage() {
     return (
       <Mother style={styles.container} _Hpadding={0}>
         <Div style={styles.Header}>
-          <Span type="title" style={styles.headerTitle}>
-            گزارش وضعیت
-          </Span>
+          <Div style={styles.titleGroup}>
+            <IconSymbol
+              type="Ionicons"
+              name="stats-chart-outline"
+              size={24}
+              color={colors.tint}
+            />
+            <Span type="title" style={styles.headerTitle}>
+              گزارش وضعیت
+            </Span>
+          </Div>
 
           {/* Transactions list button */}
           <TouchableOpacity
@@ -481,6 +489,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 30,
     paddingTop: 18,
+  },
+  titleGroup: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    columnGap: 10,
   },
   headerTitle: {
     height: "100%",

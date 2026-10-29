@@ -47,9 +47,17 @@ export default function SettingsPage() {
         <Div style={styles.container}>
           <Spacer height={20} />
 
-          <Span type="title" style={styles.pageTitle}>
-            تنظیمات
-          </Span>
+          <Div style={styles.pageHeader}>
+            <IconSymbol
+              type="Ionicons"
+              name="settings-outline"
+              size={26}
+              color={colors.tint}
+            />
+            <Span type="title" style={styles.pageTitle}>
+              تنظیمات
+            </Span>
+          </Div>
 
           <Spacer height={30} />
 
@@ -208,6 +216,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     direction: "rtl",
+  },
+  pageHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    columnGap: 10,
   },
   pageTitle: {
     fontSize: 24,
