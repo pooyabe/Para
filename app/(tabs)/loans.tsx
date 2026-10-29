@@ -448,7 +448,7 @@ export default function LoansPage() {
             <Span type="title" style={styles.helpTitle}>
               راهنمای وام و طلب
             </Span>
-            <Span style={[styles.helpText, { color: colors.text }]}>
+            <Span style={ { color: colors.text, lineHeight: 30, textAlign: "justify" } }>
               اینجا پول‌هایی رو که قرض دادی یا قرض گرفتی ثبت و پیگیری کن. مبلغ
               کل، پرداخت‌ها و مانده هر مورد رو می‌بینی و می‌تونی تاریخ سررسید و
               توضیحاتش رو مدیریت کنی.
@@ -609,10 +609,6 @@ const styles = StyleSheet.create({
   },
   helpTitle: {
     fontSize: 20,
-    textAlign: "right",
-  },
-  helpText: {
-    lineHeight: 27,
     textAlign: "right",
   },
   helpCloseButton: {
