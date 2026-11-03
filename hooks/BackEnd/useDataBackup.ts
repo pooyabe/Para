@@ -1,12 +1,11 @@
+import { bumpDataRevision } from "@/hooks/BackEnd/useDataRevision";
+import { getDbConnection } from "@/hooks/DB";
 import * as DocumentPicker from "expo-document-picker";
-import { Directory, Paths } from "expo-file-system";
-import { readAsStringAsync, writeAsStringAsync } from "expo-file-system/legacy";
+import { Directory, File, Paths } from "expo-file-system";
+import { readAsStringAsync } from "expo-file-system/legacy";
 import { useCallback, useState } from "react";
 import { Platform } from "react-native";
 import { toast } from "sonner-native";
-
-import { bumpDataRevision } from "@/hooks/BackEnd/useDataRevision";
-import { getDbConnection } from "@/hooks/DB";
 
 /**
  * The tables that hold the user's data.
@@ -63,9 +62,7 @@ const escapeCsvField = (value: unknown): string => {
 
   const text = String(value);
 
-  return /[",\n\r]|^\s|\s$/.test(text)
-    ? `"${text.replace(/"/g, '""')}"`
-    : text;
+  return /[",\n\r]|^\s|\s$/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
 };
 
 /**
@@ -152,7 +149,9 @@ export async function buildBackupCsv(): Promise<{
     lines.push(columns.map(escapeCsvField).join(","));
 
     for (const record of records) {
-      lines.push(columns.map((column) => escapeCsvField(record[column])).join(","));
+      lines.push(
+        columns.map((column) => escapeCsvField(record[column])).join(","),
+      );
       rows += 1;
     }
   }
@@ -324,10 +323,8 @@ export function useDataBackup() {
         savedName = file.name;
       } else {
         // No folder picker on iOS: write next to the app's own data.
-        await writeAsStringAsync(
-          Paths.join(Paths.document.uri, fileName),
-          csv
-        );
+        const iosFile = new File(Paths.document, fileName);
+        iosFile.write(csv);
       }
 
       toast.success(`پشتیبان در فایل «${savedName}» ذخیره شد.`);
@@ -355,7 +352,7 @@ export function useDataBackup() {
           "application/vnd.ms-excel",
           "application/octet-stream",
         ],
-        copyToCacheDirectory: true,
+        copyToCacheDirectory: false, // Prevents copying into Expo Go's unreadable root cache
       });
 
       if (picked.canceled) return;
@@ -363,10 +360,8 @@ export function useDataBackup() {
       const asset = picked.assets?.[0];
       if (!asset) return;
 
-      // The picker copies the file into the app's own cache, so it always
-      // lands on a readable file:// path. `readAsStringAsync` resolves the
-      // permission through the file-system module, which works for every
-      // uri the picker can return.
+      // With copyToCacheDirectory: false, asset.uri is a content:// URI on Android,
+      // which readAsStringAsync can read in both Expo Go and production builds.
       const csv = await readAsStringAsync(asset.uri);
       const summary = await restoreBackupText(csv);
 
