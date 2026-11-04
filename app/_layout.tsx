@@ -4,6 +4,8 @@ import { StatusBar } from "expo-status-bar";
 import "react-native-reanimated";
 
 import { Colors } from "@/constants/Colors";
+import { refreshLoanReminderSchedules } from "@/hooks/BackEnd/loanReminders/loanReminderSchedules";
+import { registerLoanReminderNotificationHandler } from "@/hooks/BackEnd/loanReminders/reminderNotifications";
 import { initializeDatabase } from "@/hooks/DB";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { ThemeProvider } from "@/hooks/useTheme";
@@ -19,7 +21,17 @@ export default function RootLayout() {
      * It runs once when the component mounts.
      * The `initializeDatabase` function is responsible for setting up the database.
      */
-    initializeDatabase();
+    registerLoanReminderNotificationHandler();
+
+    initializeDatabase()
+      /**
+       * یادآورهای ماهانه با پنجره‌ای از اعلان‌های تک‌زمانی ساخته می‌شوند؛
+       * با هر بار باز شدن برنامه، پنجره جلو برده می‌شود.
+       */
+      .then(() => refreshLoanReminderSchedules())
+      .catch((error) => {
+        console.warn("[LoanReminders] startup refresh failed:", error);
+      });
   }, []);
 
   const [loaded] = useFonts({
