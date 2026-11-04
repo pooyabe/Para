@@ -7,8 +7,16 @@ import {
   Span,
 } from "@/components/Elements";
 import { Colors } from "@/constants/Colors";
+import { cancelLoanReminderNotifications } from "@/hooks/BackEnd/loanReminders/reminderNotifications";
+import { toPersianDigits } from "@/hooks/BackEnd/loanReminders/reminderTime";
 import { useShamsiDate } from "@/hooks/BackEnd/useShamsiDate";
-import { deleteLoan, getLoanPayments, getLoans, LoanPayment } from "@/hooks/DB";
+import {
+  deleteLoan,
+  getLoanPayments,
+  getLoanReminderCounts,
+  getLoans,
+  LoanPayment,
+} from "@/hooks/DB";
 import { Loan } from "@/hooks/DB/actions/getLoans";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { router, useFocusEffect } from "expo-router";
@@ -25,6 +33,9 @@ import { toast } from "sonner-native";
 
 export default function LoansPage() {
   const [loans, setLoans] = useState<Loan[]>([]);
+  const [reminderCounts, setReminderCounts] = useState<Record<number, number>>(
+    {},
+  );
   const [loading, setLoading] = useState<boolean>(false);
   const [viewMode, setViewMode] = useState<"all" | "active" | "settled">("all");
   const [modalLoan, setModalLoan] = useState<Loan | null>(null);
@@ -54,6 +65,7 @@ export default function LoansPage() {
         // No filter applied - keep all loans (settled, active, and unsettled)
       }
       setLoans(loanList);
+      setReminderCounts(await getLoanReminderCounts());
     } catch (error) {
       console.error("Error loading loans:", error);
     } finally {
@@ -83,13 +95,26 @@ export default function LoansPage() {
         text: "حذف",
         onPress: async () => {
           try {
-            const success = await deleteLoan(id);
-            if (success) {
-              setLoans((prev) => prev.filter((l) => l.id !== id));
-              toast.success("مورد با موفقیت حذف شد");
+            const result = await deleteLoan(id);
+
+            if (!result.success) {
+              toast.error("حذف مورد انجام نشد.");
+              return;
             }
+
+            // یادآورهای مورد حذف‌شده نباید بعداً اعلان بدهند.
+            await cancelLoanReminderNotifications(result.notificationIds);
+
+            setLoans((prev) => prev.filter((l) => l.id !== id));
+            setReminderCounts((prev) => {
+              const next = { ...prev };
+              delete next[id];
+              return next;
+            });
+            toast.success("مورد با موفقیت حذف شد");
           } catch (error) {
             console.error("Error deleting loan:", error);
+            toast.error("حذف مورد انجام نشد.");
           }
         },
         style: "destructive",
@@ -100,6 +125,13 @@ export default function LoansPage() {
   const handleEditLoan = (loan: Loan) => {
     router.navigate({
       pathname: "/loans/edit",
+      params: { loan: JSON.stringify(loan) },
+    });
+  };
+
+  const handleManageReminders = (loan: Loan) => {
+    router.navigate({
+      pathname: "/loans/reminders",
       params: { loan: JSON.stringify(loan) },
     });
   };
@@ -409,6 +441,34 @@ export default function LoansPage() {
                   color={colors.income}
                 />
               </TouchableOpacity>
+              <TouchableOpacity
+                accessibilityRole="button"
+                accessibilityLabel={`یادآوری‌های ${loan.source}`}
+                onPress={() => handleManageReminders(loan)}
+                style={styles.iconButton}
+              >
+                <IconSymbol
+                  type="Ionicons"
+                  name="notifications-outline"
+                  size={22}
+                  color={
+                    reminderCounts[loan.id]
+                      ? colors.theOrange
+                      : colors.tabIconDefault
+                  }
+                />
+                {!!reminderCounts[loan.id] && (
+                  <Span
+                    type="default"
+                    style={[
+                      styles.reminderBadge,
+                      { backgroundColor: colors.theOrange },
+                    ]}
+                  >
+                    {toPersianDigits(reminderCounts[loan.id])}
+                  </Span>
+                )}
+              </TouchableOpacity>
             </Div>
           </TouchableOpacity>
         ))}
@@ -469,7 +529,8 @@ export default function LoansPage() {
             >
               اینجا پول‌هایی رو که قرض دادی یا قرض گرفتی ثبت و پیگیری کن. مبلغ
               کل، پرداخت‌ها و مانده هر مورد رو می‌بینی و می‌تونی تاریخ سررسید و
-              توضیحاتش رو مدیریت کنی.
+              توضیحاتش رو مدیریت کنی. با دکمه زنگ روی هر مورد هم می‌تونی یادآور
+              اعلان یک‌باره یا تکرارشونده تنظیم کنی.
             </Span>
             <TouchableOpacity
               onPress={() => setHelpVisible(false)}
@@ -651,6 +712,20 @@ const styles = StyleSheet.create({
   },
   iconButton: {
     padding: 10,
+  },
+  reminderBadge: {
+    position: "absolute",
+    top: 2,
+    right: 2,
+    minWidth: 16,
+    height: 16,
+    paddingHorizontal: 3,
+    borderRadius: 8,
+    overflow: "hidden",
+    fontSize: 10,
+    lineHeight: 16,
+    textAlign: "center",
+    color: "#11181C",
   },
   toggleContainer: {
     paddingHorizontal: 20,
