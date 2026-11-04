@@ -1,5 +1,5 @@
-import { useThemeColor } from "@/hooks/useThemeColor";
 import { useColorScheme } from "@/hooks/useColorScheme";
+import { useThemeColor } from "@/hooks/useThemeColor";
 import SegmentedControl, {
   SegmentedControlProps,
 } from "@react-native-segmented-control/segmented-control";
@@ -73,6 +73,7 @@ export function Radio({
             borderColor: tintColor,
             borderWidth: 2,
             marginTop: 10,
+            direction: "ltr",
           },
           style,
         ]}
