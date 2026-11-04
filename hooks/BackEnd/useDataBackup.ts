@@ -1,5 +1,9 @@
+import { cancelLoanReminderNotifications } from "@/hooks/BackEnd/loanReminders/reminderNotifications";
 import { bumpDataRevision } from "@/hooks/BackEnd/useDataRevision";
-import { getDbConnection } from "@/hooks/DB";
+import {
+  getDbConnection,
+  parseLoanReminderNotificationIds,
+} from "@/hooks/DB";
 import * as DocumentPicker from "expo-document-picker";
 import { Directory, File, Paths } from "expo-file-system";
 import { readAsStringAsync } from "expo-file-system/legacy";
@@ -211,11 +215,29 @@ export function parseBackupCsv(text: string): ParsedTable[] {
   return tables;
 }
 
-/** Deletes every record of every user table (children first). */
-const deleteAllRecords = async (db: DbConnection) => {
+/**
+ * Deletes every record of every user table (children first) and returns the
+ * reminder notification ids, so they can be canceled outside the transaction.
+ *
+ * Reminders are device-local schedule state: they are not part of the backup
+ * file, and stale notification ids after a reinstall would silently break them.
+ */
+const deleteAllRecords = async (db: DbConnection): Promise<string[]> => {
+  const reminderRows = await db.getAllAsync<{ notification_ids: string }>(
+    `SELECT notification_ids FROM loan_reminders`,
+  );
+
+  const notificationIds = reminderRows.flatMap((row) =>
+    parseLoanReminderNotificationIds(row.notification_ids),
+  );
+
+  await db.runAsync(`DELETE FROM loan_reminders`);
+
   for (const table of [...BACKUP_TABLES].reverse()) {
     await db.runAsync(`DELETE FROM ${table}`);
   }
+
+  return notificationIds;
 };
 
 /**
@@ -227,9 +249,10 @@ export async function restoreBackupText(csv: string): Promise<BackupSummary> {
   const db = await getDbConnection();
 
   let rows = 0;
+  let reminderNotificationIds: string[] = [];
 
   await db.withTransactionAsync(async () => {
-    await deleteAllRecords(db);
+    reminderNotificationIds = await deleteAllRecords(db);
 
     for (const table of tables) {
       const knownColumns = await getTableColumns(db, table.name);
@@ -262,16 +285,21 @@ export async function restoreBackupText(csv: string): Promise<BackupSummary> {
     }
   });
 
+  await cancelLoanReminderNotifications(reminderNotificationIds);
+
   return { tables: tables.length, rows };
 }
 
 /** Removes all transactions, categories and loans. */
 export async function wipeAllData(): Promise<void> {
   const db = await getDbConnection();
+  let reminderNotificationIds: string[] = [];
 
   await db.withTransactionAsync(async () => {
-    await deleteAllRecords(db);
+    reminderNotificationIds = await deleteAllRecords(db);
   });
+
+  await cancelLoanReminderNotifications(reminderNotificationIds);
 }
 
 const backupFileName = () => {
