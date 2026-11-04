@@ -25,6 +25,7 @@ export * from "./actions/addLoanPayment";
 export * from "./actions/getLoanPayments";
 export * from "./actions/getLoanOptions";
 export * from "./actions/getSettledLoans";
+export * from "./actions/loanReminders";
 
 // App settings actions (theme, preferences, ...)
 export * from "./actions/getSetting";

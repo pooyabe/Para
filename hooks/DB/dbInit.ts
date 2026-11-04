@@ -7,6 +7,7 @@ import { spendingTableSQL } from "./schemas/spending";
 import { spendingItemsTableSQL } from "./schemas/spending_items";
 import { loansTableSQL } from "./schemas/loans";
 import { loanPaymentsTableSQL } from "./schemas/loan_payments";
+import { loanRemindersTableSQL } from "./schemas/loan_reminders";
 import { settingsTableSQL } from "./schemas/settings";
 
 export const initializeDatabase = async () => {
@@ -25,6 +26,7 @@ export const initializeDatabase = async () => {
       ${spendingTableSQL}
       ${loansTableSQL}
       ${loanPaymentsTableSQL}
+      ${loanRemindersTableSQL}
       ${settingsTableSQL}
     `);
 
