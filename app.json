@@ -2,7 +2,7 @@
   "expo": {
     "name": "Para",
     "slug": "Para",
-    "version": "1.4.19",
+    "version": "1.4.22",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "para",
@@ -13,7 +13,7 @@
       "bundleIdentifier": "com.Para.app"
     },
     "android": {
-      "versionCode": 10,
+      "versionCode": 11,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/icon.png",
         "backgroundColor": "#181f2f"
