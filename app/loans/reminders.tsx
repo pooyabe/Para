@@ -19,9 +19,9 @@ import {
   REMINDER_TIME_LABEL,
   WEEKDAY_OPTIONS,
 } from "@/hooks/BackEnd/loanReminders/reminderTime";
-import { useColorScheme } from "@/hooks/useColorScheme";
 import type { Loan } from "@/hooks/DB/actions/getLoans";
 import type { LoanReminderMode } from "@/hooks/DB/actions/loanReminders";
+import { useColorScheme } from "@/hooks/useColorScheme";
 import { router, useLocalSearchParams } from "expo-router";
 import { useMemo } from "react";
 import { Alert, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
@@ -105,7 +105,7 @@ export default function LoanRemindersPage() {
     const reminder = reminders.find((item) => item.id === reminderId);
     if (!reminder) return;
 
-    Alert.alert("حذف یادآور", "این یادآور حذف شود؟", [
+    Alert.alert("حذف یادآور", "این یادآور حذف بشه؟", [
       { text: "لغو", style: "cancel" },
       {
         text: "حذف",
@@ -164,18 +164,19 @@ export default function LoanRemindersPage() {
         contentContainerStyle={styles.scrollContent}
         keyboardShouldPersistTaps="handled"
       >
-        <Div
-          style={[styles.introCard, { backgroundColor: colors.cardAlt }]}
-        >
+        <Div style={[styles.introCard, { backgroundColor: colors.cardAlt }]}>
           <Span
             type="defaultMedium"
             style={[styles.introBadge, { color: typeColor }]}
           >
             {isReceivable ? "طلب" : "بدهی"} — {loan.source}
           </Span>
-          <Span type="default" style={[styles.introText, { color: colors.muted }]}>
-            یادآورها ساعت {REMINDER_TIME_LABEL} در گوشی‌ات اعلان می‌دهند و به
-            اینترنت نیازی ندارند.
+          <Span
+            type="default"
+            style={[styles.introText, { color: colors.muted }]}
+          >
+            ساعت {REMINDER_TIME_LABEL} بهت یادآوری می‌کنم. نیازی به اینترنت هم
+            نیست!
           </Span>
         </Div>
 
@@ -196,9 +197,9 @@ export default function LoanRemindersPage() {
                 type="default"
                 style={[styles.introText, { color: colors.muted }]}
               >
-                برای دریافت یادآور باید نسخه نصب‌شده اپ روی گوشی اجرا شود. در این
-                حالت می‌توانی یادآورها را ببینی و حذف کنی، اما ثبت یادآور جدید
-                انجام نمی‌شود.
+                برای دریافت یادآور باید نسخه نصب‌شده اپ روی گوشی اجرا شود. در
+                این حالت می‌توانی یادآورها را ببینی و حذف کنی، اما ثبت یادآور
+                جدید انجام نمی‌شود.
               </Span>
             </Div>
 
@@ -296,9 +297,7 @@ export default function LoanRemindersPage() {
         <Spacer height={15} />
 
         {isFormOpen ? (
-          <Div
-            style={[styles.formCard, { backgroundColor: colors.card }]}
-          >
+          <Div style={[styles.formCard, { backgroundColor: colors.card }]}>
             <Span type="defaultMedium" style={styles.formTitle}>
               {editingReminder ? "ویرایش یادآور" : "یادآور جدید"}
             </Span>
@@ -335,7 +334,7 @@ export default function LoanRemindersPage() {
                 </Div>
                 <Spacer height={8} />
                 <Span type="subtitle" style={{ color: colors.muted }}>
-                  ماه‌هایی که این روز را ندارند یادآوری نمی‌فرستند.
+                  حواست باشه همه‌ی ماه‌ها ۳۱ روزه نیستن!
                 </Span>
               </>
             )}
@@ -379,7 +378,7 @@ export default function LoanRemindersPage() {
             <Spacer height={14} />
 
             <Span type="subtitle" style={{ color: colors.muted }}>
-              ساعت ارسال: {REMINDER_TIME_LABEL}
+              ساعت {REMINDER_TIME_LABEL} یادت میندازم.
             </Span>
 
             <Spacer height={20} />

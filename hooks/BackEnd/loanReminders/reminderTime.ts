@@ -1,10 +1,13 @@
-import type { LoanReminder, LoanReminderMode } from "@/hooks/DB/actions/loanReminders";
+import type {
+  LoanReminder,
+  LoanReminderMode,
+} from "@/hooks/DB/actions/loanReminders";
 import moment from "jalali-moment";
 
 /** ساعت ثابت ارسال یادآورها؛ در کل برنامه یکسان است. */
 export const REMINDER_HOUR = 7;
 export const REMINDER_MINUTE = 0;
-export const REMINDER_TIME_LABEL = "۰۷:۰۰";
+export const REMINDER_TIME_LABEL = "۰۷:۰۰ صبح";
 
 /**
  * تعداد ماه‌هایی که برای یادآور ماهانه از پیش در سیستم‌عامل زمان‌بندی می‌شود.
