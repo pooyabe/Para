@@ -15,39 +15,6 @@ const modulesRoot = path.join(__dirname, "..", "node_modules");
 
 const PATCHES = [
   {
-    // React Native 0.86 deprecated the `SafeAreaView` export from
-    // "react-native" and logs a warning whenever it is rendered. The picker
-    // imports it for its full-screen modal, so point it at the replacement the
-    // deprecation message recommends.
-    name: "react-native-dropdown-picker",
-    file: path.join(
-      modulesRoot,
-      "react-native-dropdown-picker",
-      "src",
-      "components",
-      "Picker.js",
-    ),
-    isApplied: (source) =>
-      source.includes(
-        "import { SafeAreaView } from 'react-native-safe-area-context';",
-      ),
-    apply: (source) => {
-      const withoutNativeSafeAreaView = source.replace(
-        "    View,\n    SafeAreaView,\n",
-        "    View,\n",
-      );
-
-      if (withoutNativeSafeAreaView === source) {
-        return null;
-      }
-
-      return withoutNativeSafeAreaView.replace(
-        "} from 'react-native';\n",
-        "} from 'react-native';\nimport { SafeAreaView } from 'react-native-safe-area-context';\n",
-      );
-    },
-  },
-  {
     // The New Architecture ignores setLayoutAnimationEnabledExperimental and
     // warns about it. The call only existed to enable LayoutAnimation on the
     // legacy Android architecture, so dropping it is a no-op on current React
