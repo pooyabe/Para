@@ -615,7 +615,9 @@ const styles = StyleSheet.create({
   field: {
     flex: 1,
     width: "100%",
-    flexDirection: "row",
+    // کل برنامه با چیدمان LTR رندر می‌شود (RTL فقط روی متن اعمال شده)،
+    // پس ترتیب ردیف باید صریحاً برعکس شود تا شِورون سمت راست بنشیند.
+    flexDirection: "row-reverse",
     alignItems: "center",
     borderWidth: 1.5,
     borderRadius: 100,
@@ -731,7 +733,8 @@ const styles = StyleSheet.create({
   },
   row: {
     flex: 1,
-    flexDirection: "row",
+    // نشانگر انتخاب/افزودن در RTL باید سمت راست باشد، نه چپ.
+    flexDirection: "row-reverse",
     alignItems: "center",
     borderRadius: 16,
     paddingHorizontal: 12,
