@@ -38,7 +38,7 @@ export default function LoansPage() {
   );
   const [loading, setLoading] = useState<boolean>(false);
   const [viewMode, setViewMode] = useState<"all" | "active" | "settled">(
-    "settled",
+    "active",
   );
   const [modalLoan, setModalLoan] = useState<Loan | null>(null);
   const [modalPayments, setModalPayments] = useState<LoanPayment[]>([]);
@@ -211,8 +211,8 @@ export default function LoansPage() {
           label="نمایش"
           placeholder="نمایش"
           items_array={[
-            { label: "تسویه شده‌ها", value: "settled" },
             { label: "تسویه نشده‌ها", value: "active" },
+            { label: "تسویه شده‌ها", value: "settled" },
             { label: "همه موارد", value: "all" },
           ]}
           searchable={false}
