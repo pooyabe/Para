@@ -1,5 +1,5 @@
 import { useThemeColor } from "@/hooks/useThemeColor";
-import React, {
+import {
   memo,
   useCallback,
   useEffect,
@@ -617,7 +617,7 @@ const styles = StyleSheet.create({
     width: "100%",
     // کل برنامه با چیدمان LTR رندر می‌شود (RTL فقط روی متن اعمال شده)،
     // پس ترتیب ردیف باید صریحاً برعکس شود تا شِورون سمت راست بنشیند.
-    flexDirection: "row-reverse",
+    flexDirection: "row",
     alignItems: "center",
     borderWidth: 1.5,
     borderRadius: 100,
@@ -627,7 +627,7 @@ const styles = StyleSheet.create({
   fieldValue: {
     flex: 1,
     fontSize: 16,
-    textAlign: "right",
+    textAlign: "justify",
     direction: "rtl",
     paddingRight: 8,
   },
