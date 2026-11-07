@@ -1,11 +1,7 @@
 import { useShamsiDate } from "@/hooks/BackEnd/useShamsiDate";
-import {
-  addLoan,
-  getPayableLoanOptions,
-  getReceivableLoanOptions,
-} from "@/hooks/DB";
+import { addLoan } from "@/hooks/DB";
 import numberToText from "@/hooks/numberToText";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner-native";
 
 export const useLoanForm = () => {
@@ -46,26 +42,6 @@ export const useLoanForm = () => {
     const georgianDate = toGregorian(date);
     setLoanEndDate(georgianDate);
   };
-
-  // دریافت لیست‌های وام‌ها برای انتخاب در درآمد/هزینه
-  const [payableLoans, setPayableLoans] = useState<
-    Array<{ id: number; label: string; value: string; type: string }>
-  >([]);
-  const [receivableLoans, setReceivableLoans] = useState<
-    Array<{ id: number; label: string; value: string; type: string }>
-  >([]);
-
-  useEffect(() => {
-    const fetchLoanOptions = async () => {
-      const [payable, receivable] = await Promise.all([
-        getPayableLoanOptions(),
-        getReceivableLoanOptions(),
-      ]);
-      setPayableLoans(payable);
-      setReceivableLoans(receivable);
-    };
-    fetchLoanOptions();
-  }, []);
 
   // ذخیره‌سازی داده‌ها
   const saveLoan = async () => {
@@ -121,8 +97,6 @@ export const useLoanForm = () => {
     shamsiStartDate,
     shamsiEndDate,
     thePriceString,
-    payableLoans,
-    receivableLoans,
     printPriceString,
     handleStartDateChange,
     handleEndDateChange,

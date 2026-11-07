@@ -33,7 +33,6 @@ export default function HomeScreen() {
     setImportance,
     handleDateChange,
     saveSpending,
-    spending_date,
     shamsiSpendingDate,
     spending_amount,
   } = useSpendingForm();

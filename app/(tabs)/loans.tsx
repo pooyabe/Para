@@ -7,20 +7,13 @@ import {
   Span,
 } from "@/components/Elements";
 import { Colors } from "@/constants/Colors";
-import { cancelLoanReminderNotifications } from "@/hooks/BackEnd/loanReminders/reminderNotifications";
 import { toPersianDigits } from "@/hooks/BackEnd/loanReminders/reminderTime";
+import { useLoansList } from "@/hooks/BackEnd/Pages/useLoansList";
 import { useShamsiDate } from "@/hooks/BackEnd/useShamsiDate";
-import {
-  deleteLoan,
-  getLoanPayments,
-  getLoanReminderCounts,
-  getLoans,
-  LoanPayment,
-} from "@/hooks/DB";
 import { Loan } from "@/hooks/DB/actions/getLoans";
 import { useColorScheme } from "@/hooks/useColorScheme";
-import { router, useFocusEffect } from "expo-router";
-import { useCallback, useEffect, useState } from "react";
+import { router } from "expo-router";
+import { useState } from "react";
 import {
   Alert,
   Modal,
@@ -29,64 +22,29 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { toast } from "sonner-native";
 
 export default function LoansPage() {
-  const [loans, setLoans] = useState<Loan[]>([]);
-  const [reminderCounts, setReminderCounts] = useState<Record<number, number>>(
-    {},
-  );
-  const [loading, setLoading] = useState<boolean>(false);
-  const [viewMode, setViewMode] = useState<"all" | "active" | "settled">(
-    "active",
-  );
-  const [modalLoan, setModalLoan] = useState<Loan | null>(null);
-  const [modalPayments, setModalPayments] = useState<LoanPayment[]>([]);
-  const [modalLoading, setModalLoading] = useState<boolean>(false);
+  const {
+    loans,
+    reminderCounts,
+    loading,
+    viewMode,
+    setViewMode,
+    modalLoan,
+    modalPayments,
+    modalLoading,
+    removeLoan,
+    openPayments,
+    closePayments,
+  } = useLoansList();
+
   const [helpVisible, setHelpVisible] = useState(false);
 
   const colorScheme = useColorScheme() as "light" | "dark";
   const colors = Colors[colorScheme];
   const { toJalali } = useShamsiDate();
 
-  const loadLoans = useCallback(async () => {
-    setLoading(true);
-    try {
-      let loanList: Loan[];
-      if (viewMode === "settled") {
-        loanList = await getLoans(true);
-        loanList = loanList.filter((l) => l.is_settled === 1);
-      } else if (viewMode === "active") {
-        loanList = await getLoans(false);
-        loanList = loanList.filter(
-          (l) => l.is_settled === 0 || l.is_settled === undefined,
-        );
-      } else {
-        loanList = await getLoans(true);
-        // Show all loans regardless of settlement status when viewMode is "all"
-        // No filter applied - keep all loans (settled, active, and unsettled)
-      }
-      setLoans(loanList);
-      setReminderCounts(await getLoanReminderCounts());
-    } catch (error) {
-      console.error("Error loading loans:", error);
-    } finally {
-      setLoading(false);
-    }
-  }, [viewMode]);
-
-  useEffect(() => {
-    loadLoans();
-  }, [loadLoans]);
-
-  // Refresh when screen gains focus
-  useFocusEffect(
-    useCallback(() => {
-      loadLoans();
-    }, [loadLoans]),
-  );
-
-  const handleDeleteLoan = async (id: number) => {
+  const handleDeleteLoan = (id: number) => {
     Alert.alert("حذف", "آیا می‌خواهید این مورد را حذف کنید؟", [
       {
         text: "لغو",
@@ -95,30 +53,7 @@ export default function LoansPage() {
       },
       {
         text: "حذف",
-        onPress: async () => {
-          try {
-            const result = await deleteLoan(id);
-
-            if (!result.success) {
-              toast.error("حذف مورد انجام نشد.");
-              return;
-            }
-
-            // یادآورهای مورد حذف‌شده نباید بعداً اعلان بدهند.
-            await cancelLoanReminderNotifications(result.notificationIds);
-
-            setLoans((prev) => prev.filter((l) => l.id !== id));
-            setReminderCounts((prev) => {
-              const next = { ...prev };
-              delete next[id];
-              return next;
-            });
-            toast.success("مورد با موفقیت حذف شد");
-          } catch (error) {
-            console.error("Error deleting loan:", error);
-            toast.error("حذف مورد انجام نشد.");
-          }
-        },
+        onPress: () => removeLoan(id),
         style: "destructive",
       },
     ]);
@@ -136,20 +71,6 @@ export default function LoansPage() {
       pathname: "/loans/reminders",
       params: { loan: JSON.stringify(loan) },
     });
-  };
-
-  const handleViewPayments = async (loan: Loan) => {
-    setModalLoan(loan);
-    setModalLoading(true);
-    try {
-      const payments = await getLoanPayments(loan.id);
-      setModalPayments(payments);
-    } catch (error) {
-      console.error("Error loading payments:", error);
-      toast.error("خطا در بارگذاری جزئیات پرداخت");
-    } finally {
-      setModalLoading(false);
-    }
   };
 
   const formatAmount = (amount: number) => {
@@ -433,7 +354,7 @@ export default function LoansPage() {
                 />
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => handleViewPayments(loan)}
+                onPress={() => openPayments(loan)}
                 style={styles.iconButton}
               >
                 <IconSymbol
@@ -553,7 +474,7 @@ export default function LoansPage() {
         animationType="slide"
         presentationStyle="pageSheet"
         backdropColor="rgba(0,0,0,0.05)"
-        onRequestClose={() => setModalLoan(null)}
+        onRequestClose={closePayments}
       >
         <View
           style={[styles.modalOverlay, { backgroundColor: colors.overlay }]}
@@ -578,7 +499,7 @@ export default function LoansPage() {
                 {modalLoan?.source}
               </Span>
               <TouchableOpacity
-                onPress={() => setModalLoan(null)}
+                onPress={closePayments}
                 style={styles.closeButton}
               >
                 <Span style={[styles.closeIcon, { color: colors.muted }]}>

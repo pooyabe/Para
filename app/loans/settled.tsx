@@ -6,45 +6,19 @@ import {
   Span,
 } from "@/components/Elements";
 import { Colors } from "@/constants/Colors";
+import { useSettledLoans } from "@/hooks/BackEnd/Pages/useSettledLoans";
 import { useShamsiDate } from "@/hooks/BackEnd/useShamsiDate";
-import { getSettledLoans, SettledLoan } from "@/hooks/DB";
 import { useColorScheme } from "@/hooks/useColorScheme";
-import { useEffect, useState } from "react";
-import {
-  NativeScrollEvent,
-  NativeSyntheticEvent,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-} from "react-native";
-import { toast } from "sonner-native";
+import { useState } from "react";
+import { ScrollView, StyleSheet, TouchableOpacity } from "react-native";
 
 export default function SettledLoansPage() {
-  const [settledLoans, setSettledLoans] = useState<SettledLoan[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+  const { settledLoans, loading } = useSettledLoans();
   const [expandedLoan, setExpandedLoan] = useState<number | null>(null);
 
   const colorScheme = useColorScheme() as "light" | "dark";
   const colors = Colors[colorScheme];
   const { toJalali } = useShamsiDate();
-
-  const loadSettledLoans = async () => {
-    if (loading) return;
-    setLoading(true);
-    try {
-      const loans = await getSettledLoans();
-      setSettledLoans(loans);
-    } catch (error) {
-      console.error("Error loading settled loans:", error);
-      toast.error("خطا در بارگذاری وام‌های تسویه شده");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    loadSettledLoans();
-  }, []);
 
   const formatAmount = (amount: number) => {
     return amount.toLocaleString("fa-IR");

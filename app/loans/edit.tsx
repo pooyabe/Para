@@ -9,103 +9,41 @@ import {
   Span,
 } from "@/components/Elements";
 import { Colors } from "@/constants/Colors";
-import { useLoanForm } from "@/hooks/BackEnd/Pages/useLoanForm";
-import { formatAmountInput, parseAmountInput } from "@/hooks/BackEnd/formatAmountInput";
-import { useShamsiDate } from "@/hooks/BackEnd/useShamsiDate";
+import { useLoanEditForm } from "@/hooks/BackEnd/Pages/useLoanEditForm";
+import {
+  formatAmountInput,
+  parseAmountInput,
+} from "@/hooks/BackEnd/formatAmountInput";
 import { useColorScheme } from "@/hooks/useColorScheme";
-import { updateLoan } from "@/hooks/DB";
-import { Loan } from "@/hooks/DB/actions/getLoans";
-import { router, useLocalSearchParams } from "expo-router";
-import { useEffect, useState } from "react";
+import { router } from "expo-router";
 import { StyleSheet } from "react-native";
-import { toast } from "sonner-native";
 
 export default function EditLoanPage() {
   const colors = Colors[useColorScheme()];
-  const { loan } = useLocalSearchParams<{ loan: string }>();
-  const { toJalali } = useShamsiDate();
+
   const {
     loan_type,
-    setLoanType,
     loan_amount,
-    setLoanAmount,
     loan_source,
-    setLoanSource,
     loan_description,
-    setLoanDescription,
-    loan_start_date,
-    loan_end_date,
     shamsiStartDate,
     shamsiEndDate,
     thePriceString,
     printPriceString,
     handleStartDateChange,
     handleEndDateChange,
-  } = useLoanForm();
+    setLoanType,
+    setLoanSource,
+    setLoanDescription,
+    loading,
+    saveLoanEdit,
+  } = useLoanEditForm();
 
   const isReceivable = loan_type === "receivable";
 
-  const [loanData, setLoanData] = useState<Loan | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const loadLoan = async () => {
-      try {
-        if (loan) {
-          const parsedLoan: Loan = JSON.parse(loan);
-          setLoanData(parsedLoan);
-
-          // Populate form with existing data
-          setLoanType(parsedLoan.type);
-          setLoanAmount(parsedLoan.amount);
-          setLoanSource(parsedLoan.source);
-          setLoanDescription(parsedLoan.description || "");
-          printPriceString(parsedLoan.amount);
-
-          // Convert dates to Shamsi for display
-          const startDateShamsi = toJalali(parsedLoan.start_date);
-          const endDateShamsi = toJalali(parsedLoan.end_date);
-          handleStartDateChange(startDateShamsi);
-          handleEndDateChange(endDateShamsi);
-        }
-      } catch (error) {
-        console.error("Error loading loan:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    loadLoan();
-  }, [loan]);
-
   const handleSave = async () => {
-    if (
-      !loanData ||
-      !loan_source ||
-      !loan_start_date ||
-      !loan_end_date ||
-      loan_amount === null ||
-      loan_amount === undefined
-    ) {
-      toast.warning("همه گزینه‌های الزامی را پر کنید!");
-      return;
-    }
-
-    try {
-      await updateLoan({
-        id: loanData.id,
-        type: loan_type,
-        amount: Number(loan_amount),
-        source: loan_source.trim(),
-        description: loan_description.trim() || undefined,
-        startDate: loan_start_date,
-        endDate: loan_end_date,
-      });
-
-      toast.success("وام با موفقیت ویرایش شد ;)");
+    if (await saveLoanEdit()) {
       router.back();
-    } catch (e) {
-      toast.error("خطا در ویرایش وام!");
-      console.error("❌ خطا در ویرایش:", e);
     }
   };
 

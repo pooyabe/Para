@@ -106,9 +106,6 @@ export const useIncomeForm = () => {
   // تمام حالت‌ها و متدها را به کامپوننت اصلی بازمی‌گردانیم
   return {
     income_amount,
-    income_reason,
-    where_stored,
-    income_date,
     thePriceString,
     reasons,
     destinations,
