@@ -27,6 +27,9 @@ export * from "./actions/getLoanOptions";
 export * from "./actions/getSettledLoans";
 export * from "./actions/loanReminders";
 
+// Editing spending categories, income reasons and income destinations
+export * from "./actions/categories";
+
 // App settings actions (theme, preferences, ...)
 export * from "./actions/getSetting";
 export * from "./actions/setSetting";
