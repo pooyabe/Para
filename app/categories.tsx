@@ -254,11 +254,11 @@ export default function CategoriesPage() {
           }}
         />
 
-        <Spacer height={16} />
+        <Spacer height={30} />
 
         <Input
           label="جستجو"
-          placeholder="بخشی از نام را بنویس"
+          placeholder="بخشی از اسم رو بنویس..."
           value={searchQuery}
           onChangeText={setSearchQuery}
           autoCorrect={false}
