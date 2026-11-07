@@ -185,7 +185,7 @@ export default function LoansPage() {
             color={colors.tint}
           />
           <Span type="title" style={styles.headerTitle}>
-            مديريت وام و طلب
+            بده‌بستون
           </Span>
         </Div>
         <TouchableOpacity
