@@ -688,11 +688,11 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 17,
     direction: "rtl",
-    textAlign: "right",
+    textAlign: "justify",
   },
   headerSubtitle: {
     fontSize: 11,
-    textAlign: "right",
+    textAlign: "justify",
     direction: "rtl",
   },
   closeButton: {
@@ -748,7 +748,7 @@ const styles = StyleSheet.create({
   rowLabel: {
     flex: 1,
     fontSize: 16,
-    textAlign: "right",
+    textAlign: "justify",
     direction: "rtl",
   },
   emptyState: {
