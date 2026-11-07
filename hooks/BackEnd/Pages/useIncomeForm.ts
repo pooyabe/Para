@@ -1,4 +1,5 @@
 // hooks/useIncomeForm.ts
+import { useDataRevision } from "@/hooks/BackEnd/useDataRevision";
 import { useShamsiDate } from "@/hooks/BackEnd/useShamsiDate";
 import { addIncome, getIncomeDestinations, getIncomeReasons, getReceivableLoanOptions } from "@/hooks/DB";
 import numberToText from "@/hooks/numberToText";
@@ -35,7 +36,10 @@ export const useIncomeForm = () => {
   };
 
   // تبدیل تاریخ شمسی به میلادی
-  const { toGregorian } = useShamsiDate();
+  const { toGregorian, nowJalali } = useShamsiDate();
+
+  // تغییر نام یا حذف دلیل‌ها و محل‌ها از تنظیمات باید فهرست را تازه کند.
+  const dataRevision = useDataRevision();
   const handleDateChange = (date: string) => {
     // Store Shamsi Date for UI
     setShamsiIncomeDate(date);
@@ -69,9 +73,10 @@ export const useIncomeForm = () => {
     };
 
     fetchOptions();
+  }, [dataRevision]);
 
-    // Set the current day as default
-    const { nowJalali } = useShamsiDate();
+  // Set the current day as default
+  useEffect(() => {
     handleDateChange(nowJalali());
   }, []);
 

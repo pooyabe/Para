@@ -1,3 +1,4 @@
+import { useDataRevision } from "@/hooks/BackEnd/useDataRevision";
 import { useShamsiDate } from "@/hooks/BackEnd/useShamsiDate";
 import { deleteIncome } from "@/hooks/DB/actions/deleteIncome";
 import { deleteSpending } from "@/hooks/DB/actions/deleteSpending";
@@ -26,6 +27,9 @@ export function useTransactionsList() {
   );
 
   const { toGregorian } = useShamsiDate();
+
+  // تغییر نام یا حذف دسته‌ها از تنظیمات باید فهرست را تازه کند.
+  const dataRevision = useDataRevision();
 
   const loadTransactions = async (
     reset: boolean = false,
@@ -68,6 +72,17 @@ export function useTransactionsList() {
 
     fetchTransactions();
   }, [selectedDate]);
+
+  // تغییر نام یا حذف دسته‌ها از تنظیمات، نام تراکنش‌های این فهرست را هم عوض می‌کند.
+  useEffect(() => {
+    if (dataRevision === 0) return;
+
+    const reloadTransactions = async () => {
+      await loadTransactions(true, selectedDate);
+    };
+
+    reloadTransactions();
+  }, [dataRevision]);
 
   /** فیلتر تاریخ را عوض می‌کند و فهرست را از ابتدا می‌خواند. */
   const selectDate = (date: string) => {

@@ -1,3 +1,4 @@
+import { useDataRevision } from "@/hooks/BackEnd/useDataRevision";
 import { useShamsiDate } from "@/hooks/BackEnd/useShamsiDate";
 import { addSpending, getSpendingOptions, getPayableLoanOptions } from "@/hooks/DB";
 import numberToText from "@/hooks/numberToText";
@@ -22,7 +23,10 @@ export const useSpendingForm = () => {
   };
 
   // تبدیل تاریخ شمسی به میلادی
-  const { toGregorian } = useShamsiDate();
+  const { toGregorian, nowJalali } = useShamsiDate();
+
+  // تغییر نام یا حذف دسته‌ها از تنظیمات باید فهرست را تازه کند.
+  const dataRevision = useDataRevision();
   const handleDateChange = (date: string) => {
     const georgianDate = toGregorian(date);
 
@@ -57,9 +61,10 @@ export const useSpendingForm = () => {
     };
 
     fetchOptions();
+  }, [dataRevision]);
 
-    // Set the current day as default
-    const { nowJalali } = useShamsiDate();
+  // Set the current day as default
+  useEffect(() => {
     handleDateChange(nowJalali());
   }, []);
 

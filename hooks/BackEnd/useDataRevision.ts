@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 
 /**
  * A tiny app-wide counter that is bumped whenever the database content is
- * replaced (a restore or a wipe from the settings page).
+ * replaced (a restore or a wipe from the settings page) or the labels of
+ * categories change (the categories editor in the settings page).
  *
  * Tab screens stay mounted while you switch tabs, so without this they would
  * keep showing the data they loaded before the restore.
