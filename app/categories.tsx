@@ -40,6 +40,19 @@ const SECTIONS: CategorySection[] = [
   { key: "incomeDestination", label: "محل درآمد", itemLabel: "محل درآمد" },
 ];
 
+/**
+ * نویسه‌های عربی و نیم‌فاصله را یکدست می‌کند تا جستجو با تایپ ساده هم نتیجه بدهد.
+ */
+function normalizeTitle(text: string): string {
+  return text
+    .replace(/\u064a/g, "\u06cc") // ي عربی → ی فارسی
+    .replace(/\u0643/g, "\u06a9") // ك عربی → ک فارسی
+    .replace(/\u200c/g, " ") // نیم‌فاصله
+    .replace(/\s+/g, " ")
+    .trim()
+    .toLowerCase();
+}
+
 function formatCount(count: number): string {
   if (count === 0) return "بدون تراکنش";
   return `${count.toLocaleString("fa-IR")} تراکنش`;
@@ -59,6 +72,9 @@ export default function CategoriesPage() {
     moveItem,
   } = useCategoryEditor();
 
+  // جستجوی زنده در فهرست همین بخش
+  const [searchQuery, setSearchQuery] = useState("");
+
   // مودال تغییر نام
   const [editTarget, setEditTarget] = useState<CategoryItem | null>(null);
   const [editTitle, setEditTitle] = useState("");
@@ -73,6 +89,18 @@ export default function CategoriesPage() {
     SECTIONS.findIndex((section) => section.key === kind),
     0,
   );
+
+  /** فهرست نمایش‌داده‌شده؛ با هر تغییر متن جستجو دوباره حساب می‌شود. */
+  const visibleItems = useMemo(() => {
+    const needle = normalizeTitle(searchQuery);
+    if (!needle) return items;
+
+    return items.filter((item) =>
+      normalizeTitle(item.title).includes(needle),
+    );
+  }, [items, searchQuery]);
+
+  const isSearching = normalizeTitle(searchQuery).length > 0;
 
   const transferOptions = useMemo(
     () =>
@@ -108,6 +136,7 @@ export default function CategoriesPage() {
   const handleSelectKind = (nextKind: CategoryKind) => {
     closeEdit();
     closeDelete();
+    setSearchQuery("");
     selectKind(nextKind);
   };
 
@@ -227,13 +256,47 @@ export default function CategoriesPage() {
 
         <Spacer height={16} />
 
+        <Input
+          label="جستجو"
+          placeholder="بخشی از نام را بنویس"
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+          autoCorrect={false}
+          returnKeyType="search"
+        />
+
+        <Spacer height={16} />
+
         <Span style={[styles.sectionHint, { color: colors.muted }]}>
           {loading
             ? "در حال خواندن فهرست…"
-            : `${activeSection.label} (${items.length.toLocaleString("fa-IR")})`}
+            : isSearching
+              ? `${visibleItems.length.toLocaleString(
+                  "fa-IR",
+                )} نتیجه از ${items.length.toLocaleString("fa-IR")} مورد`
+              : `${activeSection.label} (${items.length.toLocaleString("fa-IR")})`}
         </Span>
 
         <Spacer height={10} />
+
+        {!loading && isSearching && items.length > 0 && visibleItems.length === 0 ? (
+          <Div
+            style={[
+              styles.emptyCard,
+              { backgroundColor: colors.card, borderColor: colors.divider },
+            ]}
+          >
+            <IconSymbol
+              type="Ionicons"
+              name="search-outline"
+              size={26}
+              color={colors.muted}
+            />
+            <Span style={[styles.emptyText, { color: colors.muted }]}>
+              موردی با «{searchQuery.trim()}» پیدا نشد.
+            </Span>
+          </Div>
+        ) : null}
 
         {!loading && items.length === 0 ? (
           <Div
@@ -255,7 +318,7 @@ export default function CategoriesPage() {
           </Div>
         ) : null}
 
-        {items.map((item) => (
+        {visibleItems.map((item) => (
           <Div
             key={item.id}
             style={[
