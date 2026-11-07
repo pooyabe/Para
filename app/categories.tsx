@@ -35,9 +35,9 @@ type CategorySection = {
 };
 
 const SECTIONS: CategorySection[] = [
-  { key: "spending", label: "دسته‌های هزینه", itemLabel: "دسته هزینه" },
-  { key: "incomeReason", label: "دلیل‌های درآمد", itemLabel: "دلیل درآمد" },
-  { key: "incomeDestination", label: "محل‌های درآمد", itemLabel: "محل درآمد" },
+  { key: "spending", label: "هزینه‌ها", itemLabel: "دسته هزینه" },
+  { key: "incomeReason", label: "دلیل درآمد", itemLabel: "دلیل درآمد" },
+  { key: "incomeDestination", label: "محل درآمد", itemLabel: "محل درآمد" },
 ];
 
 function formatCount(count: number): string {
@@ -421,7 +421,7 @@ export default function CategoriesPage() {
                 type="subtitle"
                 style={[styles.sheetHint, { color: colors.theRed }]}
               >
-                این بخش خطرناک است؛ بعد از انجام، برگشت‌پذیر نیست.
+                حواست باشه این بخش خطرناکه؛ بعد از انجام، برگشت‌پذیر نیست.
               </Span>
 
               <Spacer height={16} />
@@ -547,14 +547,14 @@ export default function CategoriesPage() {
 const styles = StyleSheet.create({
   container: { direction: "rtl" },
   content: { paddingTop: 12, paddingBottom: 32 },
-  pageTitle: { fontSize: 26, textAlign: "right" },
+  pageTitle: { fontSize: 26, },
   intro: {
     marginTop: 8,
     fontSize: 13,
     lineHeight: 22,
-    textAlign: "right",
+    textAlign: "justify",
   },
-  sectionHint: { fontSize: 13, textAlign: "right" },
+  sectionHint: { fontSize: 13 },
   emptyCard: {
     borderWidth: 1,
     borderRadius: 20,
@@ -576,7 +576,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     columnGap: 10,
   },
-  itemTitle: { flex: 1, fontSize: 16, textAlign: "right" },
+  itemTitle: { flex: 1, fontSize: 16 },
   countBadge: {
     overflow: "hidden",
     borderRadius: 100,
@@ -586,7 +586,7 @@ const styles = StyleSheet.create({
   itemActions: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "flex-end",
+    justifyContent: "space-between",
     columnGap: 8,
   },
   actionButton: {
@@ -609,12 +609,11 @@ const styles = StyleSheet.create({
     maxHeight: "88%",
   },
   sheetContent: { paddingBottom: 4 },
-  sheetTitle: { fontSize: 18, textAlign: "right" },
+  sheetTitle: { fontSize: 18 },
   sheetHint: {
     marginTop: 6,
     fontSize: 12,
     lineHeight: 20,
-    textAlign: "right",
   },
   optionCard: {
     borderWidth: 1,
@@ -622,7 +621,7 @@ const styles = StyleSheet.create({
     padding: 16,
     rowGap: 8,
   },
-  optionHint: { fontSize: 12, lineHeight: 20, textAlign: "right" },
+  optionHint: { fontSize: 12, lineHeight: 20 },
   optionButton: { height: 46, borderWidth: 2 },
   cancelButton: { alignItems: "center", paddingVertical: 14 },
 });
