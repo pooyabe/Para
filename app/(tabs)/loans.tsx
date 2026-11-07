@@ -732,6 +732,7 @@ const styles = StyleSheet.create({
   toggleContainer: {
     paddingHorizontal: 20,
     paddingBottom: 10,
+    direction: "ltr"
   },
   scrollView: {
     flex: 1,
