@@ -98,8 +98,8 @@ export default function HelpPage() {
 const styles = StyleSheet.create({
   container: { direction: "rtl" },
   content: { paddingTop: 12, paddingBottom: 32, rowGap: 16 },
-  pageTitle: { fontSize: 26, textAlign: "right" },
-  intro: { fontSize: 14, lineHeight: 24, textAlign: "right" },
+  pageTitle: { fontSize: 26 },
+  intro: { fontSize: 14, lineHeight: 24, textAlign: "justify" },
   card: { borderWidth: 1, borderRadius: 20, padding: 18, rowGap: 12 },
   accordionHeader: {
     flexDirection: "row",
