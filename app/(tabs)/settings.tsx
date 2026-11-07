@@ -108,6 +108,35 @@ export default function SettingsPage() {
 
           <Spacer height={20} />
 
+          {/* Categories: spending categories, income reasons, destinations */}
+          <TouchableOpacity
+            accessibilityRole="button"
+            onPress={() => router.navigate("/categories")}
+            style={[
+              styles.card,
+              styles.navigationCard,
+              { backgroundColor: colors.card, borderColor: colors.divider },
+            ]}
+          >
+            <IconSymbol
+              type="Ionicons"
+              name="pricetags-outline"
+              size={22}
+              color={colors.tint}
+            />
+            <Span type="defaultSemiBold" style={styles.cardTitle}>
+              دسته‌بندی‌ها
+            </Span>
+            <IconSymbol
+              type="Ionicons"
+              name="chevron-back-outline"
+              size={20}
+              color={colors.muted}
+            />
+          </TouchableOpacity>
+
+          <Spacer height={20} />
+
           {/* Data: export, import, wipe */}
           <TouchableOpacity
             accessibilityRole="button"
