@@ -2,6 +2,7 @@
   "name": "para",
   "main": "expo-router/entry",
   "version": "1.4.39",
+  "license": "AGPL-3.0-or-later",
   "scripts": {
     "start": "expo start",
     "postinstall": "node scripts/patch-dependencies.js",
