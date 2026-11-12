@@ -1,4 +1,7 @@
-import { useDataRevision } from "@/hooks/BackEnd/useDataRevision";
+import {
+  bumpDataRevision,
+  useDataRevision,
+} from "@/hooks/BackEnd/useDataRevision";
 import { useShamsiDate } from "@/hooks/BackEnd/useShamsiDate";
 import { addSpending, getSpendingOptions, getPayableLoanOptions } from "@/hooks/DB";
 import numberToText from "@/hooks/numberToText";
@@ -48,7 +51,7 @@ export const useSpendingForm = () => {
   useEffect(() => {
     const fetchOptions = async () => {
       const [reasonOpts, loanOpts] = await Promise.all([
-        getSpendingOptions({ hideSettledLoanReasons: true }),
+        getSpendingOptions({ hideLoanReasons: true }),
         getPayableLoanOptions(),
       ]);
       setReasons(
@@ -91,6 +94,9 @@ export const useSpendingForm = () => {
         importance: String(importance),
         transactionDate: spending_date,
       });
+
+      // پرداخت وام ممکن است وام را تسویه کند؛ فهرست وام‌ها و دلیل‌ها باید تازه شود.
+      bumpDataRevision();
 
       // Show success message
       toast.success("ذخیره شد ;)");

@@ -1,3 +1,4 @@
+import { bumpDataRevision } from "@/hooks/BackEnd/useDataRevision";
 import { useShamsiDate } from "@/hooks/BackEnd/useShamsiDate";
 import { updateLoan } from "@/hooks/DB";
 import type { Loan } from "@/hooks/DB/actions/getLoans";
@@ -87,6 +88,9 @@ export function useLoanEditForm() {
         startDate: loan_start_date,
         endDate: loan_end_date,
       });
+
+      // نام، نوع و مبلغ وام روی فهرست وام‌ها و دلیل‌های فرم تراکنش اثر دارد.
+      bumpDataRevision();
 
       toast.success("وام با موفقیت ویرایش شد ;)");
       return true;

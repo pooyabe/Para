@@ -1,5 +1,8 @@
 // hooks/useIncomeForm.ts
-import { useDataRevision } from "@/hooks/BackEnd/useDataRevision";
+import {
+  bumpDataRevision,
+  useDataRevision,
+} from "@/hooks/BackEnd/useDataRevision";
 import { useShamsiDate } from "@/hooks/BackEnd/useShamsiDate";
 import { addIncome, getIncomeDestinations, getIncomeReasons, getReceivableLoanOptions } from "@/hooks/DB";
 import numberToText from "@/hooks/numberToText";
@@ -53,7 +56,7 @@ export const useIncomeForm = () => {
   useEffect(() => {
     const fetchOptions = async () => {
       const [reasonOpts, destinationOpts, loanOpts] = await Promise.all([
-        getIncomeReasons({ hideSettledLoanReasons: true }),
+        getIncomeReasons({ hideLoanReasons: true }),
         getIncomeDestinations(),
         getReceivableLoanOptions(),
       ]);
@@ -96,6 +99,9 @@ export const useIncomeForm = () => {
         destinationTitle: where_stored.trim(),
         transactionDate: income_date,
       });
+
+      // دریافت وام ممکن است وام را تسویه کند؛ فهرست وام‌ها و دلیل‌ها باید تازه شود.
+      bumpDataRevision();
 
       // Reset form
       printPriceString(null);
