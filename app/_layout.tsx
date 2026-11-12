@@ -3,6 +3,7 @@ import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import "react-native-reanimated";
 
+import { InteractiveTourProvider } from "@/components/Tour/TourController";
 import { Colors } from "@/constants/Colors";
 import { refreshLoanReminderSchedules } from "@/hooks/BackEnd/loanReminders/loanReminderSchedules";
 import { registerLoanReminderNotificationHandler } from "@/hooks/BackEnd/loanReminders/reminderNotifications";
@@ -67,20 +68,22 @@ function RootNavigator() {
 
   return (
     <>
-      <Stack
-        screenOptions={{
-          headerShown: false,
-          contentStyle: {
-            backgroundColor: colors.background,
-          },
-          animation: "fade",
-          animationMatchesGesture: true,
-          animationTypeForReplace: "pop",
-        }}
-      >
-        <Stack.Screen name="(tabs)" />
-        <Stack.Screen name="+not-found" />
-      </Stack>
+      <InteractiveTourProvider>
+        <Stack
+          screenOptions={{
+            headerShown: false,
+            contentStyle: {
+              backgroundColor: colors.background,
+            },
+            animation: "fade",
+            animationMatchesGesture: true,
+            animationTypeForReplace: "pop",
+          }}
+        >
+          <Stack.Screen name="(tabs)" />
+          <Stack.Screen name="+not-found" />
+        </Stack>
+      </InteractiveTourProvider>
       <Toaster
         style={{
           backgroundColor: colors.text,

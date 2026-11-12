@@ -17,6 +17,7 @@ import {
 } from "@/hooks/BackEnd/formatAmountInput";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { StyleSheet } from "react-native";
+import { TourTarget } from "react-native-interactive-tour";
 
 export default function IncomePage() {
   const colors = Colors[useColorScheme()];
@@ -64,12 +65,14 @@ export default function IncomePage() {
 
         <Spacer height={50} />
 
-        <Input
-          label="چقد گرفتی؟"
-          type="number"
-          onChangeText={(value) => printPriceString(parseAmountInput(value))}
-          value={formatAmountInput(income_amount)}
-        />
+        <TourTarget id="income.amount" style={styles.tourTarget}>
+          <Input
+            label="چقد گرفتی؟"
+            type="number"
+            onChangeText={(value) => printPriceString(parseAmountInput(value))}
+            value={formatAmountInput(income_amount)}
+          />
+        </TourTarget>
         <Spacer height={5} />
         <Span type="subtitle" style={{ color: colors.theLightBlue }}>
           {thePriceString}
@@ -77,33 +80,37 @@ export default function IncomePage() {
 
         <Spacer height={20} />
 
-        <Select
-          label="واسه چی گرفتی؟"
-          searchable={true}
-          placeholder="چرا بهت پول دادن؟"
-          onValueChange={(value: string) => {
-            setReason(value);
-          }}
-          items_array={[
-            ...reasons,
-            ...receivableLoans.map((loan) => ({
-              label: `💰 ${loan.label}`,
-              value: loan.value,
-            })),
-          ]}
-        />
+        <TourTarget id="income.reason" style={styles.tourTarget}>
+          <Select
+            label="واسه چی گرفتی؟"
+            searchable={true}
+            placeholder="چرا بهت پول دادن؟"
+            onValueChange={(value: string) => {
+              setReason(value);
+            }}
+            items_array={[
+              ...reasons,
+              ...receivableLoans.map((loan) => ({
+                label: `💰 ${loan.label}`,
+                value: loan.value,
+              })),
+            ]}
+          />
+        </TourTarget>
 
         <Spacer height={40} />
 
-        <Select
-          label="کجا ریختن؟"
-          searchable={true}
-          placeholder="نقده؟ بانکیه؟ چیه؟"
-          onValueChange={(value: string) => {
-            setWhereStored(value);
-          }}
-          items_array={destinations}
-        />
+        <TourTarget id="income.destination" style={styles.tourTarget}>
+          <Select
+            label="کجا ریختن؟"
+            searchable={true}
+            placeholder="نقده؟ بانکیه؟ چیه؟"
+            onValueChange={(value: string) => {
+              setWhereStored(value);
+            }}
+            items_array={destinations}
+          />
+        </TourTarget>
 
         <Spacer height={40} />
 
@@ -152,5 +159,8 @@ const styles = StyleSheet.create({
   },
   pageTitle: {
     fontSize: 22,
+  },
+  tourTarget: {
+    width: "100%",
   },
 });

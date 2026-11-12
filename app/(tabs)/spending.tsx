@@ -19,6 +19,7 @@ import {
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { StyleSheet } from "react-native";
+import { TourTarget } from "react-native-interactive-tour";
 
 export default function HomeScreen() {
   const colors = Colors[useColorScheme()];
@@ -64,12 +65,14 @@ export default function HomeScreen() {
           </Span>
         </Div>
         <Spacer height={50} />
-        <Input
-          label="چقد شد؟"
-          type="number"
-          onChangeText={(value) => printPriceString(parseAmountInput(value))}
-          value={formatAmountInput(spending_amount)}
-        />
+        <TourTarget id="spending.amount" style={styles.tourTarget}>
+          <Input
+            label="چقد شد؟"
+            type="number"
+            onChangeText={(value) => printPriceString(parseAmountInput(value))}
+            value={formatAmountInput(spending_amount)}
+          />
+        </TourTarget>
         <Spacer height={5} />
         <Span type="subtitle" style={{ color: colors.theLightBlue }}>
           {thePriceString}
@@ -77,45 +80,53 @@ export default function HomeScreen() {
 
         <Spacer height={20} />
 
-        <Select
-          label="چی خریدی؟"
-          searchable={true}
-          placeholder="برای چی ازت کم شد؟"
-          onValueChange={(value: string) => {
-            setSpendingReason(value);
-          }}
-          items_array={[
-            ...reasons,
-            ...payableLoans.map((loan) => ({
-              label: `💳 ${loan.label}`,
-              value: loan.value,
-            })),
-          ]}
-        />
+        <TourTarget id="spending.reason" style={styles.tourTarget}>
+          <Select
+            label="چی خریدی؟"
+            searchable={true}
+            placeholder="برای چی ازت کم شد؟"
+            onValueChange={(value: string) => {
+              setSpendingReason(value);
+            }}
+            items_array={[
+              ...reasons,
+              ...payableLoans.map((loan) => ({
+                label: `💳 ${loan.label}`,
+                value: loan.value,
+              })),
+            ]}
+          />
+        </TourTarget>
 
         <Spacer height={0} />
 
-        <Radio
-          Items={["الکی", "بگی نگی", "ضروری"]}
-          onChangeValueWithIndex={(value, index) => {
-            setImportance(index);
-          }}
-        />
+        <TourTarget id="spending.importance" style={styles.tourTarget}>
+          <Radio
+            Items={["الکی", "بگی نگی", "ضروری"]}
+            onChangeValueWithIndex={(value, index) => {
+              setImportance(index);
+            }}
+          />
+        </TourTarget>
 
         <Spacer height={40} />
 
-        <Date
-          SelectedDate={shamsiSpendingDate}
-          onDateChange={(date: string) => {
-            handleDateChange(date);
-          }}
-          style={{}} // Add an empty style object or customize as needed
-          todayMax
-        />
+        <TourTarget id="spending.date" style={styles.tourTarget}>
+          <Date
+            SelectedDate={shamsiSpendingDate}
+            onDateChange={(date: string) => {
+              handleDateChange(date);
+            }}
+            style={{}} // Add an empty style object or customize as needed
+            todayMax
+          />
+        </TourTarget>
 
         <Spacer height={20} />
 
-        <SButton text="بردار" onPress={saveSpending} />
+        <TourTarget id="spending.save" style={styles.tourTarget}>
+          <SButton text="بردار" onPress={saveSpending} />
+        </TourTarget>
       </Div>
     </Mother>
   );
@@ -149,5 +160,8 @@ const styles = StyleSheet.create({
   },
   pageTitle: {
     fontSize: 22,
+  },
+  tourTarget: {
+    width: "100%",
   },
 });

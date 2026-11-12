@@ -1,6 +1,7 @@
 import { Tabs } from "expo-router";
 import React, { type ReactNode } from "react";
 import { Dimensions, StyleSheet } from "react-native";
+import { TourTarget } from "react-native-interactive-tour";
 
 import { Div, IconSymbol } from "@/components/Elements";
 
@@ -110,14 +111,16 @@ export default function TabLayout() {
           title: "تنظیمات",
           headerShown: false,
           tabBarIcon: ({ color, focused }) => (
-            <TabIcon focused={focused}>
-              <IconSymbol
-                type="Ionicons"
-                name={focused ? "settings" : "settings-outline"}
-                size={iconSize}
-                color={color}
-              />
-            </TabIcon>
+            <TourTarget id="tab.settings">
+              <TabIcon focused={focused}>
+                <IconSymbol
+                  type="Ionicons"
+                  name={focused ? "settings" : "settings-outline"}
+                  size={iconSize}
+                  color={color}
+                />
+              </TabIcon>
+            </TourTarget>
           ),
         }}
       />
@@ -129,14 +132,16 @@ export default function TabLayout() {
           // The reports stack brings its own header.
           headerShown: false,
           tabBarIcon: ({ color, focused }) => (
-            <TabIcon focused={focused}>
-              <IconSymbol
-                type="Ionicons"
-                name={focused ? "stats-chart" : "stats-chart-outline"}
-                size={iconSize}
-                color={color}
-              />
-            </TabIcon>
+            <TourTarget id="tab.reports">
+              <TabIcon focused={focused}>
+                <IconSymbol
+                  type="Ionicons"
+                  name={focused ? "stats-chart" : "stats-chart-outline"}
+                  size={iconSize}
+                  color={color}
+                />
+              </TabIcon>
+            </TourTarget>
           ),
         }}
       />
@@ -146,14 +151,16 @@ export default function TabLayout() {
         options={{
           title: "هزینه",
           tabBarIcon: ({ color, focused }) => (
-            <TabIcon focused={focused}>
-              <IconSymbol
-                type="Ionicons"
-                name={focused ? "cart" : "cart-outline"}
-                size={iconSize}
-                color={color}
-              />
-            </TabIcon>
+            <TourTarget id="tab.spending">
+              <TabIcon focused={focused}>
+                <IconSymbol
+                  type="Ionicons"
+                  name={focused ? "cart" : "cart-outline"}
+                  size={iconSize}
+                  color={color}
+                />
+              </TabIcon>
+            </TourTarget>
           ),
         }}
       />
@@ -162,14 +169,16 @@ export default function TabLayout() {
         options={{
           title: "درآمد",
           tabBarIcon: ({ color, focused }) => (
-            <TabIcon focused={focused}>
-              <IconSymbol
-                type="Ionicons"
-                name={focused ? "cash" : "cash-outline"}
-                size={iconSize}
-                color={color}
-              />
-            </TabIcon>
+            <TourTarget id="tab.income">
+              <TabIcon focused={focused}>
+                <IconSymbol
+                  type="Ionicons"
+                  name={focused ? "cash" : "cash-outline"}
+                  size={iconSize}
+                  color={color}
+                />
+              </TabIcon>
+            </TourTarget>
           ),
         }}
       />
@@ -179,14 +188,16 @@ export default function TabLayout() {
           title: "بده‌بستون",
           headerShown: false,
           tabBarIcon: ({ color, focused }) => (
-            <TabIcon focused={focused}>
-              <IconSymbol
-                type="MaterialIcons"
-                name="account-balance-wallet"
-                size={iconSize}
-                color={color}
-              />
-            </TabIcon>
+            <TourTarget id="tab.loans">
+              <TabIcon focused={focused}>
+                <IconSymbol
+                  type="MaterialIcons"
+                  name="account-balance-wallet"
+                  size={iconSize}
+                  color={color}
+                />
+              </TabIcon>
+            </TourTarget>
           ),
         }}
       />
