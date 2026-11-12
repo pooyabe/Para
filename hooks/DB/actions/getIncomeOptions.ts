@@ -1,5 +1,5 @@
 import { getDbConnection } from "../helpers";
-import { excludeSettledLoanReasons } from "./loanQueries";
+import { excludeLoanReasons } from "./loanQueries";
 
 type OptionItem = {
   label: string;
@@ -8,14 +8,14 @@ type OptionItem = {
 
 type IncomeReasonsConfig = {
   /**
-   * دلیل‌های ساخته‌شده برای وام‌های تسویه‌شده در فهرست دلیل فرم درآمد جدید
-   * نمایش داده نمی‌شوند. پیش‌فرض (مثلاً در ویرایش تراکنش) همه موارد است.
+   * دلیل‌های خودکار وام‌ها در فهرست دلیل فرم درآمد جدید نمایش داده نمی‌شوند.
+   * پیش‌فرض (مثلاً در ویرایش تراکنش) همه موارد است.
    */
-  hideSettledLoanReasons?: boolean;
+  hideLoanReasons?: boolean;
 };
 
 export async function getIncomeReasons({
-  hideSettledLoanReasons = false,
+  hideLoanReasons = false,
 }: IncomeReasonsConfig = {}): Promise<OptionItem[]> {
   const db = await getDbConnection();
 
@@ -23,8 +23,8 @@ export async function getIncomeReasons({
     `SELECT id, title FROM income_reasons ORDER BY title ASC`
   );
 
-  const visibleRows = hideSettledLoanReasons
-    ? await excludeSettledLoanReasons(rows, "receivable")
+  const visibleRows = hideLoanReasons
+    ? excludeLoanReasons(rows, "receivable")
     : rows;
 
   return visibleRows.map((row) => ({

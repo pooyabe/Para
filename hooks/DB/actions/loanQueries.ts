@@ -28,31 +28,20 @@ export async function getLoanById(id: number): Promise<Loan | null> {
 }
 
 /**
- * حذف دلیل‌های مربوط به وام‌های تسویه‌شده از یک فهرست دلیل.
+ * حذف دلیل‌های ساخته‌شده برای وام‌ها از یک فهرست دلیل.
  *
- * رکوردهای `spending_items` و `income_reasons` دست‌نخورده می‌مانند (تراکنش‌های
- * قبلی به آن‌ها وصل‌اند)؛ فقط از فهرست انتخاب دلیل کنار گذاشته می‌شوند.
+ * این دلیل‌ها خودکار ساخته می‌شوند و انتخاب دستی‌شان تراکنشی معمولی (نه پرداخت
+ * وام) ثبت می‌کند، پس نباید در فهرست انتخاب دلیل بیایند. رکوردهای
+ * `spending_items` و `income_reasons` دست‌نخورده می‌مانند (تراکنش‌های قبلی به
+ * آن‌ها وصل‌اند)؛ فقط از فهرست کنار گذاشته می‌شوند.
  */
-export async function excludeSettledLoanReasons<T extends { title: string }>(
+export function excludeLoanReasons<T extends { title: string }>(
   rows: T[],
   loanType: "payable" | "receivable"
-): Promise<T[]> {
+): T[] {
   const prefix = LOAN_REASON_PREFIX[loanType];
 
-  if (!rows.some((row) => row.title.startsWith(prefix))) return rows;
-
-  const db = await getDbConnection();
-
-  const openLoans = await db.getAllAsync<{ source: string }>(
-    `SELECT source FROM loans WHERE type = ? AND is_settled = 0`,
-    [loanType]
-  );
-
-  const openTitles = new Set(openLoans.map((loan) => `${prefix}${loan.source}`));
-
-  return rows.filter(
-    (row) => !row.title.startsWith(prefix) || openTitles.has(row.title)
-  );
+  return rows.filter((row) => !row.title.startsWith(prefix));
 }
 
 export { addLoanPayment };
