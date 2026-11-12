@@ -170,6 +170,9 @@ export function Select({
   const [customItems, setCustomItems] = useState<SelectItem[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [searchText, setSearchText] = useState("");
+  // ارتفاع کیبورد دستی دنبال می‌شود چون حالت edge-to-edge در اندروید باعث
+  // می‌شود پنجره با باز شدن کیبورد کوچک نشود و شیت زیر کیبورد بماند.
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
   // مقدار انیمیشن در state نگه داشته می‌شود تا مثل ref در رندر خوانده نشود.
   const [progress] = useState(() => new Animated.Value(0));
 
@@ -178,6 +181,7 @@ export function Select({
   const handleOpen = useCallback(() => {
     if (disabled) return;
     setSearchText("");
+    setKeyboardHeight(0);
     setIsOpen(true);
   }, [disabled]);
 
@@ -192,6 +196,28 @@ export function Select({
       if (finished) setIsOpen(false);
     });
   }, [progress]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    // اندروید رویداد Will* را نمی‌دهد و فقط Did* منتشر می‌شود.
+    const showEvent =
+      Platform.OS === "ios" ? "keyboardWillShow" : "keyboardDidShow";
+    const hideEvent =
+      Platform.OS === "ios" ? "keyboardWillHide" : "keyboardDidHide";
+
+    const showSubscription = Keyboard.addListener(showEvent, (event) => {
+      setKeyboardHeight(event.endCoordinates.height);
+    });
+    const hideSubscription = Keyboard.addListener(hideEvent, () => {
+      setKeyboardHeight(0);
+    });
+
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, [isOpen]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -254,18 +280,25 @@ export function Select({
 
   const rowCount = filteredOptions.length + (canAddCustom ? 1 : 0);
 
+  // شیت باید به اندازه کیبورد بالا بیاید و قدش هم در همین فضا جا شود.
+  const keyboardInset = isOpen ? keyboardHeight : 0;
+  const sheetMaxHeight = Math.min(
+    windowHeight * SHEET_MAX_HEIGHT_RATIO,
+    Math.max(ITEM_HEIGHT * 4, windowHeight - keyboardInset - 12),
+  );
+
   // ارتفاع لیست از قبل حساب می‌شود تا شیت با محتوای خودش اندازه بگیرد و
   // FlatList محدوده اسکرول مشخصی داشته باشد.
   const listHeight = useMemo(() => {
     const chromeHeight = 132 + (searchable ? 58 : 0) + insets.bottom;
     const maxListHeight = Math.max(
       ITEM_HEIGHT * 3,
-      windowHeight * SHEET_MAX_HEIGHT_RATIO - chromeHeight,
+      sheetMaxHeight - chromeHeight,
     );
 
     if (rowCount === 0) return Math.min(160, maxListHeight);
     return Math.min(rowCount * ITEM_HEIGHT, maxListHeight);
-  }, [insets.bottom, rowCount, searchable, windowHeight]);
+  }, [insets.bottom, rowCount, searchable, sheetMaxHeight]);
 
   const handleSelect = useCallback(
     (nextValue: string) => {
@@ -459,7 +492,12 @@ export function Select({
 
           <KeyboardAvoidingView
             pointerEvents="box-none"
-            style={styles.sheetPositioner}
+            style={[
+              styles.sheetPositioner,
+              Platform.OS === "android" && keyboardInset > 0
+                ? { paddingBottom: keyboardInset }
+                : null,
+            ]}
             behavior={Platform.OS === "ios" ? "padding" : undefined}
           >
             <Animated.View
@@ -468,7 +506,7 @@ export function Select({
                 {
                   backgroundColor,
                   paddingBottom: insets.bottom + 10,
-                  maxHeight: windowHeight * SHEET_MAX_HEIGHT_RATIO,
+                  maxHeight: sheetMaxHeight,
                   transform: [{ translateY: sheetTranslateY }],
                 },
               ]}
