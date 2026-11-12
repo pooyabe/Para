@@ -1,4 +1,5 @@
 import { Div, IconSymbol, Mother, Span } from "@/components/Elements";
+import { useInteractiveTour } from "@/components/Tour/TourController";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { useState } from "react";
@@ -35,6 +36,7 @@ const sections = [
 export default function HelpPage() {
   const colors = Colors[useColorScheme()];
   const [expandedSection, setExpandedSection] = useState<number | null>(null);
+  const { startInteractiveTour } = useInteractiveTour();
 
   return (
     <Mother style={styles.container}>
@@ -48,6 +50,37 @@ export default function HelpPage() {
         <Span style={[styles.intro, { color: colors.muted }]}>
           برای دیدن توضیح هر بخش، روی عنوانش بزن.
         </Span>
+
+        <TouchableOpacity
+          accessibilityRole="button"
+          accessibilityLabel="اجرای راهنمای تعاملی"
+          onPress={startInteractiveTour}
+          style={[
+            styles.interactiveCard,
+            { backgroundColor: colors.infoBackground, borderColor: colors.tint },
+          ]}
+        >
+          <IconSymbol
+            type="Ionicons"
+            name="play-circle-outline"
+            size={28}
+            color={colors.tint}
+          />
+          <Div style={styles.interactiveText}>
+            <Span type="defaultSemiBold">راهنمای تعاملی</Span>
+            <Span type="subtitle" style={{ color: colors.muted }}>
+              یه تور کوتاه روی تب‌ها و بخش‌های صفحه؛ هر وقت خواستی از نو
+              ببینش.
+            </Span>
+          </Div>
+          <IconSymbol
+            type="Ionicons"
+            name="chevron-back-outline"
+            size={20}
+            color={colors.muted}
+          />
+        </TouchableOpacity>
+
         {sections.map((section, index) => {
           const expanded = expandedSection === index;
           return (
@@ -100,6 +133,15 @@ const styles = StyleSheet.create({
   content: { paddingTop: 12, paddingBottom: 32, rowGap: 16 },
   pageTitle: { fontSize: 26 },
   intro: { fontSize: 14, lineHeight: 24, textAlign: "justify" },
+  interactiveCard: {
+    flexDirection: "row-reverse",
+    alignItems: "center",
+    columnGap: 12,
+    borderWidth: 1,
+    borderRadius: 20,
+    padding: 16,
+  },
+  interactiveText: { flex: 1, rowGap: 4 },
   card: { borderWidth: 1, borderRadius: 20, padding: 18, rowGap: 12 },
   accordionHeader: {
     flexDirection: "row",
