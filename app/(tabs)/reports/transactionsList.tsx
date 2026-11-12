@@ -3,6 +3,7 @@ import {
   Div,
   IconSymbol,
   Mother,
+  Select,
   Spacer,
   Span,
 } from "@/components/Elements";
@@ -28,6 +29,9 @@ export default function TransactionsList() {
     hasMore,
     selectedDate,
     selectDate,
+    categoryOptions,
+    selectedCategory,
+    selectCategory,
     refresh,
     handleScroll,
     handleDeleteTransaction,
@@ -64,6 +68,25 @@ export default function TransactionsList() {
             selectDate(date);
           }}
           style={{}}
+        />
+      </Div>
+
+      <Spacer height={15} />
+
+      {/* Category Selector */}
+      <Div style={styles.categorySelector}>
+        <Select
+          label="دسته‌بندی"
+          placeholder="همه تراکنش‌ها"
+          items_array={categoryOptions}
+          value={selectedCategory}
+          onValueChange={(value: string) => {
+            selectCategory(value);
+          }}
+          allowCustomItem={false}
+          searchable
+          searchPlaceholder="جستجو در دسته‌ها"
+          modalTitle="نمایش بر اساس دسته‌بندی"
         />
       </Div>
 
@@ -127,6 +150,10 @@ const styles = StyleSheet.create({
   dateSelector: {
     paddingHorizontal: 20,
     paddingBottom: 10,
+  },
+  categorySelector: {
+    paddingHorizontal: 20,
+    paddingTop: 6,
   },
   scrollView: {
     flex: 1,
