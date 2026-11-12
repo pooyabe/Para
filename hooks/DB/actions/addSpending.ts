@@ -1,5 +1,9 @@
 import { getDbConnection } from "../helpers";
-import { addLoanPayment, getLoanById } from "./loanQueries";
+import {
+  addLoanPayment,
+  getLoanById,
+  PAYABLE_LOAN_REASON_PREFIX,
+} from "./loanQueries";
 
 /**
  * دریافت ID از جدول خاص؛ در صورت نبود، درج و برگشت ID
@@ -59,7 +63,10 @@ export async function addSpending({
       });
     }
     // Still record the spending for tracking
-    const reasonId = await getOrCreateId("spending_items", `پرداخت وام: ${loan?.source || "نامشخص"}`);
+    const reasonId = await getOrCreateId(
+      "spending_items",
+      `${PAYABLE_LOAN_REASON_PREFIX}${loan?.source || "نامشخص"}`
+    );
 
     await db.runAsync(
       `INSERT INTO spendings (amount, item_id, importance, transaction_date, loan_id)

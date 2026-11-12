@@ -1,5 +1,9 @@
 import { getDbConnection } from "../helpers";
-import { addLoanPayment, getLoanById } from "./loanQueries";
+import {
+  addLoanPayment,
+  getLoanById,
+  RECEIVABLE_LOAN_REASON_PREFIX,
+} from "./loanQueries";
 
 /**
  * دریافت ID از جدول خاص؛ در صورت نبود، درج و برگشت ID
@@ -59,7 +63,10 @@ export async function addIncome({
       });
     }
     // Still record the income for tracking
-    const reasonId = await getOrCreateId("income_reasons", `دریافت وام: ${loan?.source || "نامشخص"}`);
+    const reasonId = await getOrCreateId(
+      "income_reasons",
+      `${RECEIVABLE_LOAN_REASON_PREFIX}${loan?.source || "نامشخص"}`
+    );
     const destinationId = await getOrCreateId(
       "income_destinations",
       destinationTitle

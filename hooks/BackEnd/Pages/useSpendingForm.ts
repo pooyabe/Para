@@ -48,7 +48,7 @@ export const useSpendingForm = () => {
   useEffect(() => {
     const fetchOptions = async () => {
       const [reasonOpts, loanOpts] = await Promise.all([
-        getSpendingOptions(),
+        getSpendingOptions({ hideSettledLoanReasons: true }),
         getPayableLoanOptions(),
       ]);
       setReasons(

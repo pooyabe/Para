@@ -53,7 +53,7 @@ export const useIncomeForm = () => {
   useEffect(() => {
     const fetchOptions = async () => {
       const [reasonOpts, destinationOpts, loanOpts] = await Promise.all([
-        getIncomeReasons(),
+        getIncomeReasons({ hideSettledLoanReasons: true }),
         getIncomeDestinations(),
         getReceivableLoanOptions(),
       ]);
