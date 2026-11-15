@@ -176,9 +176,15 @@ export default function ReportPage() {
         )}
         <Spacer height={20} />
         <ScrollView
-          style={styles.bottomSection}
+          style={[
+            styles.bottomSection,
+            {
+              borderTopColor: colors.divider,
+              borderTopWidth: 1,
+            },
+          ]}
           overScrollMode="always"
-          fadingEdgeLength={80}
+          fadingEdgeLength={10}
         >
           {/****
            *
