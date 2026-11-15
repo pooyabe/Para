@@ -653,7 +653,7 @@ const styles = StyleSheet.create({
   toggleContainer: {
     paddingHorizontal: 20,
     paddingBottom: 10,
-    direction: "ltr"
+    direction: "ltr",
   },
   scrollView: {
     flex: 1,
@@ -681,6 +681,9 @@ const styles = StyleSheet.create({
   typeBadgeText: {
     fontSize: 12,
     fontWeight: "bold",
+    paddingHorizontal: 12,
+    paddingVertical: 2,
+    borderRadius: 25,
   },
   loanSource: {
     flex: 1,
