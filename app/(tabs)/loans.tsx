@@ -735,6 +735,7 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
   descriptionContainer: {
+    marginTop: 15,
     borderRadius: 8,
     padding: 10,
   },
