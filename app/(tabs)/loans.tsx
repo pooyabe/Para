@@ -674,9 +674,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   loanTypeBadge: {
-    paddingHorizontal: 12,
-    paddingVertical: 4,
-    borderRadius: 20,
+    marginVertical: 4,
   },
   typeBadgeText: {
     fontSize: 12,
