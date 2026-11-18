@@ -84,7 +84,7 @@ export default function SettingsPage() {
 
               <Span type="defaultSemiBold"></Span>
             </Div>
-            <Div style={{ direction: "ltr" }}>
+            <Div style={{ direction: "ltr", marginTop: -10 }}>
               <Radio
                 Items={THEME_PREFERENCES.map(
                   (preference) => THEME_LABELS[preference],
