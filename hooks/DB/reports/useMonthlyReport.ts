@@ -19,8 +19,13 @@ export async function getMonthlyReport(
   const { startDate, endDate } = await getDateRange(rangeKey, customRange);
 
   // ← کار با تاریخ شمسی واقعی (نه تبدیل رشته میلادی)
-  const start = moment.from(startDate, "fa", "jYYYY/jMM/jDD");
-  const end = moment.from(endDate, "fa", "jYYYY/jMM/jDD");
+  // Both separators are accepted so a range string always parses as Jalali.
+  const start = moment.from(
+    startDate.replace(/-/g, "/"),
+    "fa",
+    "jYYYY/jMM/jDD",
+  );
+  const end = moment.from(endDate.replace(/-/g, "/"), "fa", "jYYYY/jMM/jDD");
 
   // Decalre the Promised vars
   const returnOutput: { value: number; label: string }[] = [];
@@ -31,16 +36,19 @@ export async function getMonthlyReport(
    * (هر روز یک ستون با برچسب DD/MM)
    *
    */
-  const isSingleMonth = startDate.slice(0, 7) === endDate.slice(0, 7);
+  const isSingleMonth =
+    startDate.slice(0, 7).replace(/-/g, "/") ===
+    endDate.slice(0, 7).replace(/-/g, "/");
 
   if (isSingleMonth) {
     const day = start.clone();
 
     while (day.isSameOrBefore(end, "day")) {
       // Gregorian date of this day, for the query
-      const G_Day = day.format("YYYY-MM-DD");
+      const G_Day = day.clone().locale("en").format("YYYY-MM-DD");
 
-      const sql = `SELECT SUM(amount) as total FROM ${dataSoure} WHERE transaction_date = ?`;
+      // DATE() so a stored date with a time part still counts for that day.
+      const sql = `SELECT SUM(amount) as total FROM ${dataSoure} WHERE DATE(transaction_date) = ?`;
 
       const theResult = await db.getFirstAsync<{ total: number }>(sql, [G_Day]);
 
@@ -70,10 +78,10 @@ export async function getMonthlyReport(
       const to = monthEnd.isAfter(end, "day") ? end : monthEnd;
 
       // Converting dates
-      const GMS = from.format("YYYY-MM-DD");
-      const GME = to.format("YYYY-MM-DD");
+      const GMS = from.clone().locale("en").format("YYYY-MM-DD");
+      const GME = to.clone().locale("en").format("YYYY-MM-DD");
 
-      const sql = `SELECT SUM(amount) as total FROM ${dataSoure} WHERE transaction_date BETWEEN ? AND ?`;
+      const sql = `SELECT SUM(amount) as total FROM ${dataSoure} WHERE DATE(transaction_date) BETWEEN ? AND ?`;
 
       const theResult = await db.getFirstAsync<{ total: number }>(sql, [
         GMS,

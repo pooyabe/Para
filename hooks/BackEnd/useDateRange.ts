@@ -23,8 +23,8 @@ export async function getDateRange(
   type: RangeType,
   customRange?: CustomRange,
 ): Promise<{
-  startDate: string; // ISO string
-  endDate: string; // ISO string
+  startDate: string; // تاریخ شمسی با فرمت jYYYY/jMM/jDD
+  endDate: string; // تاریخ شمسی با فرمت jYYYY/jMM/jDD
 }> {
   const today = moment(); // ← میلادی، هم برای کوئری هم برای حلقه
   const end = today.clone().locale("fa").endOf("day"); // ← پایان امروز، همیشه ثابت
@@ -43,8 +43,8 @@ export async function getDateRange(
     const customEnd = moment.from(customRange.endDate, "fa", "jYYYY/jMM/jDD");
 
     return {
-      startDate: customStart.format("jYYYY/jMM/jDD").replace(/\//g, "-"),
-      endDate: customEnd.format("jYYYY/jMM/jDD").replace(/\//g, "-"),
+      startDate: customStart.format("jYYYY/jMM/jDD"),
+      endDate: customEnd.format("jYYYY/jMM/jDD"),
     };
   }
 
@@ -84,7 +84,7 @@ export async function getDateRange(
   }
 
   return {
-    startDate: start.format("jYYYY-MM-DD"),
-    endDate: end.format("jYYYY-MM-DD"),
+    startDate: start.format("jYYYY/jMM/jDD"),
+    endDate: end.format("jYYYY/jMM/jDD"),
   };
 }

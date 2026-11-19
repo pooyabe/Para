@@ -1,3 +1,4 @@
+import { toJalaliString } from "@/hooks/BackEnd/useShamsiDate";
 import type {
   LoanReminder,
   LoanReminderMode,
@@ -68,7 +69,7 @@ export function toGregorianDateString(jalaliDate: string): string {
 }
 
 export function toJalaliDateString(gregorianDate: string): string {
-  return moment(gregorianDate).locale("fa").format("jYYYY/jMM/jDD");
+  return toJalaliString(gregorianDate);
 }
 
 /** تاریخ میلادی یادآور یک‌بار به‌همراه ساعت ثابت ۰۷:۰۰ به وقت محلی. */
