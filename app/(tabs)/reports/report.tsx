@@ -128,7 +128,6 @@ export default function ReportPage() {
             contentContainerStyle={styles.selectDateButtonsContainer}
             horizontal
             overScrollMode="always"
-            fadingEdgeLength={20}
             showsHorizontalScrollIndicator={false}
             contentOffset={{ x: 1000, y: 0 }}
           >
@@ -329,8 +328,9 @@ const styles = StyleSheet.create({
   selectDateButtonsContainer: {
     direction: "rtl",
     flexDirection: "row",
-    columnGap: 20,
+    columnGap: 10,
     alignItems: "center", // این خط خیلی مهمه
+    paddingHorizontal: 5,
   },
   glassTopButtons: { paddingVertical: 5 },
   // Select date buttons
