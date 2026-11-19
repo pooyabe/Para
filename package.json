@@ -14,7 +14,6 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.2",
-    "@mohamadkh75/react-native-jalali-datepicker": "^1.1.1",
     "@react-native-segmented-control/segmented-control": "^2.5.7",
     "@react-navigation/bottom-tabs": "^7.3.10",
     "@react-navigation/elements": "^2.3.8",
@@ -48,6 +47,7 @@
     "react-native-safe-area-context": "~5.7.0",
     "react-native-screens": "~4.26.0",
     "react-native-svg": "15.15.4",
+    "react-native-ui-datepicker": "^3.3.0",
     "react-native-web": "^0.21.2",
     "react-native-webview": "13.16.1",
     "react-native-worklets": "^0.10.1",
