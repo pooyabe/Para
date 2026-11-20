@@ -37,8 +37,8 @@ export function Date({
   SelectedDate,
   onDateChange,
   todayMax = false,
-  futureYears = 10,
-  pastYears = 10,
+  futureYears = 20,
+  pastYears = 20,
   minDate,
   maxDate,
 }: DateProps) {
