@@ -7,8 +7,11 @@ Simple, private, and completely offline.
 ## Download and Install
 <a href="[https://github.com/pooyabe/Para/releases](https://github.com/pooyabe/Para/releases)"> <img src="[https://img.shields.io/badge/Download%20APK%20from-Repo%20Releases-green?style=for-the-badge](https://img.shields.io/badge/Download%20APK%20from-Repo%20Releases-green?style=for-the-badge)" alt="Download APK from Repo Releases"> </a>
 
-<a href="[https://cafebazaar.ir/app/com.Para.app](https://cafebazaar.ir/app/com.Para.app)"> <img src="[https://img.shields.io/badge/Get%20it%20on-Cafe%20Bazaar-orange?style=for-the-badge](https://img.shields.io/badge/Get%20it%20on-Cafe%20Bazaar-orange?style=for-the-badge)" alt="Get it on Cafe Bazaar"> </a>
+[This is an external link to genome.gov](https://www.genome.gov/)
 
+
+[Get APK for all versions](https://github.com/pooyabe/Para/releases)
+[Install from Bazaar](https://cafebazaar.ir/app/com.Para.app)
 
 
 
