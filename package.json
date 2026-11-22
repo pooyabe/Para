@@ -1,7 +1,7 @@
 {
   "name": "para",
   "main": "expo-router/entry",
-  "version": "1.4.39",
+  "version": "1.5.12",
   "license": "AGPL-3.0-or-later",
   "scripts": {
     "start": "expo start",
